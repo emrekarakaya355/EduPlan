@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Services\Concrats;
+
+// App\Providers\AppServiceProvider aracılığı ile UbysServiceAdapter sınıfına bağlandı. Yeni  bir servis yazılması durumunda Başka Adapter bağlanmalı.
+
+interface AcademicServiceInterface
+{
+    public function fetchLessons($year,$donem);
+    public function fetchUnits($criteria);
+
+    public function fetchPersonPositions ($criteria);
+
+    public function fetchGetWorkers($criteria);
+    public function fetchCourseStudentList($criteria);
+
+    public function syncUnits();
+    public function syncLessons();
+
+}
