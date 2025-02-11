@@ -8,7 +8,6 @@ use App\Models\Course_class;
 use Livewire\Component;
 use App\Services\ApiService;
 
-// Servisi dahil edin
 
 class UbysAktar extends Component
 {
@@ -29,17 +28,13 @@ class UbysAktar extends Component
     {
         $this->ubysService = $ubysService;
     }
-    public function changeSelectedBirim()
+    public function updateSelectedBolum()
     {
-
-    }
-    public function changeSelectedBolum()
-    {
-
-
+        echo 1;
     }
     public function updatedSelectedProgram()
     {
+
         $this->updateCourseClasses();
     }
 
@@ -57,7 +52,8 @@ class UbysAktar extends Component
 
     public function mount()
     {
-        $this->birims = Birim::with('bolums','bolums.programs','bolums.programs.courseClasses')->orderBy('name')->get(); // Birimlerle birlikte bölümleri getir
+        $this->birims = Birim::whereHas('bolums.programs.courseClasses') // courseClasses olan programları getir
+        ->orderBy('name')->get();
         $this->orphanedBirims = Birim::query()->whereDoesntHave('bolums')->get();
         $this->orphanedBolums = Bolum::query()->whereDoesntHave('programs')->get();
     }
@@ -66,7 +62,7 @@ class UbysAktar extends Component
     // Verileri çekmek için metod
     public function fetchData()
     {
-        $this->ubysService->syncData();
+        $this->ubysService->syncData(2024,'Summer');
     }
 
     public function render()

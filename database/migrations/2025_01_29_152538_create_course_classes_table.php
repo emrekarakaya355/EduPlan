@@ -29,6 +29,14 @@ return new class extends Migration
             $table->string('instructorEmail')->nullable();
             $table->string('instructorTitle')->nullable();
 
+            $table->unsignedBigInteger('instructorId')->nullable();
+
+            $table->foreign('instructorId')->references('id')->on('kimlik')->onDelete('cascade');
+
+            $table->integer('duration')->default(2);
+            $table->integer('quota')->default(0);
+            $table->boolean('isScheduled')->default(false);
+
             $table->unique([ 'program_id','course_id','branch']);
             $table->timestamps();
         });

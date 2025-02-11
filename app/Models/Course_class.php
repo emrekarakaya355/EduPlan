@@ -16,17 +16,23 @@ class Course_class extends Model
         'instructorSurname',
         'instructorEmail',
         'instructorTitle',
-        'external_id'
+        'instructorId',
+        'external_id' //serviceId
     ];
 
 
-    public function course()
+    public function course(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Course::class, 'course_id', 'id');
     }
 
-    public function program()
+    public function program(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Program::class, 'program_id', 'id');
+    }
+
+    public function instructor(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Instructor::class, 'instructorId', 'id');
     }
 }

@@ -15,15 +15,15 @@ class ApiService
 
     }
 
-    public function syncData(){
+    public function syncData($year,$semester){
 
         $startTime = microtime(true);
 
-        $this->ubysService->syncUnits();
+        $this->ubysService->syncUnits($year,$semester);
         $endTime = microtime(true);
         $duration = $endTime - $startTime;
 
-        $this->ubysService->syncLessons();
+        $this->ubysService->syncLessons($year,$semester);
         dd("bitti");
     }
 

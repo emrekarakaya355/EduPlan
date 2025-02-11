@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dp_courses', function (Blueprint $table) {
+        Schema::create('schedule_slots', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('code');
-            $table->unsignedBigInteger('external_id')->unique()->nullable();
-            $table->integer('year');
-            $table->enum('semester', ['Fall', 'Spring', 'Summer'])->default('Summer');
             $table->timestamps();
         });
     }
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dp_courses');
+        Schema::dropIfExists('schedule_slots');
     }
 };

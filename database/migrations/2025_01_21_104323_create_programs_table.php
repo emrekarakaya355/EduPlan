@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('bolum_id')->constrained('dp_bolums')->onDelete('cascade');
             $table->string('name');
             $table->boolean('active')->default(true);
+            $table->integer('year');
+            $table->enum('semester', ['Fall', 'Spring', 'Summer'])->default('Summer');
             $table->timestamps();
             $table->unique(['name', 'bolum_id']);
         });

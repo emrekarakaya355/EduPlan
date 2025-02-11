@@ -29,16 +29,15 @@ class LoginForm extends Form
      */
     public function authenticate(): void
     {
+
         $this->ensureIsNotRateLimited();
-        Auth::loginUsingId(1453);
-        return;
         if($this->LdapLogin($this->email, $this->password)) {
+
             $bilgiler = User::where('email','=',$this->email)->first();
-            Auth::loginUsingId(1453);
+            Auth::loginUsingId($bilgiler->id);
             RateLimiter::clear($this->throttleKey());
         }else{
             RateLimiter::hit($this->throttleKey());
-
             throw ValidationException::withMessages([
                 'form.email' => trans('auth.failed'),
             ]);
@@ -85,9 +84,11 @@ class LoginForm extends Form
         }
         $trash = fgets ( $fp, 128 );
         fwrite ( $fp, "USER ".$email."\r\n" );
+
         $trash = fgets ( $fp, 128 );
         fwrite ( $fp, "PASS ".$password."\r\n" );
         $result = fgets ( $fp, 128 );
+
         if(str_starts_with($result, '+OK'))
             return true;
         else

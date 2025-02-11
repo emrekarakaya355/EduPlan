@@ -5,13 +5,29 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
+
+        {{ __("You're logged in!") }}
+    <x-slot name="right">
+        <div>
+            <h2>
+                Sağ
+            </h2>
         </div>
-    </div>
+    </x-slot>
+    <x-slot name="top">
+        <div>
+            <h2>
+                Üst
+            </h2>
+        </div>
+    </x-slot>
+
+
+    <x-slot name="foot">
+        <div>
+            <h2>
+                alt
+            </h2>
+        </div>
+    </x-slot>
 </x-app-layout>

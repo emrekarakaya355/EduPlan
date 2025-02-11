@@ -14,7 +14,8 @@ interface AcademicServiceInterface
     public function fetchGetWorkers($criteria);
     public function fetchCourseStudentList($criteria);
 
-    public function syncUnits();
-    public function syncLessons();
+
+    public function syncUnits($year,$semester);
+    public function syncLessons($year,$semester);
 
 }

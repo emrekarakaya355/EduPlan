@@ -17,4 +17,10 @@ class Birim extends Model
     {
         return $this->hasMany(Bolum::class)->orderBy('name');
     }
+
+    public function classrooms(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Classroom::class, 'dp_birim_classrooms', 'birim_id', 'classroom_id')
+            ->withTimestamps();
+    }
 }

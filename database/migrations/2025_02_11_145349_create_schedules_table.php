@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dp_courses', function (Blueprint $table) {
+        Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('code');
-            $table->unsignedBigInteger('external_id')->unique()->nullable();
+            $table->unsignedBigInteger('program_id');
+            $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
             $table->integer('year');
-            $table->enum('semester', ['Fall', 'Spring', 'Summer'])->default('Summer');
+            $table->enum('semester', ['Fall', 'Spring', 'Summer']);
+
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dp_courses');
+        Schema::dropIfExists('schedules');
     }
 };

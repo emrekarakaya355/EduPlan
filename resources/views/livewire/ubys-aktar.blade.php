@@ -1,12 +1,10 @@
 <div>
-<div class="flex items-center">
     <button type="button" wire:click="fetchData" class="px-4 py-2 bg-blue-500 rounded-lg hover:bg-blue-600">
         Birimleri Al
     </button>
-</div>
     <form wire:submit="changeSelectedBirim">
         <div class="">
-                <div class="p-2">
+                <div >
                     <!-- Birim Seçimi -->
                     <label for="birim">Birim:</label>
                     <select id="birim" wire:model.live="selectedBirim">
@@ -16,7 +14,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="p-8">
+                <div >
                     <!-- Bölüm Seçimi -->
                         <label for="bolum">Bölüm:</label>
                         <select id="bolum" wire:model.live="selectedBolum">
@@ -29,7 +27,7 @@
 
                         </select>
                 </div>
-            <div class="p-8">
+            <div >
                 <!-- Program Seçimi -->
                 <label for="program">Program:</label>
                 <select id="program" wire:model.live="selectedProgram">
@@ -43,7 +41,7 @@
                         @endphp
                         @if($selectedBolumObject)
                             @foreach($selectedBolumObject->programs as $program)
-                                <option value="{{ $program->id }}">{{ $program->name }}</option>
+                                <option value="{{ $program->id }}">{{ $program->name }}   {{ $program->year }}   {{ $program->semester }}</option>
                             @endforeach
                         @endif
                     @endif
@@ -64,6 +62,10 @@
                         <th>Instructor Email</th>
                         <th>Grade</th>
                         <th>Branch</th>
+                        <th>Saat</th>
+                        <th>Kontenjan</th>
+                        <th>Yıl</th>
+                        <th>Dönem</th>
                         <th>ubys-course-id</th>
                         <th>ubys-class-id</th>
                     </tr>
@@ -77,6 +79,10 @@
                             <td>{{ $courseClass->instructorEmail }}</td>
                             <td>{{ $courseClass->grade }}</td>
                             <td>{{ $courseClass->branch }}</td>
+                            <td>{{ $courseClass->duration }}</td>
+                            <td>{{ $courseClass->quota }}</td>
+                            <td>{{ $courseClass->course->year }}</td>
+                            <td>{{ $courseClass->course->semester }}</td>
                             <td>{{ $courseClass->external_id }}</td>
                             <td>{{ $courseClass->course->external_id }}</td>
                         </tr>
@@ -129,3 +135,26 @@
         </div>
     </form>
 </div>
+<x-slot name="right">
+    <div>
+        <h2>
+            Sağ
+        </h2>
+    </div>
+</x-slot>
+<x-slot name="top">
+    <div>
+        <h2>
+            Üst
+        </h2>
+    </div>
+</x-slot>
+
+
+<x-slot name="foot">
+    <div>
+        <h2>
+            alt
+        </h2>
+    </div>
+</x-slot>
