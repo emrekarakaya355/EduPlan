@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Courses;
 
-use App\Models\Course;
 use App\Models\Course_class;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
@@ -10,9 +9,8 @@ use Livewire\WithPagination;
 
 class CourseList extends Component
 {
-    use WithPagination; // Use WithPagination trait for pagination support
+    use WithPagination;
 
-    // Bu bileşen filtre güncellemelerini dinleyecek.
     protected $listeners = ['filterUpdated' => 'applyFilters'];
 
     public $program, $year, $semester;
@@ -31,17 +29,13 @@ class CourseList extends Component
         $this->year = $filters['year'];
         $this->semester = $filters['semester'];
 
-        Session::put('program', $this->program);
-        Session::put('year', $this->year);
-        Session::put('semester', $this->semester);
     }
 
     public function render()
     {
         if (empty($this->program)) {
-            $courses = collect(); // Boş bir koleksiyon döndürüyoruz
+            $courses = collect();
         } else {
-            // Eğer program filtresi doluysa, dersleri filtrele.
             $query = Course_class::query();
 
             $query->where('program_id', $this->program);
@@ -57,7 +51,6 @@ class CourseList extends Component
                 });
             }
 
-            // Use the paginate method directly inside the render method
             $courses = $query->paginate(30);
         }
         return view('livewire.courses.course-list', compact('courses'));

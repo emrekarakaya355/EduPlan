@@ -16,17 +16,27 @@ new class extends Component
     }
 }; ?>
 
-<div x-data="{ open: false }">
+<div x-data="{sidebarOpen: true }">
     <!-- Navbar -->
     <nav class="bg-white shadow-md fixed w-full z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class=" sm:px-6">
             <div class="flex justify-between h-16 items-center">
+                <button @click="sidebarOpen = !sidebarOpen; $dispatch('sidebar-toggle', sidebarOpen)" :class="{ 'ml-64': sidebarOpen }" class="rounded-md text-gray-600 hover:bg-gray-200 transition duration-200">
+                    <svg :class="{'hidden': sidebarOpen, 'block': !sidebarOpen}" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg :class="{'hidden': !sidebarOpen, 'block': sidebarOpen}" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
                 <!-- Logo -->
                 <div class="text-lg font-bold text-gray-800">EduPlan</div>
                 <!-- Hamburger -->
                 <div class="-me-2 flex items-center sm:hidden">
                     <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                        <svg class="h-6 w-6" stroke
+                        ,++
+                        +,+++++++++++++++++++++++++++++++++++++++++++++,+="currentColor" fill="none" viewBox="0 0 24 24">
                             <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
@@ -66,16 +76,24 @@ new class extends Component
         </div>
     </nav>
 
-    <div x-data="{open: false}">
+    <div>
         <!-- Sidebar (Desktop) -->
-        <aside :class="{ '-translate-x-full':  open }" class="hidden lg:block fixed left-0 top-0 h-full w-64 bg-gray-900 text-white shadow-lg pt-16 z-20 transform  -translate-x-full md:translate-x-0
-              overflow-y-auto transition ease-in-out duration-200 ">
+        <aside class="fixed left-0 top-0 h-full w-64 bg-gray-900 text-white shadow-lg pt-16 z-40 transition-transform transform"
+               :class="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }">
 
-            <livewire:layout.sidebar-filters />
+
+        <livewire:layout.sidebar-filters />
             <div  class="flex justify-between">
                 <div class="p-4 space-y-4">
                     <x-nav-link href="{{ route('course-list') }}" :active="request()->routeIs('course-list')" class="block text-white px-4 py-2 rounded hover:bg-gray-700">
                         Courses
+                    </x-nav-link>
+                </div>
+            </div>
+            <div  class="flex justify-between">
+                <div class="p-4 space-y-4">
+                    <x-nav-link href="{{ route('schedule') }}" :active="request()->routeIs('schedule')" class="block text-white px-4 py-2 rounded hover:bg-gray-700">
+                        Schedule
                     </x-nav-link>
                 </div>
             </div>

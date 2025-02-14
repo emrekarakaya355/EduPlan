@@ -17,8 +17,8 @@ class SidebarFilters extends Component
     public $unit;
     public $department;
     public $program; // Eğer seçilen program için tek değer kullanacaksan
-    public $year;
-    public $semester;
+    public $year ;
+    public $semester ;
 
     protected $listeners = ['resetFilters' => 'resetFilterValues'];
 
@@ -34,6 +34,9 @@ class SidebarFilters extends Component
         $this->department = Session::get('department', '');
         $this->program = Session::get('program', '');
         $this->year = Session::get('year', '');
+        if(!$this->year){
+            $this->year = date('Y');
+        }
         $this->semester = Session::get('semester', '');
 
         // Eğer unit seçiliyse, ilgili bölümleri yükle
@@ -63,6 +66,7 @@ class SidebarFilters extends Component
     {
         $this->programs = collect();
         if($value){
+            $this->program='';
             $this->programs = Program::where('bolum_id', $value)->get();
         }
 
@@ -70,20 +74,17 @@ class SidebarFilters extends Component
 
     public function updated($property)
     {
-        // Her değişiklikte seçilen değeri session'a kaydet
         Session::put($property, $this->$property);
     }
 
     public function applyFilters()
     {
-
-        // Filtrele butonuna basıldığında mevcut filtreleri event ile gönder
         $this->dispatch('filterUpdated', [
             'unit'       => $this->unit,
             'department' => $this->department,
             'year'       => $this->year,
             'semester'   => $this->semester,
-            'program'    => $this->program, // Eğer program seçimi varsa
+            'program'    => $this->program,
         ]);
     }
 

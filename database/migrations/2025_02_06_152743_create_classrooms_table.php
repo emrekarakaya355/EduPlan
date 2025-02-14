@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->unsignedBigInteger('building_id');
             $table->foreign('building_id')->references('id')->on('dp_buildings')->onDelete('cascade');
-            $table->integer('capacity')->default(30);
-            $table->boolean('is_lab')->default(false);
+            $table->integer('class_capacity')->default(30);
+            $table->integer('exam_capacity')->default(30);
+            $table->enum('type', ['Laboratuar', 'Sınıf', 'Atölye', 'Salon', 'Ö.Ü. Odası', 'Seminer Odası', 'Anfi']);
             $table->timestamps();
         });
     }

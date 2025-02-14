@@ -10,6 +10,7 @@ Route::view('dashboard', 'dashboard')
 
 Route::get('/ubys', UbysAktar::class)->middleware('auth')->name('ubys');
 Route::get('/courses', \App\Livewire\Courses\CourseList::class)->middleware('auth')->name('course-list');
+Route::get('/schedule', App\Livewire\Schedule\Chart::class)->middleware('auth')->name('schedule');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])

@@ -5,6 +5,8 @@ namespace App\Livewire;
 use App\Models\Birim;
 use App\Models\Bolum;
 use App\Models\Course_class;
+use Illuminate\Support\Facades\Session;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Services\ApiService;
 
@@ -59,10 +61,9 @@ class UbysAktar extends Component
     }
 
 
-    // Verileri çekmek için metod
     public function fetchData()
     {
-        $this->ubysService->syncData(2024,'Summer');
+        $this->ubysService->syncData(Session::get('year', ''),Session::get('semester', ''));
     }
 
     public function render()

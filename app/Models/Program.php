@@ -24,4 +24,11 @@ class Program extends Model
     }
 
 
+
+    public function schedules(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Schedule::class, 'program_id', 'id');
+    }
+
+
 }

@@ -21,6 +21,11 @@ class Classroom extends Model
 
     public function birims(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Birim::class, 'dp_classroom_birim', 'classroom_id', 'birim_id');
+        return $this->belongsToMany(Birim::class, 'dp_birim_classrooms', 'classroom_id', 'birim_id');
+    }
+
+    public function bolums(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Bolum::class, 'dp_birim_classrooms', 'classroom_id', 'bolum_id');
     }
 }

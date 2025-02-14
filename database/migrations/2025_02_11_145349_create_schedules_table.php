@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('schedules', function (Blueprint $table) {
+        Schema::create('dp_schedules', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('program_id');
-            $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
+            $table->foreign('program_id')->references('id')->on('dp_programs')->onDelete('cascade');
             $table->integer('year');
             $table->enum('semester', ['Fall', 'Spring', 'Summer']);
-
+            $table->integer('grade');
+            $table->integer('interval')->default(1);
+            $table->unique(['program_id', 'year', 'semester','grade']);
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('schedules');
+        Schema::dropIfExists('dp_schedules');
     }
 };

@@ -28,8 +28,9 @@
         </nav>
     </header>
 
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-        <main class="pt-16 lg:pl-64 min-h-screen w-full">
+    <div class="min-h-screen bg-gray-100 dark:bg-gray-900" x-data="{ sidebarOpen: true }" @sidebar-toggle.window="sidebarOpen = $event.detail">
+
+        <main class="pt-16   min-h-screen w-full" :class="{ 'pl-64': sidebarOpen, 'pl-0': !sidebarOpen }">
             <div class="p-6 grid grid-rows-[auto_1fr_auto] grid-cols-[1fr_auto] gap-4 min-h-[calc(100vh-4rem)]">
                 <!-- Üst Kısım -->
                 @if(isset($top))
