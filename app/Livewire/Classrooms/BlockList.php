@@ -2,31 +2,35 @@
 
 namespace App\Livewire\Classrooms;
 
-use App\Models\Birim;
 use App\Models\Classroom;
-use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
-use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
 class BlockList extends Component
 {
-
-    public $isBirim = true;
     public $selectedCampus = null;
     public $selectedBuilding = null;
-    protected $listeners = ['filterUpdated' => 'classrooms'];
 
     #[On('filterUpdated')]
     #[Computed]
     public function classrooms()
     {
+        if (!session()->has('unit') || !is_numeric(session('unit'))) {
+            return collect();
+        }
 
-        return Classroom::whereHas('birims', function($query) {
-            $query->where('birim_id', session('unit'));
+        return Classroom::where(function ($query) {
+            $query->whereHas('birims', function ($query) {
+                $query->where('birim_id', session('unit'));
+            })
+                ->when(session()->has('department') && is_numeric(session('department')), function ($query) {
+                    $query->orWhereHas('bolums', function ($query) {
+                        $query->where('bolum_id', session('department'));
+                    });
+                });
         })
-            ->with(['building.campus', 'birims'])
+            ->with(['building.campus', 'birims', 'bolums'])
             ->get()
             ->groupBy(function ($classroom) {
                 return $classroom->building->campus->name;
@@ -35,31 +39,27 @@ class BlockList extends Component
                 return $campusClasses->groupBy(function ($classroom) {
                     return $classroom->building->name;
                 });
-            });
-
+            })->toArray();
     }
-    #[On('filterUpdated')]
-    #[Computed]
-    public function bolumClassrooms()
+
+    #[On('campusSelected')]
+    public function updateSelectedCampus($campusName)
     {
-        return Classroom::whereHas('bolums', function($query) {
-            $query->where('bolum_id', session('department'));
-        })
-            ->with(['building.campus', 'bolums'])
-            ->get()
-            ->groupBy(function ($classroom) {
-                return $classroom->building->campus->name;
-            })
-            ->map(function ($campusClasses) {
-                return $campusClasses->groupBy(function ($classroom) {
-                    return $classroom->building->name;
-                });
-            });
-
+        $this->selectedCampus = $campusName;
+        $this->selectedBuilding = null; // Reset building when campus changes
     }
+
+    #[On('buildingSelected')]
+    public function updateSelectedBuilding($buildingName,$campusName)
+    {
+        $this->selectedBuilding = $buildingName;
+        $this->selectedCampus = $campusName;
+    }
+
     public function render()
     {
-
-          return view('livewire.classrooms.block-list');
+        return view('livewire.classrooms.block-list', [
+            'campusesAndBuildings' => $this->classrooms,
+        ]);
     }
 }

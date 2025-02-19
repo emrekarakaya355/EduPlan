@@ -34,7 +34,7 @@
             <div class="p-6 grid grid-rows-[auto_1fr_auto] grid-cols-[1fr_auto] gap-4 min-h-[calc(100vh-4rem)]">
                 <!-- Üst Kısım -->
                 @if(isset($top))
-                    <div class="col-span-2 bg-white p-4 rounded-lg shadow-sm">
+                    <div class="col-span-2 bg-white mb-4 rounded-lg shadow-sm">
                         {{ $top }}
                     </div>
                 @endif

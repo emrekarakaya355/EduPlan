@@ -46,7 +46,7 @@
      <livewire:courses.course-compact-list :courses="$this->courseClasses"/>
  </x-slot>
 
-<x-slot name="top"   >
+<x-slot name="top">
      <livewire:classrooms.block-list />
 
 </x-slot>
