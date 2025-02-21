@@ -16,7 +16,7 @@ class SidebarFilters extends Component
 
     public $unit;
     public $department;
-    public $program; // Eğer seçilen program için tek değer kullanacaksan
+    public $program;
     public $year ;
     public $semester ;
 
@@ -24,30 +24,61 @@ class SidebarFilters extends Component
 
     public function mount()
     {
-        // Veritabanından seçenekleri çek
-        $this->units = Birim::all();
-        $this->departments = collect(); // Başlangıçta boş koleksiyon
-        $this->programs = collect();    // Başlangıçta boş koleksiyon
+        $this->units = Birim::all()->sortBy('name');
+        $this->departments = collect();
+        $this->programs = collect();
 
-        // Session'dan filtreleri yükle
-        $this->unit = Session::get('unit', '');
+        $this->unit = Session::get('unit','');
         $this->department = Session::get('department', '');
         $this->program = Session::get('program', '');
         $this->year = Session::get('year', '');
-        if(!$this->year){
-            $this->year = date('Y');
-        }
         $this->semester = Session::get('semester', '');
 
-        // Eğer unit seçiliyse, ilgili bölümleri yükle
+        if(!$this->unit){
+            $this->unit = $this->units->first()?->id ?? null;
+            Session::put('unit', $this->unit);
+
+        }
         if ($this->unit) {
             $this->departments = Bolum::where('birim_id', $this->unit)->get();
         }
+        if(!$this->department){
+            $this->department = $this->departments?->first()?->id ?? null;
+            Session::put('department', $this->department);
 
-        // Eğer bölüm seçiliyse, ilgili programları yükle
+        }
         if ($this->department) {
             $this->programs = Program::where('bolum_id', $this->department)->get();
         }
+        if (!$this->program) {
+            $this->program = $this->programs->first()?->id ?? null;
+            Session::put('program', $this->program);
+        }
+        if(!$this->year){
+            $this->defaultDate();
+        }
+    }
+
+    private function defaultDate(){
+        $currentYear = date('Y');
+        $currentMonth = date('n');
+
+        if ($currentMonth >= 1 && $currentMonth <= 6) {
+            // Ocak - Haziran -> Bahar
+            $this->year =  $currentYear - 1 ;
+            $this->semester = 'Spring';
+        } elseif($currentMonth > 6 && $currentMonth <= 8) {
+            // Temmuz - Ağustos -> Yaz
+            $this->year = $currentYear;
+            $this->semester = 'Summer';
+        } else {
+            $this->year = $currentYear;
+            $this->semester = 'Fall';
+        }
+
+        Session::put('year', $this->year);
+        Session::put('semester', $this->semester);
+
     }
 
     public function updatedUnit($value)

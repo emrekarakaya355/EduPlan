@@ -30,22 +30,28 @@
 
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900" x-data="{ sidebarOpen: true }" @sidebar-toggle.window="sidebarOpen = $event.detail">
 
-        <main class="pt-16   min-h-screen w-full" :class="{ 'pl-64': sidebarOpen, 'pl-0': !sidebarOpen }">
-            <div class="p-6 grid grid-rows-[auto_1fr_auto] grid-cols-[1fr_auto] gap-4 min-h-[calc(100vh-4rem)]">
+        <main class="pt-16  min-h-screen w-full" :class="{ 'pl-64': sidebarOpen, 'pl-0': !sidebarOpen }">
+            <div class="p-6 flex  gap-4 min-h-[calc(100vh-4rem)]" style="flex-direction: column">
                 <!-- Üst Kısım -->
-                @if(isset($top))
-                    <div class="col-span-2 bg-white mb-4 rounded-lg shadow-sm">
-                        {{ $top }}
-                    </div>
-                @endif
-
-                <div class="flex">
-                    <div class="bg-white p-4 rounded-lg shadow-sm flex-1">
+                <div class="flex space-x-8" style="max-height: 200px">
+                    @if(isset($top))
+                        <div class="flex-1 bg-white rounded-lg shadow-sm overflow-hidden" >
+                            {{ $top }}
+                        </div>
+                    @endif
+                    @if(isset($detay))
+                        <div class=" bg-white rounded-lg" style="flex: 0 0 20%;">
+                            {{ $detay }}
+                        </div>
+                    @endif
+                </div>
+                <div class="flex space-x-8">
+                    <div class="bg-white rounded-lg shadow-sm flex-1 ">
                         {{ $slot }}
                     </div>
 
                     @if(isset($right))
-                        <div class="bg-white p-4 rounded-lg shadow-sm" style="flex: 0 0 20%; margin-left: 20px;">
+                        <div class="bg-white rounded-lg shadow-sm" style="flex: 0 0 20%;">
                             {{ $right }}
                         </div>
                     @endif
@@ -53,7 +59,7 @@
 
                 <!-- Alt Kısım -->
                 @if(isset($foot))
-                    <div class="col-span-2 bg-white p-4 rounded-lg shadow-sm" style="max-height: 30vh;">
+                    <div class="flex-1 bg-white p-4 rounded-lg shadow-sm" style="max-height: 30vh;">
                         {{ $foot }}
                     </div>
                 @endif

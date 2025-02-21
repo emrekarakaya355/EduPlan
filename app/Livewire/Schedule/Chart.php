@@ -9,19 +9,17 @@ use Livewire\Component;
 class Chart extends Component
 {
 
+    public $program, $year, $semester;
+    public $grade = 1;
+    public $courseClasses = [];
     protected $listeners = ['filterUpdated' => 'applyFilters'];
 
-    public $program, $year, $semester;
-
-    public $grade = 1;
-
-    public $courseClasses = [];
     public function mount()
     {
         $this->courseClasses = collect();
         // Session'dan filtre değerlerini alıyoruz.
         $this->program = Session::get('program', '');
-        $this->year = Session::get('year', ''); // 'date' burada yıl bilgisi olarak saklanıyor
+        $this->year = Session::get('year', '');
         $this->semester = Session::get('semester', '');
     }
 
@@ -33,6 +31,7 @@ class Chart extends Component
         $this->semester = $filters['semester'];
 
     }
+
     public function render()
     {
         if (empty($this->program)) {
@@ -50,13 +49,13 @@ class Chart extends Component
             $query->whereHas('program.courseClasses', function ($q) {
                 $q->where('grade', $this->grade);
             });
-            $schedule = $query->with(['program','scheduleSlots','program.courseClasses.instructor','program.courseClasses.course','program.courseClasses' => function ($q) {
+            $schedule = $query->with(['program', 'scheduleSlots', 'program.courseClasses.instructor', 'program.courseClasses.course', 'program.courseClasses' => function ($q) {
                 $q->where('grade', $this->grade);
             }])->first();
 
             $this->courseClasses = $schedule->program->courseClasses ?? [];
 
         }
-        return view('livewire.schedule.chart',compact('schedule'));
+        return view('livewire.schedule.chart', compact('schedule'));
     }
 }

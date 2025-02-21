@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('class_capacity')->default(30);
             $table->integer('exam_capacity')->default(30);
             $table->enum('type', ['Laboratuar', 'Sınıf', 'Atölye', 'Salon', 'Ö.Ü. Odası', 'Seminer Odası', 'Anfi']);
+            $table->unique(['name','building_id']);
             $table->timestamps();
         });
     }

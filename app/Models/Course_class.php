@@ -17,7 +17,7 @@ class Course_class extends Model
         'instructorEmail',
         'instructorTitle',
         'instructorId',
-        'external_id' //serviceId
+        'external_id'
     ];
 
 
@@ -35,4 +35,17 @@ class Course_class extends Model
     {
         return $this->belongsTo(Instructor::class, 'instructorId', 'id');
     }
+
+    public function getDetailColumns()
+    {
+        return [
+            'Ders Adı' => $this->course->name,
+            'Ders Kodu' => $this->course->code,
+            'Kontenjan' => $this->quota . ' kişi',
+            'Süre' => $this->duration . ' saat',
+            'Hoca' =>$this->instructorTitle.' '. $this->instructorName.' '.$this->instructorSurname,
+            'Dersin Verileceği Sınıf: ' => ''
+        ];
+    }
+
 }

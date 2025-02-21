@@ -10,8 +10,10 @@ class Classroom extends Model
     public $timestamps = true;
     protected $fillable = [
         'name',
-        'capacity',
-        'is_lab',
+        'class_capacity',
+        'exam_capacity',
+        'type',
+        'building_id',
     ];
 
     public function building(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -27,5 +29,17 @@ class Classroom extends Model
     public function bolums(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Bolum::class, 'dp_birim_classrooms', 'classroom_id', 'bolum_id');
+    }
+
+    public function getDetailColumns()
+    {
+        return [
+            'Derslik Adı' => $this->name,
+            'Fakülte' => $this->building->campus->name,
+            'Bina' => $this->building->name,
+            'Sınıf Türü' => $this->type,
+            'Ders Kapasitesi' => $this->class_capacity . ' kişi',
+            'Sınav Kapasitesi' => $this->exam_capacity . ' kişi',
+        ];
     }
 }

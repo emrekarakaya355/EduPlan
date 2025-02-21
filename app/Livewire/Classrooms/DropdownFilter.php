@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Classrooms;
 
+use App\Models\Building;
 use Livewire\Component;
 
 class DropdownFilter extends Component
@@ -9,11 +10,11 @@ class DropdownFilter extends Component
     public $campusesAndBuildings;
     public $selectedCampus = null;
     public $selectedBuilding = null;
+    public $selectedBuildingId = null;
 
     public function mount($campusesAndBuildings)
     {
         $this->campusesAndBuildings = $campusesAndBuildings;
-
         if(array_key_exists(session('campus'), $campusesAndBuildings)) {
             $this->selectedCampus = session('campus');
         } else {
