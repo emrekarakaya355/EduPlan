@@ -81,30 +81,28 @@ new class extends Component
         <aside class="fixed left-0 top-0 h-full w-64 bg-gray-900 text-white shadow-lg pt-16 z-40 transition-transform transform"
                :class="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }">
 
-
         <livewire:layout.sidebar-filters />
             <div  class="flex justify-between">
                 <div class="p-4 space-y-4">
-                    <x-nav-link href="{{ route('course-list') }}" :active="request()->routeIs('course-list')" class="block text-white px-4 py-2 rounded hover:bg-gray-700">
-                        Courses
-                    </x-nav-link>
+                    <x-responsive-nav-link :href="route('course-list')" :active="request()->routeIs('course-list')" wire:navigate>
+                        {{__('Courses')}}
+                    </x-responsive-nav-link>
                 </div>
             </div>
             <div  class="flex justify-between">
                 <div class="p-4 space-y-4">
-                    <x-nav-link href="{{ route('schedule') }}" :active="request()->routeIs('schedule')" class="block text-white px-4 py-2 rounded hover:bg-gray-700">
-                        Schedule
-                    </x-nav-link>
+                    <x-responsive-nav-link :href="route('schedule')" :active="request()->routeIs('schedule')" wire:navigate>
+                        {{__('Schedule')}}
+                    </x-responsive-nav-link>
                 </div>
             </div>
             <div  class="flex justify-between">
                 <div class="p-4 space-y-4">
-                    <x-nav-link href="{{ route('ubys') }}" :active="request()->routeIs('ubys')" class="block px-4 py-2 rounded hover:bg-gray-700">
-                        📚 Dersler
-                    </x-nav-link>
+                    <x-responsive-nav-link :href="route('ubys')" :active="request()->routeIs('ubys')" wire:navigate>
+                        {{__('📚 Dersler')}}
+                    </x-responsive-nav-link>
                 </div>
             </div>
-
         </aside>
     </div>
     <!-- Mobile Sidebar (Overlay) -->

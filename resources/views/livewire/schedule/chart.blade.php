@@ -18,7 +18,6 @@
         </button>
 
     </div>
-        <div>{{$schedule?->id}}</div>
     <div class="grid grid-cols-8 gap-1 p-4">
         <!-- Sol üst boş kutu -->
         <div class="p-2"></div>

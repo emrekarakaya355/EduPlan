@@ -17,7 +17,6 @@ class Chart extends Component
     public function mount()
     {
         $this->courseClasses = collect();
-        // Session'dan filtre değerlerini alıyoruz.
         $this->program = Session::get('program', '');
         $this->year = Session::get('year', '');
         $this->semester = Session::get('semester', '');

@@ -74,7 +74,6 @@
             @else
                 <div>Kayıt Yok</div>
             @endif
-
         </div>
 
     </div>

@@ -21,29 +21,30 @@ class BlockList extends Component
 
     public function mount()
     {
-        $this->classrooms =Classroom::where(function ($query) {
-            $query->whereHas('birims', function ($query) {
-                $query->where('birim_id', session('unit'));
-            })
-                ->when(session()->has('department') && is_numeric(session('department')), function ($query) {
-                    $query->orWhereHas('bolums', function ($query) {
-                        $query->where('bolum_id', session('department'));
-                    });
-                });
-        })
-            ->with(['building.campus', 'birims', 'bolums'])
-            ->get() ->groupBy(function ($classroom) {
-                return $classroom->building->campus->name;
-            })
-            ->map(function ($campusClasses) {
-                return $campusClasses->groupBy(function ($classroom) {
-                    return $classroom->building->name;
-                });
-            })->toArray();
+        if(session('unit')){
+                $this->classrooms =Classroom::where(function ($query) {
+                    $query->whereHas('birims', function ($query) {
+                        $query->where('birim_id', session('unit'));
+                    })
+                        ->when(session()->has('department') && is_numeric(session('department')), function ($query) {
+                            $query->orWhereHas('bolums', function ($query) {
+                                $query->where('bolum_id', session('department'));
+                            });
+                        });
+                })
+                    ->with(['building.campus', 'birims', 'bolums'])
+                    ->get() ->groupBy(function ($classroom) {
+                        return $classroom->building->campus->name;
+                    })
+                    ->map(function ($campusClasses) {
+                        return $campusClasses->groupBy(function ($classroom) {
+                            return $classroom->building->name;
+                        });
+                    })->toArray();
+        }
     }
 
     #[On('filterUpdated')]
-    #[Computed]
     public function classrooms()
     {
         if (!session()->has('unit') || !is_numeric(session('unit'))) {
@@ -84,7 +85,7 @@ class BlockList extends Component
     {
         $this->selectedBuilding = $buildingName;
         $this->selectedCampus = $campusName;
-        $this->selectedBuildingId = Building::where('name', $buildingName)->first()->id;
+        $this->selectedBuildingId = Building::where('name', $buildingName)->first()?->id;
     }
 
     #[On('toggleForm')]

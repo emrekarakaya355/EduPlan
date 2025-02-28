@@ -1,6 +1,6 @@
 <div class="w-64 bg-gray-900 p-4 text-white">
     <label class="block mb-2">Birim</label>
-    <select wire:model.live="unit" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
+    <select wire:model.live.debounce="unit" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
         <option value="">Seçiniz</option>
         @foreach($units as $unit)
             <option value="{{ $unit->id }}">{{ $unit->name }}</option>
@@ -8,26 +8,26 @@
     </select>
 
     <label class="block mt-4 mb-2">Bölüm</label>
-    <select wire:model.live="department" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
+    <select wire:model.live.debounce="department" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
         <option value="">Seçiniz</option>
         @foreach($departments as $department)
-            <option value="{{ $department->id }}">{{ $department->name }}</option>
+            <option value="{{ $department->id }}" {{ $department->id == $this->department ? 'selected' : '' }}>{{ $department->name }}</option>
         @endforeach
     </select>
 
     <label class="block mt-4 mb-2">Program</label>
-    <select wire:model.live="program" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
+    <select wire:model.debounce="program" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
         <option value="">Seçiniz</option>
         @foreach($programs as $program)
-            <option value="{{ $program->id }}">{{ $program->name }}</option>
+            <option value="{{ $program->id }}" {{ $program->id == $this->program ? 'selected' : '' }}>
+                {{ $program->name }}
+            </option>
         @endforeach
     </select>
-
     <div class="flex justify-between mt-4">
         <div class="w-1/2 mr-2">
             <label class="block mb-2">Yıl</label>
-            <select wire:model.live="year" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
-                <option value="">Seçiniz</option>
+            <select wire:model="year" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
                 @foreach(range(date('Y'), date('Y') - 10) as $year)
                     <option value="{{ $year }}">{{ $year }}</option>
                 @endforeach
@@ -35,8 +35,7 @@
         </div>
         <div class="w-1/2 ml-2">
             <label class="block mb-2">Dönem</label>
-            <select wire:model.live="semester" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
-                <option value="">Seçiniz</option>
+            <select wire:model="semester" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
                 <option value="Fall">Güz</option>
                 <option value="Spring">Bahar</option>
                 <option value="Summer">Yaz</option>

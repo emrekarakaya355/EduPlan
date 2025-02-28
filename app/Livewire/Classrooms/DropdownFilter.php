@@ -3,8 +3,10 @@
 namespace App\Livewire\Classrooms;
 
 use App\Models\Building;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
+#[Lazy]
 class DropdownFilter extends Component
 {
     public $campusesAndBuildings;
@@ -12,8 +14,9 @@ class DropdownFilter extends Component
     public $selectedBuilding = null;
     public $selectedBuildingId = null;
 
-    public function mount($campusesAndBuildings)
+    public function mount($campusesAndBuildings = [] )
     {
+
         $this->campusesAndBuildings = $campusesAndBuildings;
         if(array_key_exists(session('campus'), $campusesAndBuildings)) {
             $this->selectedCampus = session('campus');
@@ -27,7 +30,7 @@ class DropdownFilter extends Component
         }
         else
         {
-            $this->selectedBuilding = array_key_first($campusesAndBuildings[$this->selectedCampus]);
+            $this->selectedBuilding = array_key_first($campusesAndBuildings[$this->selectedCampus]??[]);
             session()->forget('selectedBuilding');
         }
         $this->dispatch('buildingSelected', buildingName: $this->selectedBuilding,campusName: $this->selectedCampus);
