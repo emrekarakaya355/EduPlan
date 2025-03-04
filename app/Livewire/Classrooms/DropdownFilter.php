@@ -4,11 +4,14 @@ namespace App\Livewire\Classrooms;
 
 use App\Models\Building;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
 #[Lazy]
 class DropdownFilter extends Component
 {
+
+    #[Reactive]
     public $campusesAndBuildings;
     public $selectedCampus = null;
     public $selectedBuilding = null;

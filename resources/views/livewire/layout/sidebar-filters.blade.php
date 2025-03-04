@@ -16,7 +16,7 @@
     </select>
 
     <label class="block mt-4 mb-2">Program</label>
-    <select wire:model.debounce="program" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
+    <select wire:model="program" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
         <option value="">Seçiniz</option>
         @foreach($programs as $program)
             <option value="{{ $program->id }}" {{ $program->id == $this->program ? 'selected' : '' }}>
@@ -43,7 +43,7 @@
         </div>
     </div>
 
-    <button wire:click="applyFilters" class="mt-4 w-full bg-red-600 hover:bg-red-700 text-white p-2 rounded transition">
+    <button wire:click="applyFilters" class="mt-4 w-full bg-red-600 hover:bg-red-700 text-white p-2 rounded transition" >
         Filtrele
     </button>
 </div>

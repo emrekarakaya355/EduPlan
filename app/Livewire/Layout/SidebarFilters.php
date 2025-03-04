@@ -26,11 +26,11 @@ class SidebarFilters extends Component
         $this->departments = collect();
         $this->programs = collect();
 
-        $this->unit = Session::get('unit','');
-        $this->department = Session::get('department', '');
-        $this->program = Session::get('program', '');
-        $this->year = Session::get('year', '');
-        $this->semester = Session::get('semester', '');
+        $this->unit = Session::get('unit');
+        $this->department = Session::get('department');
+        $this->program = Session::get('program');
+        $this->year = Session::get('year');
+        $this->semester = Session::get('semester');
         if ($this->unit) {
             $this->departments = Bolum::where('birim_id', $this->unit)->orderBy('name')->get();
         }
@@ -49,20 +49,20 @@ class SidebarFilters extends Component
     {
         $this->departments = collect();
         $this->programs = collect();
+        $this->department = null;
+        $this->program = null;
         Session::forget(['department' ,'program']);
         if($value){
             $this->departments = Bolum::where('birim_id', $value)->get();
-            $this->department = '';
-            $this->program = '';
         }
     }
 
     public function updatedDepartment($value)
     {
         $this->programs = collect();
+        $this->program=null;
         Session::forget(['program']);
         if($value){
-            $this->program='';
             $this->programs = Program::where('bolum_id', $value)->get();
         }
 

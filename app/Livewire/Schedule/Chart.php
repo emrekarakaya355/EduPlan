@@ -17,9 +17,9 @@ class Chart extends Component
     public function mount()
     {
         $this->courseClasses = collect();
-        $this->program = Session::get('program', '');
-        $this->year = Session::get('year', '');
-        $this->semester = Session::get('semester', '');
+        $this->program = Session::get('program');
+        $this->year = Session::get('year');
+        $this->semester = Session::get('semester');
     }
 
 

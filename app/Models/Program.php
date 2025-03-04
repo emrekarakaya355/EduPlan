@@ -29,6 +29,7 @@ class Program extends Model
     {
         return $this->hasMany(Schedule::class, 'program_id', 'id');
     }
+    /*
     public function getNameAttribute($value)
     {
 /*
@@ -49,7 +50,6 @@ class Program extends Model
         if(str_contains('İKİNCİ ÖĞRETİM', $value)) {
             $programNameShort.= ' İO';
         }
-*/
         $formattedName = preg_replace('/Birinci Öğretim -/', '', $value);
         $formattedName = preg_replace('/İkinci Öğretim -/', '', $formattedName);
         $formattedName = preg_replace('/İKİNCİ ÖĞRETİM/', 'İO', $formattedName);
@@ -59,5 +59,5 @@ class Program extends Model
         // Son olarak, dönüşen program adını döndür
         return $formattedName;
     }
-
+*/
 }

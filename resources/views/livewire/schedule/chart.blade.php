@@ -13,7 +13,8 @@
             <option value="8">8. Sınıf</option>
             <option value="9">9. Sınıf</option>
         </select>
-        <button class="bg-green-500  w-10 h-10 rounded-full text-xl shadow-md hover:bg-green-600">
+        {{$schedule?->id}}
+        <button class="bg-green-500 w-10 h-10 rounded-full text-xl shadow-md hover:bg-green-600">
                 +
         </button>
 
@@ -45,17 +46,6 @@
     </div>
 
 
- <x-slot name="right">
-     <livewire:courses.course-compact-list :courses="$this->courseClasses"/>
- </x-slot>
-
-<x-slot name="top">
-     <livewire:classrooms.block-list />
-</x-slot>
-
-<x-slot name="detay">
-    <livewire:dynamic-detail />
-</x-slot>
 </div>
 
 <script>

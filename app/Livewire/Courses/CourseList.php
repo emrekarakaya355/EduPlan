@@ -18,9 +18,9 @@ class CourseList extends Component
     public function mount()
     {
         // Session'dan filtre değerlerini alıyoruz.
-        $this->program = Session::get('program', '');
-        $this->year = Session::get('year', ''); // 'date' burada yıl bilgisi olarak saklanıyor
-        $this->semester = Session::get('semester', '');
+        $this->program = Session::get('program');
+        $this->year = Session::get('year'); // 'date' burada yıl bilgisi olarak saklanıyor
+        $this->semester = Session::get('semester');
     }
 
     public function applyFilters($filters)
