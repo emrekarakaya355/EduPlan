@@ -1,5 +1,7 @@
 <div>
 <div>
+    <livewire:classrooms.classroom-bulk-import></livewire:classrooms.classroom-bulk-import>
+
     <div>
         <!-- Campus Seçimi -->
         <div class="campus-box">

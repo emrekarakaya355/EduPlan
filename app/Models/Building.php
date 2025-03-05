@@ -10,6 +10,7 @@ class Building extends Model
     public $timestamps = true;
     protected $fillable = [
         'name',
+        'campus_id'
     ];
 
     public function campus(): \Illuminate\Database\Eloquent\Relations\BelongsTo

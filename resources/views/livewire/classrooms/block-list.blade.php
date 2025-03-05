@@ -1,5 +1,4 @@
 <div>
-
 <div class="container">
     <div class="classrooms-section">
         @if ($selectedCampus && $selectedBuilding)
@@ -79,7 +78,7 @@
     </div>
 
         <div class="filter-section">
-            @livewire('classrooms.dropdown-filter', ['campusesAndBuildings' => $campusesAndBuildings])
+            @livewire('classrooms.dropdown-filter', ['campusesAndBuildings' => '$campusesAndBuildings'])
         </div>
     @if ($showCreateForm)
         <livewire:classrooms.create-classroom :selectedBuildingId="$selectedBuildingId"/>

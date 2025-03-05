@@ -1,9 +1,9 @@
 <div>
     <div class="flex justify-between">
 
-        <select id="courseSelect" wire:model.live="grade">
+        <select id="courseSelect" x-data x-on:change="$dispatch('gradeUpdated',{grade : $event.target.value})">
             <option value="0">Hazırlık</option>
-            <option value="1">1. Sınıf</option>
+            <option value="1" selected>1. Sınıf</option>
             <option value="2">2. Sınıf</option>
             <option value="3">3. Sınıf</option>
             <option value="4">4. Sınıf</option>

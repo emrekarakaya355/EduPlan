@@ -97,7 +97,7 @@ class BlockList extends Component
     public function render()
     {
         return view('livewire.classrooms.block-list', [
-            'campusesAndBuildings' => $this->classrooms,
+            'campusesAndBuildings' => collect(),
         ]);
     }
 }

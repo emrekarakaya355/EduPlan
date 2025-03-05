@@ -8,7 +8,7 @@
         <livewire:courses.course-compact-list />
     </x-slot>
     <x-slot name="top">
-        <livewire:classrooms.block-list />
+        <livewire:classrooms.index />
     </x-slot>
 
     <x-slot name="detay">

@@ -14,6 +14,7 @@ class Classroom extends Model
         'exam_capacity',
         'type',
         'building_id',
+        'is_active',
     ];
 
     public function building(): \Illuminate\Database\Eloquent\Relations\BelongsTo
