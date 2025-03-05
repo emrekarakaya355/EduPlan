@@ -1,11 +1,13 @@
-<div>
-<div>
+<div class="container">
+        @livewire('classrooms.block-list')
+<div class="filter-section">
+
     <livewire:classrooms.classroom-bulk-import></livewire:classrooms.classroom-bulk-import>
 
     <div>
         <!-- Campus Seçimi -->
         <div class="campus-box">
-            <select wire:model.live.debounce="selectedCampus" class="campus-select">
+            <select wire:model.live="selectedCampus" class="campus-select">
                 <option value="">Seçiniz</option>
                 @foreach ($campusesAndBuildings as $campusName => $buildings)
                     <option value="{{ $campusName }}" {{ $selectedCampus === $campusName ? 'selected' : '' }}>
@@ -32,6 +34,11 @@
 </div>
 
 <style>
+    .container {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+    }
     .campus-box,
     .buildings-container {
         margin-bottom: 15px;
@@ -59,4 +66,15 @@
         background-color: #f1f1f1;
     }
 </style>
+
+
+
+    <script>
+        function drag(event) {
+            // Ders ID ve türünü taşıyoruz
+            event.dataTransfer.setData("text", event.target.dataset.id);
+            event.dataTransfer.setData("type", event.target.dataset.type);
+            event.dataTransfer.setData("name", event.target.innerText.trim());
+        }
+    </script>
 </div>

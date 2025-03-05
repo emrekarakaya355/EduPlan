@@ -77,131 +77,113 @@
 
     </div>
 
-        <div class="filter-section">
-            @livewire('classrooms.dropdown-filter', ['campusesAndBuildings' => '$campusesAndBuildings'])
-        </div>
+
     @if ($showCreateForm)
         <livewire:classrooms.create-classroom :selectedBuildingId="$selectedBuildingId"/>
     @endif
 </div>
-
-<style>
-    .container {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-    }
-
-    .classrooms-section {
-        flex: 1;
-        margin-right: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-     }
+    <style>
 
 
-    .classrooms-container {
-        display: flex;
-        gap: 10px;
-        padding: 5px;
-        background-color: #f0f0f0;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        overflow-y: auto;
-        max-height: 150px;
-        scroll-behavior: smooth;
-        white-space: nowrap;
-        flex-wrap: wrap;
-
-    }
-    .classroom-item {
-        max-height: fit-content;
-        max-width: fit-content;
-        background-color: #fff;
-        padding: 3px;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        width: calc(50% - 10px); /* 2 kart yanyana */
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        cursor: move;
-        transition: transform 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-    }
-    .classroom-item:hover {
-        background-color: #f4f4f4;
-        transform: scale(1.05);
-    }
-    .classroom-item p{
-        font-size: 10px;
-        color: black;
-    }
-    .building-title {
-        font-size: 12px;
-        font-weight: bold;
-        text-align: center;
-        width: 100%;
-    }
-    .filter-section {
-        position: sticky;
-        top: 0;
-        max-width: 300px;
-        flex-shrink: 0;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        background-color: #f0f0f0;
-    }
-
-    .filter-section .livewire-dropdown {
-    }
-
-    .search-input {
-        padding: 8px 32px 8px 12px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        font-size: 14px;
-        width: 180px;
-        outline: none;
-    }
-
-    .search-icon {
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 18px;
-        height: 18px;
-        color: #888;
-    }
-    .add-button {
-        position: relative;
-        width: 36px;
-        height: 36px;
-        background-color: #4caf50;
-        color: black;
-        font-size: 24px;
-        font-weight: bold;
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        transition: background 0.3s ease-in-out;
-    }
-
-    .add-button:hover {
-        background-color: #388e3c;
-    }
-
-</style>
-
-    <script>
-        function drag(event) {
-            // Ders ID ve türünü taşıyoruz
-            event.dataTransfer.setData("text", event.target.dataset.id);
-            event.dataTransfer.setData("type", event.target.dataset.type);
-            event.dataTransfer.setData("name", event.target.innerText.trim());
+        .classrooms-section {
+            flex: 1;
+            margin-right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
-    </script>
+        .classrooms-container {
+            display: flex;
+            gap: 10px;
+            padding: 5px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            overflow-y: auto;
+            max-height: 150px;
+            scroll-behavior: smooth;
+            white-space: nowrap;
+            flex-wrap: wrap;
+
+        }
+        .classroom-item {
+            max-height: fit-content;
+            max-width: fit-content;
+            background-color: #fff;
+            padding: 3px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            width: calc(50% - 10px); /* 2 kart yanyana */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: move;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .classroom-item:hover {
+            background-color: #f4f4f4;
+            transform: scale(1.05);
+        }
+        .classroom-item p{
+            font-size: 10px;
+            color: black;
+        }
+        .building-title {
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+        }
+        .filter-section {
+            position: sticky;
+            top: 0;
+            max-width: 300px;
+            flex-shrink: 0;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: #f0f0f0;
+        }
+
+        .filter-section .livewire-dropdown {
+        }
+
+        .search-input {
+            padding: 8px 32px 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 180px;
+            outline: none;
+        }
+
+        .search-icon {
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: #888;
+        }
+        .add-button {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            background-color: #4caf50;
+            color: black;
+            font-size: 24px;
+            font-weight: bold;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s ease-in-out;
+        }
+
+        .add-button:hover {
+            background-color: #388e3c;
+        }
+
+    </style>
 </div>

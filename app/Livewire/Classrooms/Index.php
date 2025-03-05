@@ -33,13 +33,11 @@ class Index extends Component
 
     }
 
-    public function selectCampus($campusName)
+    public function updatedSelectedCampus($campusName)
     {
-        /*
         $this->selectedCampus = $campusName;
         session(['selectedCampus' => $campusName]);
 
-        /*Eğer campuse ait Bina varsa ilk sıradakini seçiyor  ve session kaydediyor yoksa unutuyor
         if (!empty($this->campusesAndBuildings[$campusName])) {
             $this->selectedBuilding = array_key_first($this->campusesAndBuildings[$campusName]);
             session(['selectedBuilding' => $this->selectedBuilding]); // Yeni binayı kaydet
@@ -47,7 +45,7 @@ class Index extends Component
             $this->selectedBuilding = null;
             session()->forget('selectedBuilding');
         }
-        $this->dispatch('campusSelected', campusName: $campusName);*/
+        $this->dispatch('campusSelected', campusName: $campusName);
     }
 
     public function updatedSelectedBuilding($buildingName)
@@ -55,11 +53,6 @@ class Index extends Component
         $this->selectedBuilding = $buildingName;
         session(['selectedBuilding' => $buildingName]);
         $this->dispatch('buildingSelected', buildingName: $buildingName,campusName: $this->selectedCampus);
-    }
-
-    private function getCampusAndBuildings()
-    {
-
     }
 
     public function render()
@@ -86,9 +79,8 @@ class Index extends Component
                     });
                 })->toArray();
 
-
-        return view('livewire.classrooms.dropdown-filter', [
-            'campusesAndBuildings' => collect(),
+        return view('livewire.classrooms.index', [
+            'campusesAndBuildings' =>  $this->classrooms,
         ]);
     }
 }

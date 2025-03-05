@@ -44,38 +44,10 @@ class BlockList extends Component
         }
     }
 
-    #[On('filterUpdated')]
-    public function classrooms()
-    {
-        if (!session()->has('unit') || !is_numeric(session('unit'))) {
-            return collect();
-        }
-
-        return Classroom::where(function ($query) {
-            $query->whereHas('birims', function ($query) {
-                $query->where('birim_id', session('unit'));
-            })
-                ->when(session()->has('department') && is_numeric(session('department')), function ($query) {
-                    $query->orWhereHas('bolums', function ($query) {
-                        $query->where('bolum_id', session('department'));
-                    });
-                });
-        })
-            ->with(['building.campus', 'birims', 'bolums'])
-            ->get()
-            ->groupBy(function ($classroom) {
-                return $classroom->building->campus->name;
-            })
-            ->map(function ($campusClasses) {
-                return $campusClasses->groupBy(function ($classroom) {
-                    return $classroom->building->name;
-                });
-            })->toArray();
-    }
-
     #[On('campusSelected')]
     public function updateSelectedCampus($campusName)
     {
+        dd(1);
         $this->selectedCampus = $campusName;
         $this->selectedBuilding = null; // Reset building when campus changes
     }
