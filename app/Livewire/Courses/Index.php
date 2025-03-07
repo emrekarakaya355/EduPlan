@@ -2,16 +2,14 @@
 
 namespace App\Livewire\Courses;
 
-use App\Models\Course;
 use App\Models\Course_class;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\On;
-use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
-class CourseCompactList extends Component
+class Index extends Component
 {
-    public  $courses;
+    public $courses;
     public $program_id;
     public $grade = 1;
     public $year;
@@ -22,7 +20,15 @@ class CourseCompactList extends Component
         $this->program_id = Session::get('program');
         $this->year = Session::get('year');
         $this->semester = Session::get('semester');
+        $this->loadCourses();
 
+    }
+
+
+    public function loadCourses(){
+        $this->courses = Course_class::query()->whereHas('course',function($query){
+            return $query->where('year',$this->year)->where('semester',$this->semester);
+        })->where('program_id', $this->program_id)->where('grade',$this->grade)->with('course')->get();
     }
 
     #[On('filtersUpdated')]
@@ -31,17 +37,17 @@ class CourseCompactList extends Component
         $this->program_id = $filters['program_id'];
         $this->year = $filters['year'];
         $this->semester = $filters['semester'];
+        $this->loadCourses();
     }
 
     #[On('gradeUpdated')]
     public function applyGrade($grade){
         $this->grade = $grade;
+        $this->loadCourses();
     }
+
     public function render()
     {
-        $this->courses = Course_class::query()->whereHas('course',function($query){
-            return $query->where('year',$this->year)->where('semester',$this->semester);
-        })->where('program_id', $this->program_id)->where('grade',$this->grade)->get();
-        return view('livewire.courses.course-compact-list');
+        return view('livewire.courses.index');
     }
 }

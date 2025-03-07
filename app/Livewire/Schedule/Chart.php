@@ -6,15 +6,18 @@ use App\Models\Schedule;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Nette\Utils\ArrayList;
 
 class Chart extends Component
 {
 
     public $program, $year, $semester;
     public $grade = 1;
+
+
     protected $listeners = ['filterUpdated' => 'applyFilters'];
 
-    public function mount()
+    public function mount(): void
     {
         $this->program = Session::get('program');
         $this->year = Session::get('year');
@@ -22,7 +25,9 @@ class Chart extends Component
     }
 
 
-    public function applyFilters($filters)
+
+
+    public function applyFilters($filters): void
     {
         $this->program = $filters['program'];
         $this->year = $filters['year'];
@@ -31,7 +36,7 @@ class Chart extends Component
     }
 
     #[On('gradeUpdated')]
-    public function applyGrade($grade)
+    public function applyGrade($grade): void
     {
         $this->grade = $grade;
     }

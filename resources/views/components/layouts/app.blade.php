@@ -40,7 +40,7 @@
                         </div>
                     @endif
                     @if(isset($detay))
-                        <div class=" bg-white rounded-lg" style="flex: 0 0 20%;">
+                        <div class=" bg-white rounded-lg overflow-hidden" style="flex: 0 0 20%;">
                             {{ $detay }}
                         </div>
                     @endif

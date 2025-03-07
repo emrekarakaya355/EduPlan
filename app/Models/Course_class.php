@@ -36,6 +36,11 @@ class Course_class extends Model
         return $this->belongsTo(Instructor::class, 'instructorId', 'id');
     }
 
+    public function scheduleSlots()
+    {
+        return $this->hasMany(ScheduleSlot::class, 'course_id', 'id');
+    }
+
     public function getDetailColumns()
     {
         return [
@@ -46,6 +51,21 @@ class Course_class extends Model
             'Hoca' =>$this->instructorTitle.' '. $this->instructorName.' '.$this->instructorSurname,
             'Dersin Verileceği Sınıf: ' => ''
         ];
+    }
+    public function setTemporaryScheduledHours($hours)
+    {
+        $this->attributes['temporary_scheduled_hours'] = $hours;
+    }
+    public function getScheduledHoursAttribute()
+    {
+        return $this->scheduleSlots->sum('duration');
+    }
+
+    public function getUnscheduledHoursAttribute()
+    {
+        $scheduledHours = $this->scheduled_hours ?? 0;
+
+        return max(0, $this->duration - $scheduledHours);
     }
 
 }

@@ -33,7 +33,7 @@ return new class extends Migration
 
             $table->foreign('instructorId')->references('id')->on('kimlik')->onDelete('cascade');
 
-            $table->integer('duration')->default(2);
+            $table->integer('duration')->default(4);
             $table->integer('quota')->default(0);
             $table->boolean('isScheduled')->default(false);
 

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ScheduleSlot extends Model
 {
-    protected $table = 'dp_schedules';
+    protected $table = 'dp_schedule_slots';
 
     protected $fillable = [];
 
@@ -20,5 +20,10 @@ class ScheduleSlot extends Model
 
     public function classroom(){
         return  $this->belongsTo(Classroom::class,'classroom_id','id');
+    }
+
+    public function getDurationAttribute()
+    {
+        return $this->start_time && $this->end_time ? $this->end_time->diffInHours($this->start_time) : 0;
     }
 }

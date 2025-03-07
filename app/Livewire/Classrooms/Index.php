@@ -4,6 +4,7 @@ namespace App\Livewire\Classrooms;
 
 use App\Models\Building;
 use App\Models\Classroom;
+use JetBrains\PhpStorm\NoReturn;
 use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
@@ -14,73 +15,83 @@ class Index extends Component
 {
 
     public $classrooms = [];
+    public $filteredClassrooms = [];
     public $selectedCampus = null;
     public $selectedBuilding = null;
-    public $selectedBuildingId = null;
 
     public $unit,$department;
 
+    protected $listeners = ['filterUpdated' => 'applyFilters'];
 
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    public function mount($campusesAndBuildings = [] )
+    public function mount(): void
     {
 
         $this->unit = Session()->get('unit');
         $this->department = Session()->get('department');
+        $this->selectedCampus = Session()->get('selectedCampus');
+        $this->selectedBuilding = Session()->get('selectedBuilding');
+        $this->loadClassrooms();
+    }
 
+    public function loadClassrooms(): void
+    {
+        $this->classrooms = Classroom::where(function ($query) {
+            $query->whereHas('birims', function ($query) {
+                $query->where('birim_id', $this->unit);
+            })
+                ->when($this->department && is_numeric($this->department), function ($query) {
+                    $query->orWhereHas('bolums', function ($query) {
+                        $query->where('bolum_id', $this->department);
+                    });
+                });
+        })
+            ->with(['building.campus', 'birims', 'bolums'])
+            ->get() ->groupBy(function ($classroom) {
+                return $classroom->building->campus->name;
+            })
+            ->map(function ($campusClasses) {
+                return $campusClasses->groupBy(function ($classroom) {
+                    return $classroom->building->name;
+                });
+            })->toArray();
+
+        $this->filterClassrooms();
+    }
+
+    public function applyFilters($filters): void
+    {
+        if($filters['unit']!=$this->unit) {
+            $this->selectedCampus = null;
+            $this->selectedBuilding = null;
+        }
+        $this->unit = $filters['unit'];
+        $this->department = $filters['department'];
+        $this->loadClassrooms();
     }
 
     public function updatedSelectedCampus($campusName)
     {
         $this->selectedCampus = $campusName;
+        $this->selectedBuilding = null;
         session(['selectedCampus' => $campusName]);
-
-        if (!empty($this->campusesAndBuildings[$campusName])) {
-            $this->selectedBuilding = array_key_first($this->campusesAndBuildings[$campusName]);
-            session(['selectedBuilding' => $this->selectedBuilding]); // Yeni binayı kaydet
-        } else {
-            $this->selectedBuilding = null;
-            session()->forget('selectedBuilding');
-        }
-        $this->dispatch('campusSelected', campusName: $campusName);
     }
 
-    public function updatedSelectedBuilding($buildingName)
+    public function updatedSelectedBuilding($buildingName): void
     {
         $this->selectedBuilding = $buildingName;
         session(['selectedBuilding' => $buildingName]);
-        $this->dispatch('buildingSelected', buildingName: $buildingName,campusName: $this->selectedCampus);
+        $this->filterClassrooms();
     }
-
+    public function filterClassrooms()
+    {
+        if ($this->selectedCampus && $this->selectedBuilding) {
+            $this->filteredClassrooms = $this->classrooms[$this->selectedCampus][$this->selectedBuilding] ?? [];
+        } else {
+            $this->filteredClassrooms = [];
+        }
+    }
     public function render()
     {
-
-        $this->classrooms =
-            Classroom::where(function ($query) {
-                $query->whereHas('birims', function ($query) {
-                    $query->where('birim_id', $this->unit);
-                })
-                    ->when($this->department && is_numeric($this->department), function ($query) {
-                        $query->orWhereHas('bolums', function ($query) {
-                            $query->where('bolum_id', $this->department);
-                        });
-                    });
-            })
-                ->with(['building.campus', 'birims', 'bolums'])
-                ->get() ->groupBy(function ($classroom) {
-                    return $classroom->building->campus->name;
-                })
-                ->map(function ($campusClasses) {
-                    return $campusClasses->groupBy(function ($classroom) {
-                        return $classroom->building->name;
-                    });
-                })->toArray();
-
-        return view('livewire.classrooms.index', [
-            'campusesAndBuildings' =>  $this->classrooms,
-        ]);
+        return view('livewire.classrooms.index');
     }
 }

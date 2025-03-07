@@ -36,7 +36,7 @@
         @foreach(range(8, 20) as $hour)
             <div class="text-center font-bold p-2 bg-gray-700 text-white">{{ $hour }}:00</div>
             @foreach(range(1, 7) as $day)
-                <div class="flex border min-h-[50px] bg-gray-100 dropzone " draggable="true" style="max-height: 20px; display: flex; flex-direction: column; justify-content: space-between;" ondragstart="drag(event)" data-day="{{ $day }}" data-hour="{{ $hour }}" ondragover="event.preventDefault()" ondrop="drop(event)">
+                <div class="flex border min-h-[50px] bg-gray-100 dropzone draggable" draggable="true" style="max-height: 20px; display: flex; flex-direction: column; justify-content: space-between;" ondragstart="drag(event)" data-day="{{ $day }}" data-hour="{{ $hour }}" ondragover="event.preventDefault()" ondrop="drop(event)">
                     <div class="classroom-name"></div>
                     <div class="classroom-location"></div>
                 </div>
@@ -68,29 +68,33 @@
         let day = targetCell.dataset.day;                 // Gün verisi
         let hour = targetCell.dataset.hour;               // Saat verisi
 
-        // Eğer zaten bir ders varsa üzerine eklemeyi engelle
-        if (targetCell.classList.contains("dropzone") && !targetCell.querySelector(".draggable")) {
-            if (type === "course") {
-                // Ders adı ekleniyor
-                targetCell.querySelector(".classroom-name").innerText = name;
-
-            } else if (type === "classroom") {
-                // Derslik adı ekleniyor
-                targetCell.querySelector(".classroom-location").innerText = name;
-            }
-            let newElement = targetCell.querySelector(".draggable");
-
-            // Tekrar draggable hale getir
-            newElement.setAttribute("draggable", "true");
-            newElement.setAttribute("ondragstart", "drag(event)");
-
-            // Gün ve saat bilgisini dersin içine yaz
-            let courseName = newElement.innerText.trim();
-            targetCell.innerHTML = `<div class="draggable"
-                                 draggable="true" ondragstart="drag(event)">
-                                    ${courseName} <br> (${hour}:00, Gün ${day})
-                                </div>`;
+        if (!targetCell.classList.contains("dropzone") || targetCell.querySelector(".draggable")) {
+            return;
         }
+
+        // Yeni element oluştur
+        let newElement = document.createElement("div");
+        newElement.classList.add("draggable");
+        newElement.setAttribute("draggable", "true");
+        newElement.setAttribute("ondragstart", "drag(event)");
+
+        if (type === "course") {
+            let day = targetCell.dataset.day;   // Gün bilgisi
+            let hour = targetCell.dataset.hour; // Saat bilgisi
+            newElement.innerHTML = `${name} <br> (${hour}:00, Gün ${day})`;
+
+            // Livewire veya event gönder
+            window.dispatchEvent(new CustomEvent('addToSchedule', {
+                detail: { courseId: dataId }
+            }));
+
+        } else if (type === "classroom") {
+            newElement.innerText = name; // Sadece isim yaz
+        }
+
+        // Hücreye ekle
+        targetCell.appendChild(newElement);
+
     }
 
 
