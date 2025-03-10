@@ -130,15 +130,4 @@
         background-color: #388e3c;
     }
 </style>
-
-
-
-    <script>
-        function drag(event) {
-            // Ders ID ve türünü taşıyoruz
-            event.dataTransfer.setData("text", event.target.dataset.id);
-            event.dataTransfer.setData("type", event.target.dataset.type);
-            event.dataTransfer.setData("name", event.target.innerText.trim());
-        }
-    </script>
 </div>

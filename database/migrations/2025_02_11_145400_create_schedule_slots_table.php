@@ -19,9 +19,10 @@ return new class extends Migration
             $table->foreign('course_id')->references('id')->on('dp_course_classes')->onDelete('cascade');
             $table->unsignedBigInteger('classroom_id');
             $table->foreign('classroom_id')->references('id')->on('dp_classrooms')->onDelete('SET NULL');
-            $table->time('start_time');
-            $table->time('end_time');
-            $table->unsignedTinyInteger('day');
+            $table->time('start_time')->comment('Dersin başlangıç saati');
+            $table->time('end_time')->comment('Dersin bitiş saati');
+            $table->check('start_time < end_time');
+            $table->unsignedTinyInteger('day')->comment('Haftanın günü (1: Pazartesi, 2: Salı, vb.)');
             $table->timestamps();
         });
     }

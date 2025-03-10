@@ -32,11 +32,10 @@
         <div class="text-center font-bold p-2 bg-gray-800 text-white">Cumartesi</div>
         <div class="text-center font-bold p-2 bg-gray-800 text-white">Pazar</div>
 
-        <!-- Saatler ve çizelge -->
         @foreach(range(8, 20) as $hour)
             <div class="text-center font-bold p-2 bg-gray-700 text-white">{{ $hour }}:00</div>
             @foreach(range(1, 7) as $day)
-                <div class="flex border min-h-[50px] bg-gray-100 dropzone draggable" draggable="true" style="max-height: 20px; display: flex; flex-direction: column; justify-content: space-between;" ondragstart="drag(event)" data-day="{{ $day }}" data-hour="{{ $hour }}" ondragover="event.preventDefault()" ondrop="drop(event)">
+                <div class=" border min-h-[50px] bg-gray-100 dropzone draggable" draggable="true" style="max-height: 20px; display: flex; flex-direction: column; justify-content: space-between;" ondragstart="drag(event)" data-day="{{ $day }}" data-hour="{{ $hour }}" ondragover="event.preventDefault()" ondrop="drop(event)">
                     <div class="classroom-name"></div>
                     <div class="classroom-location"></div>
                 </div>
@@ -48,54 +47,3 @@
 
 </div>
 
-<script>
-
-    function drag(event) {
-        alert(1);
-        // Ders ID ve türünü taşıyoruz
-        event.dataTransfer.setData("text", event.target.dataset.id);
-        event.dataTransfer.setData("type", event.target.dataset.type);
-        event.dataTransfer.setData("name", event.target.innerText.trim());
-    }
-
-    function drop(event) {
-        event.preventDefault();
-
-        let dataId = event.dataTransfer.getData("text");  // Ders ID
-        let type = event.dataTransfer.getData("type");    // Veri türü (Ders mi, Classroom mı?)
-        let name = event.dataTransfer.getData("name");    // Sürüklenen öğenin adı (Ders adı veya Classroom adı)
-        let targetCell = event.target;                    // Bırakılan hücre
-        let day = targetCell.dataset.day;                 // Gün verisi
-        let hour = targetCell.dataset.hour;               // Saat verisi
-
-        if (!targetCell.classList.contains("dropzone") || targetCell.querySelector(".draggable")) {
-            return;
-        }
-
-        // Yeni element oluştur
-        let newElement = document.createElement("div");
-        newElement.classList.add("draggable");
-        newElement.setAttribute("draggable", "true");
-        newElement.setAttribute("ondragstart", "drag(event)");
-
-        if (type === "course") {
-            let day = targetCell.dataset.day;   // Gün bilgisi
-            let hour = targetCell.dataset.hour; // Saat bilgisi
-            newElement.innerHTML = `${name} <br> (${hour}:00, Gün ${day})`;
-
-            // Livewire veya event gönder
-            window.dispatchEvent(new CustomEvent('addToSchedule', {
-                detail: { courseId: dataId }
-            }));
-
-        } else if (type === "classroom") {
-            newElement.innerText = name; // Sadece isim yaz
-        }
-
-        // Hücreye ekle
-        targetCell.appendChild(newElement);
-
-    }
-
-
-</script>

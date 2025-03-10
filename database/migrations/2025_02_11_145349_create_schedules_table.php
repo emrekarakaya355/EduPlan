@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('program_id');
             $table->foreign('program_id')->references('id')->on('dp_programs')->onDelete('cascade');
-            $table->integer('year');
+            $table->year('year');
             $table->enum('semester', ['Fall', 'Spring', 'Summer']);
             $table->integer('grade');
             $table->integer('interval')->default(1);

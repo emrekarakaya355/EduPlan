@@ -4,12 +4,12 @@ namespace App\Livewire\Courses;
 
 use Livewire\Attributes\Modelable;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
 class CompactList extends Component
 {
-    #[Modelable]
-    public  $courses;
+     public $courses;
 
     public  $scheduleCourses;
 
