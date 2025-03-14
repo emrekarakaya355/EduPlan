@@ -11,7 +11,7 @@ Route::view('dashboard', 'dashboard')
 
 Route::get('/ubys', UbysAktar::class)->middleware('auth')->name('ubys');
 Route::get('/courses', \App\Livewire\Courses\CourseList::class)->middleware('auth')->name('course-list');
-Route::get('/schedule', App\Livewire\Pages\Schedule::class)->middleware('auth')->name('schedule');
+Route::get('/schedule', App\Livewire\Schedule\Index::class)->middleware('auth')->name('schedule');
 Route::get('/schedules', App\Livewire\Schedule\CompactChart::class)->middleware('auth')->name('schedules');
 
 Route::get('/classroom/create', CreateClassroom::class)->middleware('auth')->name('classroom.create');

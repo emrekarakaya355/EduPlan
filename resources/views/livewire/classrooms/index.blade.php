@@ -30,7 +30,7 @@
     <div class="classrooms-section" >
         <div></div>
         <div>
-            <livewire:classrooms.block-list :classrooms="$filteredClassrooms" />
+            <livewire:classrooms.block-list :classrooms="$filteredClassrooms"/>
         </div>
     </div>
 

@@ -44,12 +44,12 @@
                 let hour = targetCell.dataset.hour; // Saat bilgisi
                 newElement.innerHTML = `${name} <br> (${hour}:00, Gün ${day})`;
 
-                // Livewire veya event gönder
                 window.dispatchEvent(new CustomEvent('addToSchedule', {
                     detail: { courseId: dataId }
                 }));
 
             } else if (type === "classroom") {
+                alert(1);
                 newElement.innerText = name;
             }
 

@@ -1,4 +1,4 @@
-<div>
+<div >
     <div class="flex justify-between">
 
         <select id="courseSelect" x-data x-on:change="$dispatch('gradeUpdated',{grade : $event.target.value})">
@@ -19,7 +19,7 @@
         </button>
 
     </div>
-    <div class="grid grid-cols-8 gap-1 p-4">
+    <div class="grid grid-cols-8 gap-1 p-4" style="grid-template-columns: repeat(8, minmax(0, 1fr));">
         <!-- Sol üst boş kutu -->
         <div class="p-2"></div>
 
@@ -32,14 +32,40 @@
         <div class="text-center font-bold p-2 bg-gray-800 text-white">Cumartesi</div>
         <div class="text-center font-bold p-2 bg-gray-800 text-white">Pazar</div>
 
-        @foreach(range(8, 20) as $hour)
-            <div class="text-center font-bold p-2 bg-gray-700 text-white">{{ $hour }}:00</div>
-            @foreach(range(1, 7) as $day)
-                <div class=" border min-h-[50px] bg-gray-100 dropzone draggable" draggable="true" style="max-height: 20px; display: flex; flex-direction: column; justify-content: space-between;" ondragstart="drag(event)" data-day="{{ $day }}" data-hour="{{ $hour }}" ondragover="event.preventDefault()" ondrop="drop(event)">
-                    <div class="classroom-name"></div>
-                    <div class="classroom-location"></div>
-                </div>
 
+        @foreach($calendarData as $time => $days)
+            <!-- Saat sütunu -->
+            <div class="text-center font-bold p-2 bg-gray-700 text-white">
+                {{ $time }}
+            </div>
+
+            @foreach(range(0, 6) as $day)
+                @if (isset($days[$day]) && is_array($days[$day]))
+                    <div class="flex border overflow-hidden text-center align-middle">
+                        @foreach($days[$day] as $course)
+                            <div wire:key="{{ $time }}-{{ $course['id'] }}"
+                                 class="border-l dropzone relative flex-1"
+                                 draggable="true"
+                                 data-id="{{ $course['id'] ?? '' }}"
+                                 data-type="course"
+                                 data-day="{{ $day + 1 }}" data-hour="{{ $time }}" ondragstart="drag(event)"
+                                 ondragover="event.preventDefault()" ondrop="drop(event)">
+                                <button wire:click="$dispatch('removeFromSchedule', { hour: '{{ $time }}', day: '{{ $day + 1 }}', courseId: '{{ $course['id'] ?? '' }}' })"
+                                        class="absolute right-0 top-0 ml-2 text-red-500 ">x</button>
+                                <div class="text-sm name" style="pointer-events: none">{{ $course['class_code'] }}</div>
+                                <div class="name" style="pointer-events: none; font-size: xx-small">{{ $course['class_name'] }}</div>
+                                <div class="font-bold" style="pointer-events: none;font-size: xx-small"> {{ $course['teacher_name'] }}</div>
+                                <div style="pointer-events: none; font-size: xx-small">{{ $course['classrom_name'] ?? '(Derslik Sonra Belirtilecek)' }}</div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+
+                    <div class="border bg-white dropzone"
+                         data-day="{{ $day + 1  }}" data-hour="{{ $time }}"
+                         ondragover="event.preventDefault()" ondrop="drop(event)">
+                    </div>
+                @endif
             @endforeach
         @endforeach
     </div>

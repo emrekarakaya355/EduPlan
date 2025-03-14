@@ -35,6 +35,8 @@ class Index extends Component
 
     public function loadClassrooms(): void
     {
+
+
         $this->classrooms = Classroom::where(function ($query) {
             $query->whereHas('birims', function ($query) {
                 $query->where('birim_id', $this->unit);
@@ -46,17 +48,26 @@ class Index extends Component
                 });
         })
             ->with(['building.campus', 'birims', 'bolums'])
-            ->get() ->groupBy(function ($classroom) {
+            ->get()
+
+            ->groupBy(function ($classroom) {
                 return $classroom->building->campus->name;
             })
+
             ->map(function ($campusClasses) {
+
+                $campusClasses->map(function ($classroom) {
+                    $classroom->total = $classroom->totalUsageDuration;
+                    return $classroom;
+                });
+
                 return $campusClasses->groupBy(function ($classroom) {
                     return $classroom->building->name;
                 });
             })->toArray();
 
         $this->filterClassrooms();
-    }
+     }
 
     public function applyFilters($filters): void
     {

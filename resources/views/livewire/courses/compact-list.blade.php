@@ -1,6 +1,7 @@
 <div>
     <div class="courses-container">
         @foreach($this->courses as $courseClass)
+
             <div
                 wire:key="course-class-{{ $courseClass->id }}" data-id="{{$courseClass->id}}"
                 wire:mouseover="$dispatch('showDetail', { model: 'Course_class', id: {{ $courseClass->id }} })"
@@ -12,6 +13,10 @@
                     <span class="course-name">{{str($courseClass->course->code)->words(3) }}</span>
                     <span class="course-duration">{{str($courseClass->unscheduledHours)->words(3) }}</span>
                 </div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: {{ $progress }}%"></div>
+                </div>
+
             </div>
         @endforeach
     </div>
@@ -72,6 +77,20 @@
         .course-name {
             font-weight: bold;
             flex: 1;
+        }
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: #e5e7eb; /* Açık gri arkaplan */
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #10b981; /* Tailwind green-500 */
+            transition: width 0.4s ease-in-out;
         }
 
 

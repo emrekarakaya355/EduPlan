@@ -31,6 +31,14 @@ class Classroom extends Model
     {
         return $this->belongsToMany(Bolum::class, 'dp_birim_classrooms', 'classroom_id', 'bolum_id');
     }
+    public function scheduleSlots(){
+        return  $this->hasMany(ScheduleSlot::class,'classroom_id','id');
+    }
+
+    public function getTotalUsageDurationAttribute()
+    {
+        return $this->scheduleSlots->sum('duration');
+    }
 
     public function getDetailColumns()
     {

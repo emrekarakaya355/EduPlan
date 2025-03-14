@@ -90,11 +90,9 @@ class SidebarFilters extends Component
         $currentMonth = date('n');
 
         if ($currentMonth >= 1 && $currentMonth <= 6) {
-            // Ocak - Haziran -> Bahar
             $this->year =  $currentYear - 1 ;
             $this->semester = 'Spring';
         } elseif($currentMonth > 6 && $currentMonth <= 8) {
-            // Temmuz - Ağustos -> Yaz
             $this->year = $currentYear;
             $this->semester = 'Summer';
         } else {

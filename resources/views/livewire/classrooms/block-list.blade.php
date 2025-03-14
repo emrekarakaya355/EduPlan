@@ -1,15 +1,39 @@
 <div class="classrooms-container">
     @if (!empty($classrooms))
         @foreach ($classrooms as $classroom)
-            <div class="classroom-item" draggable="true"
+            @php
+                // totalUsageDuration'a göre yüzdelik hesapla
+                $progress = $classroom['total'] > 0 ? ($classroom['total'] / 70) * 100 : 0;
+            @endphp
+            <div
+                wire:key="classroom-class-{{ $classroom['id'] }}"
+                data-id="{{$classroom['id']}}"
+                class="classroom-item"
+                 draggable="true"
+                 data-type="classroom"
+                 ondragstart="drag(event, {{ $classroom['id'] }})"
                  wire:mouseover.debounce="$dispatch('showDetail', { model: 'Classroom', id: {{ $classroom['id'] }} })">
                 <p class="font-bold">{{ $classroom['name'] }}</p>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: {{ $progress }}%"></div>
+                </div>
             </div>
+
         @endforeach
     @else
         <div>Kayıt Yok</div>
     @endif
+
     <style>
+        .progress-percentage {
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #10b981;
+            transition: width 0.4s ease-in-out;
+        }
         .classrooms-container {
             display: flex;
             flex:1;

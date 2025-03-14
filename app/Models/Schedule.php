@@ -13,9 +13,8 @@ class Schedule extends Model
     public function program(){
         return $this->belongsTo('App\Models\Program');
     }
-
     public function scheduleSlots() {
-        return $this->hasMany(ScheduleSlot::class,'id','schedule_id');
+        return $this->hasMany(ScheduleSlot::class,'schedule_id', 'id');
     }
 
 }
