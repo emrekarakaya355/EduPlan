@@ -23,13 +23,13 @@
             let type = event.dataTransfer.getData("type");
             let dataId = event.dataTransfer.getData("text");
             let targetCell = event.target;
-
+            let day = targetCell.dataset.day;
+            let hour = targetCell.dataset.hour;
             if (!targetCell.classList.contains("dropzone") || targetCell.querySelector(".draggable")) {
                 return;
             }
             if (type === "course") {
-                let day = targetCell.dataset.day;   // Gün bilgisi
-                let hour = targetCell.dataset.hour; // Saat bilgisi
+
                 window.dispatchEvent(new CustomEvent('addToSchedule', {
                     detail: { courseId: dataId, day: day, start_time: hour }
                 }));
