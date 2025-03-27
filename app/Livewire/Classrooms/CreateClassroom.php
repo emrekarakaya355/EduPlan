@@ -10,8 +10,8 @@ class CreateClassroom extends Component
 {
     public ClassroomForm $form;
     public $selectedBuildingId;
-    public function mount($selectedBuildingId) {
-       $this->selectedBuildingId = $selectedBuildingId;
+    public function mount() {
+       $this->selectedBuildingId = Building::query()->where('name',session()->get('selectedBuilding'))->first();
     }
     public function save() {
 

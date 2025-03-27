@@ -27,8 +27,17 @@
             </div>
         </div>
     </div>
-    <div class="classrooms-section" >
-        <div></div>
+    <div class="classrooms-section" x-data="{ showCreateForm: false }" >
+        <div class="flex justify-end">
+            <button class="add-button"
+                    @click="showCreateForm = !showCreateForm">
+                <i class="fa-solid fa-plus-circle fa-flip text-green-500"></i>
+            </button>
+            <div x-show="showCreateForm" x-transition>
+                <livewire:classrooms.create-classroom />
+            </div>
+
+        </div>
         <div>
             <livewire:classrooms.block-list :classrooms="$filteredClassrooms"/>
         </div>
@@ -111,23 +120,6 @@
         height: 18px;
         color: #888;
     }
-    .add-button {
-        position: relative;
-        width: 36px;
-        height: 36px;
-        background-color: #4caf50;
-        color: black;
-        font-size: 24px;
-        font-weight: bold;
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        transition: background 0.3s ease-in-out;
-    }
 
-    .add-button:hover {
-        background-color: #388e3c;
-    }
 </style>
 </div>

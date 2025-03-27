@@ -1,4 +1,5 @@
 <div class="classrooms-container">
+
     @if (!empty($classrooms))
         @foreach ($classrooms as $classroom)
             @php
@@ -12,7 +13,13 @@
                  draggable="true"
                  data-type="classroom"
                  ondragstart="drag(event, {{ $classroom['id'] }})"
-                 wire:mouseover.debounce="$dispatch('showDetail', { model: 'Classroom', id: {{ $classroom['id'] }} })">
+                 wire:mouseenter.debounce.250="$dispatch('showDetail', {  'Derslik Adı' : '{{addslashes( $classroom['name'])}}',
+                                                                     'Fakülte' : '{{ addslashes($classroom['building']['campus']['name']) }}',
+                                                                     'Bina' : '{{ addslashes($classroom['building']['name']) }}',
+                                                                     'Sınıf Türü' : '{{ addslashes($classroom['type'])}}',
+                                                                    'Ders Kapasitesi' : '{{ addslashes($classroom['class_capacity'] )}} kişi',
+                                                                    'Sınav Kapasitesi' : '{{ addslashes($classroom['exam_capacity']) }} kişi',
+                                                                     })">
                 <p class="font-bold">{{ $classroom['name'] }}</p>
                 <div class="progress-container">
                     <div class="progress-bar" style="width: {{ $progress }}%"></div>

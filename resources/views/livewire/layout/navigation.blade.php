@@ -29,8 +29,19 @@ new class extends Component
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
-                <!-- Logo -->
-                <div class="text-lg font-bold text-gray-800">EduPlan</div>
+
+                    <div class="space-x-4">
+                        <a href="{{ route('schedule') }}" >
+                            <i class="fa-regular fa-calendar-days text-4xl @if(request()->routeIs('schedule')) text-blue-500  fa-beat-fade @else text-gray-500 @endif"></i>
+                        </a>
+                        <a href="{{ route('course-list') }}" >
+                            <i class="fa-solid fa-book-open text-4xl @if(request()->routeIs('course-list')) text-blue-500  fa-beat-fade @else text-gray-500 @endif"></i>
+                        </a>
+                    </div>
+
+                    <div class="text-lg font-bold text-gray-800">{{session()->get('year')}} {{Carbon\Carbon::createFromDate(session()->get('year'))->addYear()->year}}  Ders Programı</div>
+
+                <div></div>
                 <!-- Hamburger -->
                 <div class="-me-2 flex items-center sm:hidden">
                     <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
@@ -58,10 +69,6 @@ new class extends Component
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('profile')" wire:navigate>
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
-
                             <!-- Authentication -->
                             <button wire:click="logout" class="w-full text-start">
                                 <x-dropdown-link>
@@ -82,20 +89,7 @@ new class extends Component
                :class="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }">
 
         <livewire:layout.sidebar-filters />
-            <div  class="flex justify-between">
-                <div class="p-4 space-y-4">
-                    <x-responsive-nav-link :href="route('course-list')" :active="request()->routeIs('course-list')" wire:navigate>
-                        {{__('Courses')}}
-                    </x-responsive-nav-link>
-                </div>
-            </div>
-            <div  class="flex justify-between">
-                <div class="p-4 space-y-4">
-                    <x-responsive-nav-link :href="route('schedule')" :active="request()->routeIs('schedule')" wire:navigate>
-                        {{__('Schedule')}}
-                    </x-responsive-nav-link>
-                </div>
-            </div>
+
             <div  class="flex justify-between">
                 <div class="p-4 space-y-4">
                     <x-responsive-nav-link :href="route('ubys')" :active="request()->routeIs('ubys')" wire:navigate>

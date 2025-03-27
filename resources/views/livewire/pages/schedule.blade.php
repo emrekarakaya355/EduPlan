@@ -33,28 +33,16 @@
                 return;
             }
 
-            // Yeni element oluştur
-            let newElement = document.createElement("div");
-            newElement.classList.add("draggable");
-            newElement.setAttribute("draggable", "true");
-            newElement.setAttribute("ondragstart", "drag(event)");
-
             if (type === "course") {
-                let day = targetCell.dataset.day;   // Gün bilgisi
-                let hour = targetCell.dataset.hour; // Saat bilgisi
-                newElement.innerHTML = `${name} <br> (${hour}:00, Gün ${day})`;
-
-                window.dispatchEvent(new CustomEvent('addToSchedule', {
+               window.dispatchEvent(new CustomEvent('addToSchedule', {
                     detail: { courseId: dataId }
                 }));
 
             } else if (type === "classroom") {
                 alert(1);
-                newElement.innerText = name;
             }
 
-            // Hücreye ekle
-            targetCell.appendChild(newElement);
+
 
         }
 

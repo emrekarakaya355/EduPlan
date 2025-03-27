@@ -17,4 +17,15 @@ class Schedule extends Model
         return $this->hasMany(ScheduleSlot::class,'schedule_id', 'id');
     }
 
+    public function getSemesterAttribute($value)
+    {
+        $translations = [
+            'Spring' => 'Bahar',
+            'Fall' => 'Güz',
+            'Summer' => 'Yaz',
+        ];
+
+        return $translations[$value] ?? $value;
+    }
+
 }

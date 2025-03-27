@@ -4,7 +4,7 @@
 
         <input type="text" wire:model="form.name" placeholder="Derslik Adı"
                class="p-2 border rounded-md w-full mb-2">
-        <input type="number" wire:model="form.building_id" placeholder="Bina"
+        <input type="number" wire:model="form.building_id" placeholder="{{$selectedBuildingId?->name ?? 'Bina'}}" value="{{$selectedBuildingId?->id}}"
                class="p-2 border rounded-md w-full mb-2">
         <input type="number" wire:model="form.class_capacity" placeholder="Sınıf Kapasitesi"
                class="p-2 border rounded-md w-full mb-2">
@@ -19,7 +19,7 @@
         </select>
 
         <div class="flex justify-end gap-2">
-            <button wire:click="dispatch('toggleForm')" class="p-2 bg-gray-500 text-white rounded-md">
+            <button @click="showCreateForm = !showCreateForm" class="p-2 bg-gray-500 text-white rounded-md">
                 Kapat
             </button>
             <button wire:click="save" class="p-2 bg-green-600 text-white rounded-md">

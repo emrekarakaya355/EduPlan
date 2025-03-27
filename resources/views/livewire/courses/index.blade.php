@@ -2,7 +2,9 @@
     <div class="table-header">
         <!-- Search ve Add Button -->
         <input type="text" placeholder="Ders arayın..." class="search-input">
-        <button class="add-button">+</button>
+        <button class="add-button">
+            <i class="fa-solid fa-plus-circle fa-flip text-green-500 "></i>
+        </button>
     </div>
     <div>
         <div class="courses-container">
@@ -12,7 +14,13 @@
                 @endphp
                 <div
                     wire:key="course-class-{{ $courseClass->id }}" data-id="{{$courseClass->id}}"
-                    wire:mouseover="$dispatch('showDetail', { model: 'Course_class', id: {{ $courseClass->id }} })"
+                    wire:mouseenter.self.debounce.250.prevent ="$dispatch('showDetail', {
+                                                               'Ders Adı':'{{ addslashes($courseClass->course->name) }}',
+                                                               'Ders Kodu':'{{ addslashes($courseClass->course->code)}}',
+                                                               'Kontenjan' : '{{addslashes($courseClass->quota)}} kişi',
+                                                               'Süre' : '{{addslashes($courseClass->duration)}} saat',
+                                                               'Hoca' : '{{addslashes($courseClass->instructorTitle)}} {{addslashes($courseClass->instructorName)}} {{addslashes($courseClass->instructorSurname)}}'
+                                                               })"
                     class="course-item"
                     draggable="true"
                     ondragstart="drag(event, {{ $courseClass->id }})"
@@ -51,21 +59,19 @@
                 display: flex;
                 flex-wrap: wrap;
                 gap: 10px;
-                overflow-y: auto;
                 margin-top: 15px;
             }
             .course-section {
                 padding: 10px;
-                overflow-y: auto;,
             }
             .course-item {
                 background-color: #fff;
                 padding: 12px;
                 border-radius: 8px;
                 border: 1px solid #ddd;
-                width: calc(33% - 10px); /* 3 kart yanyana */
+                width: calc(50% - 10px); /* 3 kart yanyana */
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                cursor: move;
+                cursor: grab;
                 transition: transform 0.3s ease;
                 display: flex;
                 flex-direction: column;
@@ -105,4 +111,8 @@
         </style>
 
 </div>
+    <script>
+
+
+    </script>
 </div>

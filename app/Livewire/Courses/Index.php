@@ -4,6 +4,7 @@ namespace App\Livewire\Courses;
 
 use App\Models\Course_class;
 use Illuminate\Support\Facades\Session;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -16,6 +17,7 @@ class Index extends Component
     public $year;
     public $semester;
     public $scheduleCourses;
+
     public $removedCourses;
 
     public function mount(): void
@@ -30,15 +32,18 @@ class Index extends Component
     }
 
 
-    public function loadCourses(): void
+    #[Computed]
+    public function loadCourses()
     {
-        $this->courses = Course_class::query()->whereHas('course', function ($query) {
-            return $query->where('year', $this->year)->where('semester', $this->semester);
-        })->where('program_id', $this->program_id)->where('grade', $this->grade)->with('course')->get()
-            ->filter(function ($course) {
-                return $course->unscheduled_hours > 0;
-            });
+          return $this->courses = Course_class::query()->whereHas('course', function ($query) {
+                return $query->where('year', $this->year)->where('semester', $this->semester);
+            })->where('program_id', $this->program_id)->where('grade', $this->grade)->with('course')->get()
+                ->filter(function ($course) {
+                    return $course->unscheduled_hours > 0;
+                });
     }
+
+
 
     #[On('filterUpdated')]
     public function applySidebarFilters($filters): void
@@ -59,28 +64,14 @@ class Index extends Component
     #[On('addToSchedule')]
     public function removeFromCourseList($courseId): void
     {
-        $course = $this->courses->first(fn($course) => $course->id == $courseId);
-
-        if ($course) {
-            $this->removedCourses[] = $course;
-        }
-
-        $this->courses = $this->courses->reject(fn($course) => $course->id == $courseId && $course->unscheduled_hours <= 0);
+        $this->loadCourses();
     }
 
     #[On('removeFromSchedule')]
     public function addToCourseList($courseId): void
     {
-        $course = collect($this->removedCourses)->first(fn($course) => $course->id == $courseId);
-        if ($course) {
-            $course->unscheduled_hours = 1;
+        $this->loadCourses();
 
-            // Tekrar listeye ekleyelim
-            $this->courses->push($course);
-
-            // Silinen derslerden çıkaralım
-            $this->removedCourses = collect($this->removedCourses)->reject(fn($c) => $c->id == $courseId)->values()->all();
-        }
     }
 
     public function render()

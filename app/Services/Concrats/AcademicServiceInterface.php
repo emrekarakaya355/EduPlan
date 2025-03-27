@@ -7,6 +7,7 @@ namespace App\Services\Concrats;
 interface AcademicServiceInterface
 {
     public function fetchLessons($year,$donem);
+    public function fetchStudents();
     public function fetchUnits($criteria);
 
     public function fetchPersonPositions ($criteria);

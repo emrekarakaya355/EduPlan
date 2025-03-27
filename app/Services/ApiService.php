@@ -16,7 +16,6 @@ class ApiService
     }
 
     public function syncData($year,$semester){
-
         $startTime = microtime(true);
 
         $this->ubysService->syncUnits($year,$semester);
@@ -26,18 +25,5 @@ class ApiService
         $this->ubysService->syncLessons($year,$semester);
         dd("bitti");
     }
-
-
-/*
-    private function getBirims($units)
-    {
-        return $units->filter(function ($unit) {return ($unit->UnitTypeId == "8" || $unit->UnitTypeId == "3" ||$unit->UnitTypeId == "1" || $unit->UnitTypeId == "16"|| $unit->UnitTypeId == "11"); });
-    }
-*/
-
-
-
-
-
 
 }

@@ -36,7 +36,6 @@ class UbysAktar extends Component
     }
     public function updatedSelectedProgram()
     {
-
         $this->updateCourseClasses();
     }
 
@@ -54,7 +53,7 @@ class UbysAktar extends Component
 
     public function mount()
     {
-        $this->birims = Birim::whereHas('bolums.programs.courseClasses') // courseClasses olan programları getir
+        $this->birims = Birim::whereHas('bolums.programs.courseClasses')
         ->orderBy('name')->get();
         $this->orphanedBirims = Birim::query()->whereDoesntHave('bolums')->get();
         $this->orphanedBolums = Bolum::query()->whereDoesntHave('programs')->get();

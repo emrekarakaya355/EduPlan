@@ -13,7 +13,7 @@ class Chart extends Component
 {
 
     #[Reactive]
-    public $schedule;
+    public $schedule = [];
 
     #[Reactive]
     public $calendarData;
@@ -21,7 +21,6 @@ class Chart extends Component
 
     public function render()
     {
-
         return view('livewire.schedule.chart');
     }
 }

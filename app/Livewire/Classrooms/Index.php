@@ -21,6 +21,7 @@ class Index extends Component
 
     public $unit,$department;
 
+
     protected $listeners = ['filterUpdated' => 'applyFilters'];
 
     public function mount(): void
@@ -35,8 +36,6 @@ class Index extends Component
 
     public function loadClassrooms(): void
     {
-
-
         $this->classrooms = Classroom::where(function ($query) {
             $query->whereHas('birims', function ($query) {
                 $query->where('birim_id', $this->unit);

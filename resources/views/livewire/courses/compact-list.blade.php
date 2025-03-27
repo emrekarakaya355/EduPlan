@@ -96,11 +96,4 @@
 
     </style>
 
-    <script>
-        function drag(event) {
-            event.dataTransfer.setData("text", event.target.dataset.id);
-            event.dataTransfer.setData("type", event.target.dataset.type);
-            event.dataTransfer.setData("name", event.target.innerText.trim());
-        }
-    </script>
 </div>

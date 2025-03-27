@@ -3,15 +3,20 @@
 namespace App\Livewire\Schedule;
 
 use App\Enums\DayOfWeek;
+use App\Livewire\UbysAktar;
 use App\Models\Course_class;
+use App\Models\ogrenci;
 use App\Models\Schedule;
 use App\Models\ScheduleSlot;
+use App\Services\Adapters\UbysAdapter;
 use Carbon\Carbon;
 use Carbon\WeekDay;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Schedule')]
 class Index extends Component
 {
 
@@ -75,8 +80,9 @@ class Index extends Component
                             'id' => $scheduleSlot->course->id,
                             'class_name' => $scheduleSlot->course->course->name,
                             'class_code' => $scheduleSlot->course->course->code,
-                            'teacher_name' => $scheduleSlot->course->instructor->adi . ' ' . $scheduleSlot->course->instructor->soyadi,
-                            'classrom_name' => $scheduleSlot->classroom?->name,
+                            'teacher_name' => ($scheduleSlot->course->instructor?->adi . ' ' . $scheduleSlot->course->instructor?->soyadi) ?? ' ',
+                            'classrom_name' => $scheduleSlot->classroom?->name ,
+                            'building_name' => isset($scheduleSlot->classroom?->building?->name) ? '( ' .$scheduleSlot->classroom?->building?->name .' ) ' :'',
                         ];
                     }
                     $this->scheduleData[$timeText][] = $temp;
@@ -167,9 +173,12 @@ class Index extends Component
             'day' => 'required|integer|min:1|max:7',
             'start_time' => 'required|date_format:H:i',
         ])->validate();
+
+
         $end_time = date('H:i', strtotime($data['start_time'] . ' +1 hour'));
         $course = Course_class::query()->find($courseId);
-        if(!$course || $course->UnscheduledHours<=0){
+        if(!$course || $course->UnscheduledHours<=0)
+        {
             return;
         }
 
@@ -185,7 +194,7 @@ class Index extends Component
     }
 
     #[On('removeFromSchedule')]
-    public function removeFromSchedule($hour,$day,$courseId)
+    public function removeFromSchedule($hour,$day,$courseId): void
     {
         ScheduleSlot::query()
             ->where('schedule_id',$this->schedule->id)
