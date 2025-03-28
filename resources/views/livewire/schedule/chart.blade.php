@@ -17,10 +17,10 @@
         </div>
         <div class="flex items-center flex-col">
             @isset($schedule)
-                <div>{{$schedule['year'] .' - '. Carbon\Carbon::createFromDate($schedule['year'])->addYear()->year. ' ' . $schedule['semester']  }}</div>
+                <div>{{$schedule->year .' - '. Carbon\Carbon::createFromDate($schedule->year)->addYear()->year. ' ' . $schedule->semester  }}</div>
 
-                <div>{{$schedule['program']['name'] . ' ' }}</div>
-                <div>{{$schedule['grade'] .'. Sınıf Ders Programı'}}</div>
+                <div>{{$schedule->program->name . ' ' }}</div>
+                <div>{{$schedule->grade .'. Sınıf Ders Programı'}}</div>
             @endisset
         </div>
        <div class="flex">
@@ -48,7 +48,7 @@
         <div class="text-center font-bold p-2 bg-gray-800 text-white">Cuma</div>
         <div class="text-center font-bold p-2 bg-gray-800 text-white">Cumartesi</div>
 
-        @foreach($calendarData as $time => $days)
+        @foreach($scheduleData as $time => $days)
             <div class="text-center font-bold p-2 bg-gray-700 text-white">
                 {{ $time }}
             </div>
@@ -60,8 +60,9 @@
                             <div wire:key="{{ $time }}-{{ $course['id'] }}"
                                  class="border-l dropzone relative flex-1"
                                  draggable="true"
-                                 data-id="{{ $course['id'] ?? '' }}"
+                                 data-id="{{ $course->id ?? '' }}"
                                  data-type="course"
+                                 data-schedule ="{{ $this->schedule->id }}"
                                  data-day="{{ $day + 1 }}" data-hour="{{ $time }}" ondragstart="drag(event)"
                                  ondragover="event.preventDefault()" ondrop="drop(event)">
                                 <button wire:click="$dispatch('removeFromSchedule', { hour: '{{ $time }}', day: '{{ $day + 1 }}', courseId: '{{ $course['id'] ?? '' }}' })"
@@ -80,6 +81,7 @@
 
                     <div class="border bg-white dropzone"
                          data-day="{{ $day + 1  }}" data-hour="{{ $time }}"
+                         data-schedule ="{{ $schedule?->id }}"
                          ondragover="event.preventDefault()" ondrop="drop(event)">
                     </div>
                 @endif
@@ -87,6 +89,57 @@
         @endforeach
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function (e) {
+            Livewire.on('show-confirm', (event) => {
+                if (event.type === 'error') {
+                    alert(event[0].message);
+                } else {
 
+                    alert(event[0].message);
+                }
+            });
+
+            Livewire.confirm('ask-confirmation', (event) => {
+                if (confirm(event.message)) {
+                    Livewire.dispatch('forceAddToSchedule', {
+                        courseId: event.courseId,
+                        day: event.day,
+                        start_time: event.start_time
+                    });
+                }
+            });
+        });
+
+
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.dataset.id);
+            event.dataTransfer.setData("type", event.target.dataset.type);
+            event.dataTransfer.setData("name", event.target.innerText.trim());
+        }
+        function drop(event) {
+            event.preventDefault();
+            let type = event.dataTransfer.getData("type");
+            let dataId = event.dataTransfer.getData("text");
+            let targetCell = event.target;
+            let day = targetCell.dataset.day;
+            let hour = targetCell.dataset.hour;
+            let schedule = targetCell.dataset.schedule;
+            if (!targetCell.classList.contains("dropzone") || targetCell.querySelector(".draggable")) {
+                return;
+            }
+            if (type === "course") {
+
+                window.dispatchEvent(new CustomEvent('addToSchedule', {
+                    detail: { courseId: dataId, day: day, start_time: hour, scheduleId:schedule }
+                }));
+            } else if (type === "classroom") {
+                window.dispatchEvent(new CustomEvent('addClassroomToSchedule', {
+                    detail: { classroomId: dataId, day: day, start_time: hour }
+                }));
+            }
+        }
+    </script>
 </div>
 

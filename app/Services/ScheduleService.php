@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\Course_class;
+use App\Models\ScheduleSlot;
+use App\Services\Validators\ClassroomConflictValidator;
+use App\Services\Validators\InstructorConflictValidator;
+
+class ScheduleService {
+
+    protected array $conflictValidators = [];
+
+    public function __construct(){
+        $this->conflictValidators = [
+            new InstructorConflictValidator(),
+            new ClassroomConflictValidator()
+        ];
+    }
+
+    public function addToSchedule($scheduleId, $courseId, $day, $startTime, $force = false)
+    {
+        $course = Course_class::findOrFail($courseId);
+        $endTime = date('H:i', strtotime($startTime . ' +1 hour'));
+
+        $conflicts = $this->detectConflicts($scheduleId, $course, $day, $startTime, $endTime);
+
+        if (!empty($conflicts) && !$force) {
+            return ['has_conflicts' => true, 'conflicts' => $conflicts];
+        }
+
+        $slot = ScheduleSlot::create([
+            'schedule_id' => $scheduleId,
+            'course_id' => $courseId,
+            'classroom_id' => null,
+            'start_time' => $startTime,
+            'end_time' => $endTime,
+            'day' => $day,
+        ]);
+
+        return ['success' => true, 'slot' => $slot];
+    }
+
+    private function detectConflicts($scheduleId, $course, $day, $startTime, string $endTime)
+    {
+        $conflicts = [];
+
+        foreach ($this->conflictValidators as $validator) {
+            $result = $validator->validate($scheduleId, $course, $day, $startTime, $endTime);
+
+            if ($result !== true) {
+                $conflicts[$validator->getName()] = $result;
+            }
+
+        }
+
+        return $conflicts;
+    }
+
+}
