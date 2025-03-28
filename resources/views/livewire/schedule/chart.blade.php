@@ -60,9 +60,9 @@
                             <div wire:key="{{ $time }}-{{ $course['id'] }}"
                                  class="border-l dropzone relative flex-1"
                                  draggable="true"
-                                 data-id="{{ $course->id ?? '' }}"
+                                 data-id="{{ $course['id'] ?? '' }}"
                                  data-type="course"
-                                 data-schedule ="{{ $this->schedule->id }}"
+                                 data-schedule ="{{ $schedule->id }}"
                                  data-day="{{ $day + 1 }}" data-hour="{{ $time }}" ondragstart="drag(event)"
                                  ondragover="event.preventDefault()" ondrop="drop(event)">
                                 <button wire:click="$dispatch('removeFromSchedule', { hour: '{{ $time }}', day: '{{ $day + 1 }}', courseId: '{{ $course['id'] ?? '' }}' })"
@@ -92,22 +92,43 @@
     <script>
         document.addEventListener('DOMContentLoaded', function (e) {
             Livewire.on('show-confirm', (event) => {
-                if (event.type === 'error') {
-                    alert(event[0].message);
-                } else {
-
-                    alert(event[0].message);
-                }
+                const data = event[0];
+                Swal.fire({
+                    title: data.type === 'error' ? 'Hata!' : 'Başarılı!',
+                    text: data.message,
+                    icon: data.type,
+                    confirmButtonText: 'Tamam',
+                    timer: data.type === 'error' ? null : 2000,
+                    timerProgressBar: true,
+                    toast: data.type !== 'error',
+                    position: data.type === 'error' ? 'center' : 'top-end',
+                    showConfirmButton: data.type === 'error'
+                });
             });
 
-            Livewire.confirm('ask-confirmation', (event) => {
-                if (confirm(event.message)) {
-                    Livewire.dispatch('forceAddToSchedule', {
-                        courseId: event.courseId,
-                        day: event.day,
-                        start_time: event.start_time
-                    });
-                }
+            Livewire.on('ask-confirmation', (event) => {
+                const data = event[0]; // Livewire 3'te veriler event[0] içinde
+
+                Swal.fire({
+                    title: 'Emin misiniz?',
+                    text: data.message,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Evet, ekle!',
+                    cancelButtonText: 'İptal',
+                    background: '#1a1a2e',
+                    color: '#ffffff'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Livewire.dispatch('forceAddToSchedule', {
+                            courseId: data.courseId,
+                            day: data.day,
+                            start_time: data.start_time
+                        });
+                    }
+                });
             });
         });
 

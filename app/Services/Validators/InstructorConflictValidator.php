@@ -19,20 +19,19 @@ class InstructorConflictValidator implements ConflictValidatorInterface{
      */
     public function validate($scheduleId, $course, $day, $startTime, $endTime)
     {
-        $conflicts = ScheduleSlot::where('schedule_id', $scheduleId)
-            ->whereHas('course', function($query) use ($course) {
+        $conflicts = ScheduleSlot::whereHas('course', function($query) use ($course) {
                 $query->where('instructorId', $course->instructorId);
             })
             ->where('day', $day)
             ->where(function($query) use ($startTime, $endTime) {
                 $query->whereBetween('start_time', [$startTime, $endTime])
-                    ->orWhereBetween('end_time', [$startTime, $endTime])
+                    ->orWhereBetween('end_time', [date('H:i', strtotime($startTime . ' +1 minute')), $endTime])
                     ->orWhere(function($q) use ($startTime, $endTime) {
                         $q->where('start_time', '<=', $startTime)
                             ->where('end_time', '>=', $endTime);
                     });
             })
-            ->with('course')
+            ->with('course.course')
             ->get();
 
         if ($conflicts->isEmpty()) {
@@ -40,7 +39,7 @@ class InstructorConflictValidator implements ConflictValidatorInterface{
         }
 
         return [
-            'message' => 'Teacher has conflicting classes',
+            'message' => 'Hocanın bu saatte başka bir yerde dersi var.',
             'conflicts' => $conflicts->toArray()
         ];
     }

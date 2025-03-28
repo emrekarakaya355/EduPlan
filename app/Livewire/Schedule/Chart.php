@@ -166,6 +166,13 @@ class Chart extends Component
             $day,
             $startTime
         );
+        if(!$result['success']){
+            $this->dispatch('show-confirm', [
+                'message' => 'Dersin bütün saatleri zaten planlanmış durumda',
+                'type' => 'error'
+            ]);
+            return;
+        }
         if (isset($result['has_conflicts'])) {
             $this->dispatch('ask-confirmation', [
                 'message' => $this->formatConflictMessage($result['conflicts']),
@@ -175,6 +182,7 @@ class Chart extends Component
             ]);
             return;
         }
+
         ;
         $this->dispatch('show-confirm', [
             'message' => 'Ders Çakışma olmadan eklendi.',
@@ -196,8 +204,8 @@ class Chart extends Component
         );
 
         $this->loadSchedule();
-        $this->dispatchBrowserEvent('show-confirm', [
-            'message' => 'Course added to schedule (conflicts ignored).',
+        $this->dispatch('show-confirm', [
+            'message' => 'Ders Başarı İle eklendi (Çakışma görmezden geldi.).',
             'type' => 'success'
         ]);
         $this->loadSchedule();
@@ -205,18 +213,17 @@ class Chart extends Component
     protected function formatConflictMessage($conflicts)
     {
         $messages = [];
-
         foreach ($conflicts as $type => $data) {
             $messages[] = $data['message'] ?? '';
 
             if (isset($data['conflicts'])) {
                 foreach ($data['conflicts'] as $conflict) {
-                    $messages[] = "- {$conflict['course']['course_id']} at {$conflict['start_time']}";
+                    $messages[] = "\n- {$conflict['course']['course']['name']} at {$conflict['start_time']}\n\n";
                 }
             }
         }
 
-        return implode("\n", $messages) . "\n\nDo you want to add anyway?";
+        return implode("\n", $messages) . "\n\nYinede Eklemek İstiyor musun?";
     }
     #[On('removeFromSchedule')]
     public function removeFromSchedule($hour,$day,$courseId): void

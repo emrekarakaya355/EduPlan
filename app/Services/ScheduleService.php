@@ -23,6 +23,9 @@ class ScheduleService {
         $course = Course_class::findOrFail($courseId);
         $endTime = date('H:i', strtotime($startTime . ' +1 hour'));
 
+        if ($course->UnscheduledHours < 1) {
+            return ['success' => false,'status' => 'Ders zaten planlanmış'];
+        }
         $conflicts = $this->detectConflicts($scheduleId, $course, $day, $startTime, $endTime);
 
         if (!empty($conflicts) && !$force) {
