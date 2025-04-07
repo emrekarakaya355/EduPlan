@@ -1,6 +1,6 @@
 <div class="p-2">
     <div class="flex justify-between">
-
+        <div class="flex space-x-4">
         <div>
             <select id="courseSelect" x-data x-on:change="$dispatch('gradeUpdated',{grade : $event.target.value})">
                 <option value="0">Hazırlık</option>
@@ -15,6 +15,13 @@
                 <option value="9">9. Sınıf</option>
             </select>
         </div>
+            <div>
+                <select id="sube" >
+                    <option value="A">A Şubesi</option>
+                    <option value="B">B Şubesi</option>
+                </select>
+            </div>
+        </div>
         <div class="flex items-center flex-col">
             @isset($schedule)
                 <div>{{$schedule->year .' - '. Carbon\Carbon::createFromDate($schedule->year)->addYear()->year. ' ' . $schedule->semester  }}</div>
@@ -23,7 +30,7 @@
                 <div>{{$schedule->grade .'. Sınıf Ders Programı'}}</div>
             @endisset
         </div>
-       <div class="flex">
+        <div class="flex items-center space-x-2">
            <div>
                <span>Versiyon</span>
                <select>
@@ -32,7 +39,12 @@
                </select>
            </div>
            <div>
-               <button  class="px-4 py-2 rounded text-green-500">
+               <button class="rounded text-blue-500 text-2xl hover:bg-blue-100">
+                    <i class="fa-solid fa-save"></i>
+               </button>
+           </div>
+           <div>
+               <button class="rounded text-green-500 text-2xl hover:bg-green-100">
                    <i class="fa-solid fa-gear fa-flip"></i>
                </button>
            </div>

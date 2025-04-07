@@ -3,6 +3,8 @@
 namespace App\Services\Validators;
 
 
+use App\Models\Course_class;
+use App\Models\Instructor;
 use App\Models\ScheduleSlot;
 use App\Services\Concrats\ConflictValidatorInterface;
 
@@ -17,10 +19,11 @@ class InstructorConflictValidator implements ConflictValidatorInterface{
      * @param $endTime
      * @return mixed
      */
-    public function validate($scheduleId, $course, $day, $startTime, $endTime)
+    public function validate($dynamicId, $day, $startTime, $endTime)
     {
-        $conflicts = ScheduleSlot::whereHas('course', function($query) use ($course) {
-                $query->where('instructorId', $course->instructorId);
+
+        $conflicts = ScheduleSlot::whereHas('course', function($query) use ($dynamicId) {
+                $query->where('instructorId', $dynamicId);
             })
             ->where('day', $day)
             ->where(function($query) use ($startTime, $endTime) {
@@ -37,11 +40,24 @@ class InstructorConflictValidator implements ConflictValidatorInterface{
         if ($conflicts->isEmpty()) {
             return true;
         }
-
         return [
             'message' => 'Hocanın bu saatte başka bir yerde dersi var.',
-            'conflicts' => $conflicts->toArray()
+            'conflicts' => $this->getConflictMessage($conflicts)
         ];
+    }
+
+    private function getConflictMessage($conflicts): string
+    {
+        $message = '';
+        foreach($conflicts as $conflict){
+
+            $instructorName = $conflict?->course?->instructor?->name ?? ' ?? ';
+            $programName = $conflict?->course?->program?->name ?? ' bir yerde ';
+            $courseCode = $conflict?->course?->course?->code ?? '???';
+
+            $message .= "$instructorName isimli hocamız bu saatte $programName programı için $courseCode kodlu dersi vermektedir.\n";
+        }
+        return $message;
     }
 
     /**

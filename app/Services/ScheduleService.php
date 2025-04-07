@@ -21,12 +21,12 @@ class ScheduleService {
     public function addToSchedule($scheduleId, $courseId, $day, $startTime, $force = false)
     {
         $course = Course_class::findOrFail($courseId);
-        $endTime = date('H:i', strtotime($startTime . ' +1 hour'));
+        $endTime = date('H:i', strtotime($startTime . ' +45 minute'));
 
         if ($course->UnscheduledHours < 1) {
             return ['success' => false,'status' => 'Ders zaten planlanmış'];
         }
-        $conflicts = $this->detectConflicts($scheduleId, $course, $day, $startTime, $endTime);
+        $conflicts = $this->detectConflicts($course->instructorId, $day, $startTime, $endTime);
 
         if (!empty($conflicts) && !$force) {
             return ['has_conflicts' => true, 'conflicts' => $conflicts];
@@ -44,19 +44,16 @@ class ScheduleService {
         return ['success' => true, 'slot' => $slot];
     }
 
-    private function detectConflicts($scheduleId, $course, $day, $startTime, string $endTime)
+    private function detectConflicts($instructorId, $day, $startTime, string $endTime)
     {
         $conflicts = [];
-
         foreach ($this->conflictValidators as $validator) {
-            $result = $validator->validate($scheduleId, $course, $day, $startTime, $endTime);
+            $result = $validator->validate($instructorId, $day, $startTime, $endTime);
 
             if ($result !== true) {
                 $conflicts[$validator->getName()] = $result;
             }
-
         }
-
         return $conflicts;
     }
 

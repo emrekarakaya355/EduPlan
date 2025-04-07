@@ -10,10 +10,10 @@
                 wire:key="classroom-class-{{ $classroom['id'] }}"
                 data-id="{{$classroom['id']}}"
                 class="classroom-item"
-                 draggable="true"
-                 data-type="classroom"
-                 ondragstart="drag(event, {{ $classroom['id'] }})"
-                 wire:mouseenter.debounce.250="$dispatch('showDetail', {  'Derslik Adı' : '{{addslashes( $classroom['name'])}}',
+                draggable="true"
+                data-type="classroom"
+                ondragstart="drag(event, {{ $classroom['id'] }})"
+                wire:mouseenter.debounce.250="$dispatch('showDetail', {  'Derslik Adı' : '{{addslashes( $classroom['name'])}}',
                                                                      'Fakülte' : '{{ addslashes($classroom['building']['campus']['name']) }}',
                                                                      'Bina' : '{{ addslashes($classroom['building']['name']) }}',
                                                                      'Sınıf Türü' : '{{ addslashes($classroom['type'])}}',
@@ -53,6 +53,8 @@
             max-height: 100px;
             scroll-behavior: smooth;
             flex-wrap: wrap;
+            vertical-align: center;
+            align-items: center;
 
 
         }

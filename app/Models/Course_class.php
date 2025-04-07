@@ -58,7 +58,7 @@ class Course_class extends Model
     }
     public function getScheduledHoursAttribute()
     {
-        return $this->scheduleSlots->sum('duration');
+        return $this->scheduleSlots->count();
     }
 
     public function getUnscheduledHoursAttribute()

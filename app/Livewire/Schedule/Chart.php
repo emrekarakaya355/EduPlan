@@ -9,14 +9,10 @@ use App\Services\ScheduleService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\On;
-use Livewire\Attributes\Reactive;
 use Livewire\Component;
-use Nette\Utils\ArrayList;
 
 class Chart extends Component
 {
-
-
     public $program, $year, $semester;
     public $grade = 1;
     public $schedule;
@@ -74,8 +70,8 @@ class Chart extends Component
                     foreach ($lessons as $scheduleSlot) {
                         $temp[] = [
                             'id' => $scheduleSlot->course->id,
-                            'class_name' => $scheduleSlot->course->course->name,
-                            'class_code' => $scheduleSlot->course->course->code,
+                            'class_name' => $scheduleSlot->course->course?->name,
+                            'class_code' => $scheduleSlot->course->course?->code,
                             'teacher_name' => ($scheduleSlot->course->instructor?->adi . ' ' . $scheduleSlot->course->instructor?->soyadi) ?? ' ',
                             'classrom_name' => $scheduleSlot->classroom?->name ,
                             'building_name' => isset($scheduleSlot->classroom?->building?->name) ? '( ' .$scheduleSlot->classroom?->building?->name .' ) ' :'',
@@ -90,7 +86,7 @@ class Chart extends Component
 
         //dd($this->scheduleData);
     }
-    private function generateTimeRange($from = '08:30', $to = '18:00', $lunchStart = '12:30', $lunchEnd = '13:30'){
+    private function generateTimeRange($from = '08:30', $to = '18:00', $lunchStart = '12:00', $lunchEnd = '13:00'){
         {
             $time = Carbon::parse($from);
             $lunchStart = Carbon::parse($lunchStart);
@@ -166,7 +162,7 @@ class Chart extends Component
             $day,
             $startTime
         );
-        if(!$result['success']){
+        if(isset($result['success']) && !$result['success']){
             $this->dispatch('show-confirm', [
                 'message' => 'Dersin bütün saatleri zaten planlanmış durumda',
                 'type' => 'error'
@@ -205,7 +201,7 @@ class Chart extends Component
 
         $this->loadSchedule();
         $this->dispatch('show-confirm', [
-            'message' => 'Ders Başarı İle eklendi (Çakışma görmezden geldi.).',
+            'message' => 'Ders Başarı İle eklendi (Çakışma görmezden gelindi.).',
             'type' => 'success'
         ]);
         $this->loadSchedule();
@@ -217,13 +213,12 @@ class Chart extends Component
             $messages[] = $data['message'] ?? '';
 
             if (isset($data['conflicts'])) {
-                foreach ($data['conflicts'] as $conflict) {
-                    $messages[] = "\n- {$conflict['course']['course']['name']} at {$conflict['start_time']}\n\n";
-                }
+                $messages = $data['conflicts'];
+                    #$messages[] = "\n- {$conflict['course']['course']['name']} at {$conflict['start_time']}\n\n";
             }
         }
 
-        return implode("\n", $messages) . "\n\nYinede Eklemek İstiyor musun?";
+        return $messages . "\n\nYinede Eklemek İstiyor musun?";
     }
     #[On('removeFromSchedule')]
     public function removeFromSchedule($hour,$day,$courseId): void

@@ -1,4 +1,4 @@
-<div class="container space-x-4">
+<div class="container space-x-4"  style="position: relative;">
     <div class="filter-section">
         <div>
             <div class="campus-box">
@@ -27,40 +27,41 @@
             </div>
         </div>
     </div>
-    <div class="classrooms-section" x-data="{ showCreateForm: false }" >
-        <div class="flex justify-end">
-            <button class="add-button"
-                    @click="showCreateForm = !showCreateForm">
-                <i class="fa-solid fa-plus-circle fa-flip text-green-500"></i>
-            </button>
-            <div x-show="showCreateForm" x-transition>
-                <livewire:classrooms.create-classroom />
-            </div>
+    <div class="classrooms-section">
 
-        </div>
         <div>
             <livewire:classrooms.block-list :classrooms="$filteredClassrooms"/>
         </div>
     </div>
-
+    <div class="flex justify-end"  x-data="{ showCreateForm: false }">
+        <button class="add-button p-2" style="position:absolute; top: 0; right: 0"
+                @click="showCreateForm = !showCreateForm">
+            <i class="fa-solid fa-plus-circle text-green-500"></i>
+        </button>
+        <div
+            x-show="showCreateForm"
+            class="mt-12 w-full transition ease-out duration-300">
+            <livewire:classrooms.create-classroom />
+        </div>
+    </div>
 
 <style>
     .container {
         display: flex;
-        align-items: end;
+        align-items: center;
         padding: 10px;
 
     }
     .campus-box,
     .buildings-container {
-        margin-bottom: 15px;
+        margin-bottom: 6px;
     }
 
     .campus-select,
     .building-select {
         width: 250px;
-        padding: 8px;
-        font-size: 14px;
+        padding: 2px;
+        font-size: 12px;
         border-radius: 5px;
         border: 1px solid #ccc;
         background-color: #f9f9f9;
@@ -68,8 +69,8 @@
 
     .campus-select option,
     .building-select option {
-        padding: 8px;
-        font-size: 14px;
+        padding: 2px;
+        font-size: 12px;
     }
 
     .campus-select:focus,
