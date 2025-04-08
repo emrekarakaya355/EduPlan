@@ -34,7 +34,6 @@ class ClassroomForm extends Form
         $this->class_capacity = $classroom->class_capacity;
         $this->exam_capacity = $classroom->exam_capacity;
         $this->type = $classroom->type;
-
         $this->classroom = $classroom;
     }
 
@@ -44,8 +43,6 @@ class ClassroomForm extends Form
             $this->only(['name', 'building_id', 'class_capacity', 'exam_capacity', 'type'])
         );
         $classroom->birims()->sync($this->building_id);
-
-
     }
 
     public function update() {

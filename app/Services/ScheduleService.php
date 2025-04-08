@@ -9,23 +9,29 @@ use App\Services\Validators\InstructorConflictValidator;
 
 class ScheduleService {
 
-    protected array $conflictValidators = [];
+    protected array $courseValidators = [];
+    protected array $classroomValidators = [];
 
     public function __construct(){
-        $this->conflictValidators = [
+        $this->courseValidators = [
             new InstructorConflictValidator(),
-            new ClassroomConflictValidator()
+        ];
+        $this->classroomValidators = [
+            new ClassroomConflictValidator(),
         ];
     }
 
     public function addToSchedule($scheduleId, $courseId, $day, $startTime, $force = false)
     {
-        $course = Course_class::findOrFail($courseId);
-        $endTime = date('H:i', strtotime($startTime . ' +45 minute'));
+        $course = Course_class::find($courseId);
+        if(!$course){
+            return ['success' => false];
+        }
 
         if ($course->UnscheduledHours < 1) {
             return ['success' => false,'status' => 'Ders zaten planlanmış'];
         }
+        $endTime = date('H:i', strtotime($startTime . ' +45 minute'));
         $conflicts = $this->detectConflicts($course->instructorId, $day, $startTime, $endTime);
 
         if (!empty($conflicts) && !$force) {
@@ -44,10 +50,10 @@ class ScheduleService {
         return ['success' => true, 'slot' => $slot];
     }
 
-    private function detectConflicts($instructorId, $day, $startTime, string $endTime)
+    private function detectConflicts($instructorId, $day, $startTime, $endTime): array
     {
         $conflicts = [];
-        foreach ($this->conflictValidators as $validator) {
+        foreach ($this->courseValidators as $validator) {
             $result = $validator->validate($instructorId, $day, $startTime, $endTime);
 
             if ($result !== true) {

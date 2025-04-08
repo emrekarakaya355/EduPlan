@@ -9,15 +9,23 @@ use Livewire\Component;
 class CreateClassroom extends Component
 {
     public ClassroomForm $form;
-    public $selectedBuildingId;
+    public $selectedBuilding;
+    public $buildings;
     public function mount() {
-       $this->selectedBuildingId = Building::query()->where('name',session()->get('selectedBuilding'))->first();
+       $this->selectedBuilding = session()->get('selectedBuilding');
+       $this->buildings = Building::all();
+       $selected = $this->buildings->firstWhere('name', $this->selectedBuilding);
+       if ($selected) {
+            $this->form->building_id = $selected->id;
+       }
     }
     public function save() {
 
         $this->form->store();
+        $this->form->reset();
         session()->flash('success', 'Sınıf Oluşturuldu.');
-        $this->dispatch('toggleForm');
+        dd(1);
+        $this->dispatch('close-create-classroom-form');
     }
     public function render()
     {
