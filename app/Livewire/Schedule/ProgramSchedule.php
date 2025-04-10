@@ -2,60 +2,52 @@
 
 namespace App\Livewire\Schedule;
 
-use App\Contracts\ScheduleSlotProviderInterface;
-use App\Enums\DayOfWeek;
-use App\Models\Schedule;
 use App\Models\ScheduleSlot;
 use App\Services\ScheduleService;
-use App\Services\ScheduleSlotProviders\InstructorBasedScheduleSlotProvider;
 use App\Services\ScheduleSlotProviders\ProgramBasedScheduleSlotProvider;
-use App\Traits\UsesScheduleDataFormatter;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\On;
-use Livewire\Component;
 
-class Chart extends Component
+class ProgramSchedule extends BaseSchedule
 {
-    Use UsesScheduleDataFormatter;
-    protected $viewMode;
-    public $program, $year, $semester;
-    public $grade = 1;
-    public $schedule;
-    public $scheduleSlots;
-    public $scheduleData;
-    protected ScheduleSlotProviderInterface $provider;
-    public function mount(): void
+    public $program, $year, $semester, $grade = 1;
+    public $showInstructorModal = false;
+    public $selectedInstructorId = null;
+    public $selectedInstructorName = '';
+
+    protected $viewMode = 'program';
+
+    protected function initializeProvider()
     {
-        $this->program = Session::get('program');
-        $this->year = Session::get('year');
-        $this->semester = Session::get('semester');
-        $this->loadSchedule();
+        $this->program = session('program') == '' ? -1 : session('program');
+        $this->year = session('year') ?? 2000;
+        $this->semester = session('semester') ?? 'Fall';
+
+        $this->provider = new ProgramBasedScheduleSlotProvider(
+            $this->program,
+            $this->year,
+            $this->semester,
+            $this->grade
+        );
     }
 
-    public function loadSchedule(): void
+    #[On('open-instructor-modal')]
+    public function openInstructorModal($instructorId,$instructorName): void
     {
-
-        if (empty($this->program)) {
-            $this->schedule = null;
-            $this->scheduleData = $this->prepareScheduleSlotData(collect());
-
-        } else {
-            if ($this->viewMode === 'instructor') {
-                $this->provider = new InstructorBasedScheduleSlotProvider($this->instructorId);
-            } else {
-                $this->provider = new ProgramBasedScheduleSlotProvider($this->program, $this->year, $this->semester, $this->grade);
-            }
-            $this->schedule = $this->provider->getSchedule();
-            $this->scheduleData = $this->prepareScheduleSlotData($this->provider->getScheduleSlots());
-        }
+        $this->selectedInstructorId = $instructorId;
+        $this->selectedInstructorName = $instructorName;
+        $this->showInstructorModal = true;
     }
-    /*
+    #[On('close-modal')]
+    public function closeModal(): void
+    {
+        $this->showInstructorModal = false;
+    }
+
 
     #[On('filterUpdated')]
     public function applyFilters($filters): void
     {
-        $this->program = $filters['program'];
+        $this->program = $filters['program']  == '' ? -1 : $filters['program'];
         $this->year = $filters['year'];
         $this->semester = $filters['semester'];
         $this->loadSchedule();
@@ -93,7 +85,6 @@ class Chart extends Component
     #[On('addToSchedule')]
     public function addToSchedule($courseId,$day,$start_time,$scheduleId)
     {
-
         $startTime = explode(' - ', $start_time)[0];
         $result = app(ScheduleService::class)->addToSchedule(
             $scheduleId,
@@ -123,6 +114,7 @@ class Chart extends Component
             'message' => 'Ders Çakışma olmadan eklendi.',
             'type' => 'success'
         ]);
+        $this->initializeProvider();
         $this->loadSchedule();
     }
     #[On('forceAddToSchedule')]
@@ -153,7 +145,7 @@ class Chart extends Component
 
             if (isset($data['conflicts'])) {
                 $messages = $data['conflicts'];
-                    #$messages[] = "\n- {$conflict['course']['course']['name']} at {$conflict['start_time']}\n\n";
+                #$messages[] = "\n- {$conflict['course']['course']['name']} at {$conflict['start_time']}\n\n";
             }
         }
 
@@ -170,9 +162,5 @@ class Chart extends Component
             ->delete();
         $this->loadSchedule();
 
-    }*/
-    public function render()
-    {
-        return view('livewire.schedule.chart');
     }
 }

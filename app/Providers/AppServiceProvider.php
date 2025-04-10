@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
+use App\Contracts\AcademicServiceInterface;
 use App\Services\Adapters\UbysAdapter;
-use App\Services\Concrats\AcademicServiceInterface;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        View::composer('livewire.schedule.*', function ($view) {
+            $view->with('viewMode', $view->getData()['viewMode'] ?? 'program');
+        });
 
     }
 }

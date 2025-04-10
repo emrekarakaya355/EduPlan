@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Schedule;
 
+use App\Models\User;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -11,7 +12,7 @@ class Index extends Component
     public $code;
     public $showCodeInput = false;  // Flag to show or hide the code input field
 
-    // Method to process the entered code (e.g., validate it)
+
     public function processCode()
     {
         if ($this->code === '1234') {
@@ -23,14 +24,16 @@ class Index extends Component
     }
     public function mount()
     {
-        $this->dispatch('show-confirm', [
-            'message' => ' Bir Yemek ısmarlarsanız kodu sms ile gönderiyorum. :):):):)',
-            'type' => 'error'
-        ]);
+
+        if(auth()->user()->id == 13284) {
+            $this->dispatch('show-confirmx', [
+                'message' => ' Bir Yemek ısmarlarsanız kodu sms ile gönderiyorum. :):):):)',
+                'type' => 'error'
+            ]);
+       }
     }
     public function render()
     {
-
         return view('livewire.schedule.index');
     }
 }

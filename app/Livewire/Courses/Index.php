@@ -24,7 +24,7 @@ class Index extends Component
     {
         $this->scheduleCourses = collect();
 
-        $this->program_id = Session::get('program');
+        $this->program_id = Session::get('program') == '' ? -1 : Session::get('program');
         $this->year = Session::get('year');
         $this->semester = Session::get('semester');
         $this->loadCourses();
@@ -35,9 +35,10 @@ class Index extends Component
     #[Computed]
     public function loadCourses()
     {
+
           return $this->courses = Course_class::query()->whereHas('course', function ($query) {
                 return $query->where('year', $this->year)->where('semester', $this->semester);
-            })->where('program_id', $this->program_id)->where('grade', $this->grade)->with('course')->get()
+            })->where('program_id', $this->program_id )->where('grade', $this->grade)->with('course')->get()
                 ->filter(function ($course) {
                     return $course->unscheduled_hours > 0;
                 });

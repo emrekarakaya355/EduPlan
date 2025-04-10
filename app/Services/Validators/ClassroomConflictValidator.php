@@ -2,8 +2,8 @@
 
 namespace App\Services\Validators;
 
+use App\Contracts\ConflictValidatorInterface;
 use App\Models\ScheduleSlot;
-use App\Services\Concrats\ConflictValidatorInterface;
 
 class ClassroomConflictValidator implements ConflictValidatorInterface
 {

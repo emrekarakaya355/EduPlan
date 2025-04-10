@@ -3,10 +3,8 @@
 namespace App\Services\Validators;
 
 
-use App\Models\Course_class;
-use App\Models\Instructor;
+use App\Contracts\ConflictValidatorInterface;
 use App\Models\ScheduleSlot;
-use App\Services\Concrats\ConflictValidatorInterface;
 
 class InstructorConflictValidator implements ConflictValidatorInterface{
 

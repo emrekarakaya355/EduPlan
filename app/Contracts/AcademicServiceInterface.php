@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Concrats;
+namespace App\Contracts;
 
 // App\Providers\AppServiceProvider aracılığı ile UbysServiceAdapter sınıfına bağlandı. Yeni  bir servis yazılması durumunda Başka Adapter bağlanmalı.
 

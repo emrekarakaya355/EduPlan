@@ -1,10 +1,7 @@
 <?php
 
 namespace App\Services;
-use App\Models\Birim;
-use App\Models\Bolum;
-use App\Models\Program;
-use App\Services\Concrats\AcademicServiceInterface;
+use App\Contracts\AcademicServiceInterface;
 
 class ApiService
 {

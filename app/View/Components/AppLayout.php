@@ -2,7 +2,6 @@
 
 namespace App\View\Components;
 
-use App\Services\Concrats\AcademicServiceInterface;
 use Illuminate\View\Component;
 use Illuminate\View\View;
 

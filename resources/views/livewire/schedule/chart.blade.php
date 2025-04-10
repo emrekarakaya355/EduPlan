@@ -26,8 +26,9 @@
             @isset($schedule)
                 <div>{{$schedule->year .' - '. Carbon\Carbon::createFromDate($schedule->year)->addYear()->year. ' ' . $schedule->semester  }}</div>
 
-                <div>{{$schedule->program->name . ' ' }}</div>
+                <div>{{$schedule->program?->name . ' ' }}</div>
                 <div>{{$schedule->grade .'. Sınıf Ders Programı'}}</div>
+                <div>{{$schedule->id}}</div>
             @endisset
         </div>
         <div class="flex items-center space-x-2">
@@ -83,7 +84,7 @@
                                 </button>
                                 <div class="text-sm name" style="pointer-events: none">{{ $course['class_code'] }}</div>
                                 <div class="name" style="pointer-events: none; font-size: xx-small">{{ $course['class_name'] }}</div>
-                                <div class="font-bold" style="pointer-events: none;font-size: xx-small"> {{ $course['teacher_name'] }}</div>
+                                <div class="font-bold" style="pointer-events: none;font-size: xx-small"> {{ $course['instructor_name'] }}</div>
                                 <div style="pointer-events: none; font-size: xx-small">{{ $course['classrom_name'] ?? '(Derslik Sonra Belirtilecek)' }}</div>
                                 <div style="pointer-events: none; font-size: xx-small">{{ $course['building_name'] ?? '' }}</div>
                             </div>
@@ -143,8 +144,6 @@
                 });
             });
         });
-
-
 
         function drag(event) {
             event.dataTransfer.setData("text", event.target.dataset.id);

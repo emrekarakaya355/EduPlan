@@ -1,5 +1,5 @@
 <?php
-namespace App\Services\Concrats;
+namespace App\Contracts;
 
 interface ConflictValidatorInterface
 {
