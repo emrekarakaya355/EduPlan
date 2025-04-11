@@ -33,10 +33,8 @@ abstract class BaseSchedule extends Component
         //$this->days = $this->prepareScheduleSlotData($this->scheduleData);
     }
 
-
-
     public function render()
     {
-        return view("livewire.schedule.{$this->viewMode}.index");
+         return view("livewire.schedule.{$this->viewMode}.index");
     }
 }

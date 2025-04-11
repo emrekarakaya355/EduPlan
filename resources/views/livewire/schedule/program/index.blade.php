@@ -1,6 +1,19 @@
 <div class="p-2">
+<div wire:ignore>
+    <x-slot name="right">
+        <livewire:courses.index />
+    </x-slot>
+    <x-slot name="top">
+        <livewire:classrooms.index />
+    </x-slot>
+    <x-slot name="detay">
+        <livewire:dynamic-detail />
+    </x-slot>
 
-<div class="flex justify-between">
+</div>
+
+
+    <div class="flex justify-between">
     <div class="flex space-x-4">
         <div>
             <select id="courseSelect" x-data x-on:change="$dispatch('gradeUpdated',{grade : $event.target.value})">
@@ -29,7 +42,6 @@
 
             <div>{{$schedule->program?->name . ' ' }}</div>
             <div>{{$schedule->grade .'. Sınıf Ders Programı'}}</div>
-            <div>{{$schedule->id}}</div>
         @endisset
     </div>
     <div class="flex items-center space-x-2">
@@ -55,31 +67,29 @@
     @if($showInstructorModal ?? false)
         <livewire:schedule.instructor-modal :instructor-id="$selectedInstructorId" :instructor-name="$selectedInstructorName" />
     @endif
-<div class="grid grid-cols-7 gap-1 p-4 schedule-grid">
+
+<div class="grid grid-cols-6 gap-1 p-4 schedule-grid">
 
     <div class="p-2"></div>
-    @foreach(['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'] as $day)
+    @foreach(['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'] as $day)
         <div class="text-center font-bold p-2 bg-gray-800 text-white">{{ $day }}</div>
     @endforeach
 
     <!-- Grid içeriği -->
     @foreach($scheduleData as $time => $days)
-        @include('livewire.schedule.partials.time-row', ['time' => $time, 'days' => $days])
-    @endforeach
+        <div class="text-center font-bold p-2 bg-gray-200">
+            {{ $time }}
+        </div>
+        @foreach(range(0,4) as $day)
+            @include('livewire.schedule.partials.day-cell', [
+                'day' => $day,
+                'time' => $time,
+                'courses' => $days[$day] ?? null,
+                'scheduleId' => $schedule?->id ?? -1
+            ])
+        @endforeach
+     @endforeach
 </div>
-
-    <x-slot name="right">
-        <livewire:courses.index />
-    </x-slot>
-    <x-slot name="top">
-        <livewire:classrooms.index />
-    </x-slot>
-    <x-slot name="detay">
-        <livewire:dynamic-detail />
-    </x-slot>
-
-
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function (e) {

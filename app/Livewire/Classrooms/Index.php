@@ -6,6 +6,7 @@ use App\Models\Building;
 use App\Models\Classroom;
 use JetBrains\PhpStorm\NoReturn;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 use Psr\Container\ContainerExceptionInterface;
@@ -33,6 +34,25 @@ class Index extends Component
         $this->selectedBuilding = Session()->get('selectedBuilding');
         $this->loadClassrooms();
     }
+    public $selectedClassroomId = null;
+    public $selectedClassroomName = '';
+
+    protected $viewMode = 'classroom';
+    public $showClassroomModal = false;
+
+    #[On('open-classroom-modal')]
+    public function openClasroomModal($classroomId,$classroomName): void
+    {
+        $this-> selectedClassroomId = $classroomId;
+        $this->selectedClassroomName = $classroomName;
+        $this->showClassroomModal = true;
+    }
+    #[On('close-modal')]
+    public function closeModal(): void
+    {
+        $this->showClassroomModal = false;
+    }
+
 
     public function loadClassrooms(): void
     {
@@ -100,6 +120,7 @@ class Index extends Component
             $this->filteredClassrooms = [];
         }
     }
+
     public function render()
     {
         return view('livewire.classrooms.index');

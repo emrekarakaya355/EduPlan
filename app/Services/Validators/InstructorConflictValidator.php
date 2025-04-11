@@ -19,6 +19,9 @@ class InstructorConflictValidator implements ConflictValidatorInterface{
      */
     public function validate($dynamicId, $day, $startTime, $endTime)
     {
+        if(!$dynamicId ){
+            return true;
+        }
 
         $conflicts = ScheduleSlot::whereHas('course', function($query) use ($dynamicId) {
                 $query->where('instructorId', $dynamicId);

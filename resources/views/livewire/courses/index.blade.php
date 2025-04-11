@@ -15,6 +15,7 @@
                 <div
                     wire:key="course-class-{{ $courseClass->id }}" data-id="{{$courseClass->id}}"
                     wire:mouseenter.self.debounce.250.prevent ="$dispatch('showDetail', {
+                                                               '' '',//classroom ile eşit sayıda olsun diye
                                                                'Ders Adı':'{{ addslashes($courseClass->course->name) }}',
                                                                'Ders Kodu':'{{ addslashes($courseClass->course->code)}}',
                                                                'Kontenjan' : '{{addslashes($courseClass->quota)}} kişi',
@@ -24,6 +25,8 @@
                     class="course-item"
                     draggable="true"
                     ondragstart="drag(event, {{ $courseClass->id }})"
+                    ondblclick="Livewire.dispatch('open-course-modal', {courseId: '{{$courseClass->course->id }}', courseName: '{{$courseClass->course->name }}'})"
+
                     data-type="course">
                     <div class="course-details" >
                         <span class="course-name">{{str($courseClass->course->code)->words(3) }}</span>
@@ -35,7 +38,9 @@
                 </div>
             @endforeach
         </div>
-
+        @if($showCourseModal ?? false)
+            <livewire:schedule.course-modal :course-id="$selectedCourseId" :course-name="$selectedCourseName" />
+        @endif
         <style>
             /* Başlık ve Butonlar */
             .table-header {

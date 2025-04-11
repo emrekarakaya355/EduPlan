@@ -41,6 +41,9 @@
             <livewire:classrooms.create-classroom :key="$selectedBuilding" />
         </div>
     </div>
+    @if($showClassroomModal ?? false)
+        <livewire:schedule.classroom-modal :classroom-id="$selectedClassroomId" :classroom-name="$selectedClassroomName" />
+    @endif
 
 <style>
     .container {

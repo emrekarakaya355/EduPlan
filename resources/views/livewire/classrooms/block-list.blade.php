@@ -13,6 +13,8 @@
                 draggable="true"
                 data-type="classroom"
                 ondragstart="drag(event, {{ $classroom['id'] }})"
+                ondblclick="Livewire.dispatch('open-classroom-modal', {classroomId: '{{$classroom['id'] }}', classroomName: '{{ $classroom['name']  }}'})"
+
                 wire:mouseenter.debounce.250="$dispatch('showDetail', {  'Derslik Adı' : '{{addslashes( $classroom['name'])}}',
                                                                      'Fakülte' : '{{ addslashes($classroom['building']['campus']['name']) }}',
                                                                      'Bina' : '{{ addslashes($classroom['building']['name']) }}',
@@ -67,7 +69,7 @@
             border: 1px solid #ddd;
             width: calc(50% - 10px); /* 2 kart yanyana */
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            cursor: move;
+            cursor: grab;
             transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;

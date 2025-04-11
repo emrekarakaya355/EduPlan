@@ -24,13 +24,13 @@ class Index extends Component
     }
     public function mount()
     {
-
+/*
         if(auth()->user()->id == 13284) {
             $this->dispatch('show-confirmx', [
                 'message' => ' Bir Yemek ısmarlarsanız kodu sms ile gönderiyorum. :):):):)',
                 'type' => 'error'
             ]);
-       }
+       }*/
     }
     public function render()
     {

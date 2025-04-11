@@ -45,7 +45,24 @@ class Index extends Component
     }
 
 
+    public $selectedCourseId = null;
+    public $selectedCourseName = '';
 
+    protected $viewMode = 'course';
+    public $showCourseModal = false;
+
+    #[On('open-course-modal')]
+    public function openClasroomModal($courseId,$courseName): void
+    {
+        $this-> selectedCourseId = $courseId;
+        $this->selectedCourseName = $courseName;
+        $this->showCourseModal = true;
+    }
+    #[On('close-modal')]
+    public function closeModal(): void
+    {
+        $this->showCourseModal = false;
+    }
     #[On('filterUpdated')]
     public function applySidebarFilters($filters): void
     {
@@ -77,6 +94,6 @@ class Index extends Component
 
     public function render()
     {
-        return view('livewire.courses.index');
+         return view('livewire.courses.index');
     }
 }

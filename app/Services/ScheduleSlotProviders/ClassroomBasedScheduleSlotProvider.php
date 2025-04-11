@@ -2,15 +2,21 @@
 
 namespace App\Services\ScheduleSlotProviders;
 
+
 use App\Contracts\ScheduleSlotProviderInterface;
 use App\Models\Schedule;
 use App\Models\ScheduleSlot;
 use Illuminate\Support\Collection;
 
-class InstructorBasedScheduleSlotProvider implements ScheduleSlotProviderInterface
-{
+class ClassroomBasedScheduleSlotProvider implements ScheduleSlotProviderInterface{
 
-    public function  __construct(protected int $instructorId){}
+
+    public function __construct(protected int  $classroomId){}
+
+    /**
+     * @return Schedule|null
+     */
+    public function getSchedule(): ?Schedule {return null;}
 
     /**
      * @return Collection
@@ -18,16 +24,7 @@ class InstructorBasedScheduleSlotProvider implements ScheduleSlotProviderInterfa
     public function getScheduleSlots(): Collection
     {
         return ScheduleSlot::with(['course', 'course.instructor'])
-            ->whereHas('course', function ($q) {
-                $q->where('instructorId', $this->instructorId);
-            })
+            ->where('classroom_id', $this->classroomId)
             ->get();
-    }
-
-    /**
-     * @return Schedule|null
-     */
-    public function getSchedule(): ?Schedule
-    {
     }
 }

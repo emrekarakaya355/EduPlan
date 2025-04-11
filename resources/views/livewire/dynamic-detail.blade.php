@@ -1,16 +1,14 @@
-<div class="p-4 whitespace-nowrap" >
-    <div id="detail-data" class="overflow-x-auto" >
+<div class="p-2 whitespace-nowrap" >
+    <div id="detail-data" >
     </div>
 
     <script>
         window.addEventListener('showDetail',function (event){
-            const data = event.detail;  // Event'ten gelen veriye erişiyoruz
+            const data = event.detail;
             console.log(data);
             const detailElement = document.getElementById('detail-data');
             if (detailElement) {
-                // HTML içeriğini temizliyoruz
                 detailElement.innerHTML = '';
-                // Gelen verileri key-value formatında listeye dönüştürüp HTML'ye ekliyoruz
                 const ul = document.createElement('ul');
                 for (const [key, value] of Object.entries(data)) {
                     const li = document.createElement('li');
