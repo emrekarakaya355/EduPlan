@@ -39,7 +39,7 @@
             @endforeach
         </div>
         @if($showCourseModal ?? false)
-            <livewire:schedule.course-modal :course-id="$selectedCourseId" :course-name="$selectedCourseName" />
+            <livewire:courses.schedule-chart :course-id="$selectedCourseId" :course-name="$selectedCourseName" />
         @endif
         <style>
             /* Başlık ve Butonlar */
@@ -114,10 +114,5 @@
                 transition: width 0.4s ease-in-out;
             }
         </style>
-
 </div>
-    <script>
-
-
-    </script>
 </div>

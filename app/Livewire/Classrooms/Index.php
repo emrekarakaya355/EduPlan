@@ -44,8 +44,8 @@ class Index extends Component
     public function openClasroomModal($classroomId,$classroomName): void
     {
         $this-> selectedClassroomId = $classroomId;
-        $this->selectedClassroomName = $classroomName;
-        $this->showClassroomModal = true;
+        $this-> selectedClassroomName = $classroomName;
+        $this-> showClassroomModal = true;
     }
     #[On('close-modal')]
     public function closeModal(): void

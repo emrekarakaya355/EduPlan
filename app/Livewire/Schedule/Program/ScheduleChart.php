@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Livewire\Schedule;
+namespace App\Livewire\Schedule\Program;
 
+use App\Livewire\Schedule\BaseSchedule;
 use App\Models\ScheduleSlot;
 use App\Services\ScheduleService;
 use App\Services\ScheduleSlotProviders\ProgramBasedScheduleSlotProvider;
 use Livewire\Attributes\On;
 
-class ProgramSchedule extends BaseSchedule
+class ScheduleChart extends BaseSchedule
 {
     public $program, $year, $semester, $grade = 1;
     public $showInstructorModal = false;
@@ -162,5 +163,9 @@ class ProgramSchedule extends BaseSchedule
             ->delete();
         $this->loadSchedule();
 
+    }
+    public function render()
+    {
+        return view('livewire.schedule.program.schedule-chart');
     }
 }

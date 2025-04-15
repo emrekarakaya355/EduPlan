@@ -34,7 +34,7 @@ trait UsesScheduleDataFormatter
                             'class_name' => $scheduleSlot->course->course?->name,
                             'class_code' => $scheduleSlot->course->course?->code,
                             'instructor_name' => $scheduleSlot->course->instructor
-                                ? $scheduleSlot->course->instructor->adi . ' ' . $scheduleSlot->course->instructor->soyadi
+                                ?$scheduleSlot->course->instructorTitle . ' '. $scheduleSlot->course->instructor->name
                                 : '(Hoca Belirtilmemiş)',
                             'program_name' => $scheduleSlot->course->program?->name ?? ' ',
                             'instructor_id' => $scheduleSlot->course->instructor?->id  ?? ' ',

@@ -57,8 +57,6 @@
             flex-wrap: wrap;
             vertical-align: center;
             align-items: center;
-
-
         }
         .classroom-item {
             max-height: fit-content;

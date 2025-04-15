@@ -35,6 +35,7 @@ abstract class BaseSchedule extends Component
 
     public function render()
     {
+        dd(1);
          return view("livewire.schedule.{$this->viewMode}.index");
     }
 }

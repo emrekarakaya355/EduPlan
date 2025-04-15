@@ -7,7 +7,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Title('Ders Programı')]
-class Index extends Component
+class Index2 extends Component
 {
     public $code;
     public $showCodeInput = false;  // Flag to show or hide the code input field

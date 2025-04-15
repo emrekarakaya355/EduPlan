@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Livewire\Schedule;
+namespace App\Livewire\Classrooms;
 
 use App\Services\ScheduleSlotProviders\ClassroomBasedScheduleSlotProvider;
-use Livewire\Component;
 use App\Traits\UsesScheduleDataFormatter;
+use Livewire\Component;
 
-class ClassroomModal extends Component
+class ScheduleChart extends Component
 {
     use UsesScheduleDataFormatter;
     public $viewMode = 'classroom';
@@ -31,6 +31,6 @@ class ClassroomModal extends Component
 
     public function render()
     {
-        return view('livewire.schedule.classroom.modal');
+        return view('livewire.classrooms.schedule-chart');
     }
 }

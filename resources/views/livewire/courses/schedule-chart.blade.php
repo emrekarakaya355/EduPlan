@@ -9,7 +9,6 @@
         <div class="text-center">
             Ders Programı
         </div>
-
         <div class="grid grid-cols-6 gap-1 p-4 schedule-grid">
 
             <div class="p-2"></div>

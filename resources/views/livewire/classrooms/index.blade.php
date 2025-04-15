@@ -42,7 +42,7 @@
         </div>
     </div>
     @if($showClassroomModal ?? false)
-        <livewire:schedule.classroom-modal :classroom-id="$selectedClassroomId" :classroom-name="$selectedClassroomName" />
+        <livewire:classrooms.schedule-chart :classroom-id="$selectedClassroomId" :classroom-name="$selectedClassroomName" />
     @endif
 
 <style>

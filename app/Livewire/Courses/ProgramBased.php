@@ -8,7 +8,7 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class Index extends Component
+class ProgramBased extends Component
 {
 
     public $courses;
@@ -35,7 +35,6 @@ class Index extends Component
     #[Computed]
     public function loadCourses()
     {
-
           return $this->courses = Course_class::query()->whereHas('course', function ($query) {
                 return $query->where('year', $this->year)->where('semester', $this->semester);
             })->where('program_id', $this->program_id )->where('grade', $this->grade)->with('course')->get()
@@ -43,6 +42,7 @@ class Index extends Component
                     return $course->unscheduled_hours > 0;
                 });
     }
+
 
 
     public $selectedCourseId = null;
@@ -94,6 +94,6 @@ class Index extends Component
 
     public function render()
     {
-         return view('livewire.courses.index');
+         return view('livewire.courses.program-based');
     }
 }
