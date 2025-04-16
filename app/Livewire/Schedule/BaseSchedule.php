@@ -27,8 +27,10 @@ abstract class BaseSchedule extends Component
 
     public function loadSchedule()
     {
+
         $this->initializeProvider();
         $this->schedule = $this->provider->getSchedule();
+
         $this->scheduleData = $this->prepareScheduleSlotData($this->provider->getScheduleSlots());
         //$this->days = $this->prepareScheduleSlotData($this->scheduleData);
     }

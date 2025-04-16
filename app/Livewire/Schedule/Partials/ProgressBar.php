@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Livewire\Schedule;
+namespace App\Livewire\Schedule\Partials;
 
-use App\Models\Course;
 use App\Models\Course_class;
 use App\Models\ScheduleSlot;
 use Livewire\Attributes\Lazy;
@@ -28,7 +27,7 @@ class ProgressBar extends Component
                 ->where('semester', $this->semester);
         })->sum('duration');
 
-        $this->placed = ScheduleSlot::whereHas('course.course', function ($query) {
+        $this->placed = ScheduleSlot::whereHas('courseClass.course', function ($query) {
             $query->where('year', $this->year)
                 ->where('semester', $this->semester);
         })->count();

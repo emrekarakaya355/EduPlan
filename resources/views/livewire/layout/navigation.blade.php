@@ -57,7 +57,7 @@ new class extends Component
                     </button>
                 </div>
                 <div>
-                    <livewire:schedule.progress-bar  />
+                    <livewire:schedule.partials.progress-bar  />
 
                 </div>
 

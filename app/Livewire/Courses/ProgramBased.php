@@ -80,13 +80,13 @@ class ProgramBased extends Component
     }
 
     #[On('addToSchedule')]
-    public function removeFromCourseList($courseId): void
+    public function removeFromCourseList(): void
     {
         $this->loadCourses();
     }
 
     #[On('removeFromSchedule')]
-    public function addToCourseList($courseId): void
+    public function addToCourseList(): void
     {
         $this->loadCourses();
 

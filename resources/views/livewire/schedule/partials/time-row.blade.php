@@ -8,6 +8,6 @@
     @include('livewire.schedule.partials.day-cell', [
         'day' => $day,
         'time' => $time,
-        'courses' => $days[$day] ?? null
+        'classes' => $days[$day] ?? null
     ])
 @endforeach

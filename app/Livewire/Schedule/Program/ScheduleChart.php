@@ -43,8 +43,6 @@ class ScheduleChart extends BaseSchedule
     {
         $this->showInstructorModal = false;
     }
-
-
     #[On('filterUpdated')]
     public function applyFilters($filters): void
     {
@@ -84,12 +82,12 @@ class ScheduleChart extends BaseSchedule
         $this->loadSchedule();
     }
     #[On('addToSchedule')]
-    public function addToSchedule($courseId,$day,$start_time,$scheduleId)
+    public function addToSchedule($classId,$day,$start_time,$scheduleId)
     {
         $startTime = explode(' - ', $start_time)[0];
         $result = app(ScheduleService::class)->addToSchedule(
             $scheduleId,
-            $courseId,
+            $classId,
             $day,
             $startTime
         );
@@ -103,7 +101,7 @@ class ScheduleChart extends BaseSchedule
         if (isset($result['has_conflicts'])) {
             $this->dispatch('ask-confirmation', [
                 'message' => $this->formatConflictMessage($result['conflicts']),
-                'courseId' => $courseId,
+                'classId' => $classId,
                 'day' => $day,
                 'start_time' => $start_time
             ]);
@@ -119,13 +117,13 @@ class ScheduleChart extends BaseSchedule
         $this->loadSchedule();
     }
     #[On('forceAddToSchedule')]
-    public function forceAddToSchedule($courseId, $day, $start_time)
+    public function forceAddToSchedule($classId, $day, $start_time)
     {
         $startTime = explode(' - ', $start_time)[0];
 
         app(ScheduleService::class)->addToSchedule(
             $this->schedule->id,
-            $courseId,
+            $classId,
             $day,
             $startTime,
             true // Force add
@@ -153,13 +151,13 @@ class ScheduleChart extends BaseSchedule
         return $messages . "\n\nYinede Eklemek İstiyor musun?";
     }
     #[On('removeFromSchedule')]
-    public function removeFromSchedule($hour,$day,$courseId): void
+    public function removeFromSchedule($hour,$day,$classId): void
     {
         ScheduleSlot::query()
             ->where('schedule_id',$this->schedule->id)
             ->where('day',$day)
             ->where('start_time',explode(' - ', $hour)[0])
-            ->where('course_id',$courseId)
+            ->where('class_id',$classId)
             ->delete();
         $this->loadSchedule();
 

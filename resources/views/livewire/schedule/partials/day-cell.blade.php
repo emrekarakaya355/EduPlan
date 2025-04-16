@@ -1,11 +1,11 @@
 
-@if(isset($courses) && is_array($courses))
+@if(isset($classes) && is_array($classes))
     <div class="flex border overflow-hidden text-center align-middle" wire:key="cell-{{$time}}-{{$day}}">
-        @foreach($courses as $course)
+        @foreach($classes as $class)
             @if ($viewMode === 'program')
-                @include('livewire.schedule.partials.droppable-course-card', compact('course', 'day', 'time','scheduleId'))
+                @include('livewire.schedule.partials.droppable-course-card', compact('class', 'day', 'time','scheduleId'))
             @else
-                @include('livewire.schedule.partials.not-droppable-course-card', compact('course', 'day', 'time'))
+                @include('livewire.schedule.partials.not-droppable-course-card', compact('class', 'day', 'time'))
             @endif
         @endforeach
     </div>

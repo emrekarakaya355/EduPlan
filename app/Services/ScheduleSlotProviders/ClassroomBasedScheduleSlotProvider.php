@@ -23,7 +23,7 @@ class ClassroomBasedScheduleSlotProvider implements ScheduleSlotProviderInterfac
      */
     public function getScheduleSlots(): Collection
     {
-        return ScheduleSlot::with(['course', 'course.instructor'])
+        return ScheduleSlot::with(['courseClass', 'courseClass.instructor'])
             ->where('classroom_id', $this->classroomId)
             ->get();
     }

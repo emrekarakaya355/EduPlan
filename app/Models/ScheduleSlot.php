@@ -11,14 +11,14 @@ class ScheduleSlot extends Model
     protected $casts = [
         'start_time' => 'datetime:H:i',
     ];
-    protected $fillable = ['schedule_id','course_id','classroom_id','start_time','end_time','day'];
+    protected $fillable = ['schedule_id','class_id','classroom_id','start_time','end_time','day'];
 
     public function schedule() {
         return $this->belongsTo('App\Models\Schedule','schedule_id');
     }
 
-    public function course(){
-        return  $this->belongsTo(Course_class::class,'course_id','id');
+    public function courseClass(){
+        return  $this->belongsTo(Course_class::class,'class_id','id');
     }
 
     public function classroom(){

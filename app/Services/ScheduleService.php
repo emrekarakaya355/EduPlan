@@ -21,9 +21,9 @@ class ScheduleService {
         ];
     }
 
-    public function addToSchedule($scheduleId, $courseId, $day, $startTime, $force = false)
+    public function addToSchedule($scheduleId, $classId, $day, $startTime, $force = false)
     {
-        $course = Course_class::find($courseId);
+        $course = Course_class::find($classId);
         if(!$course){
             return ['success' => false];
         }
@@ -37,10 +37,9 @@ class ScheduleService {
         if (!empty($conflicts) && !$force) {
             return ['has_conflicts' => true, 'conflicts' => $conflicts];
         }
-
         $slot = ScheduleSlot::create([
             'schedule_id' => $scheduleId,
-            'course_id' => $courseId,
+            'class_id' => $classId,
             'classroom_id' => null,
             'start_time' => $startTime,
             'end_time' => $endTime,

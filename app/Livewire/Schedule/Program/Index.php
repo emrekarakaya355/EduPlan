@@ -8,6 +8,8 @@ use Livewire\Component;
 #[Title('Ders Programı')]
 class Index extends Component
 {
+
+    /*
     public $code;
     public $showCodeInput = false;
 
@@ -28,8 +30,10 @@ class Index extends Component
                         'message' => ' Bir Yemek ısmarlarsanız kodu sms ile gönderiyorum. :):):):)',
                         'type' => 'error'
                     ]);
-               }*/
-    }
+               }
+    }*/
+
+
     public function render()
     {
         return view('livewire.schedule.program.index');

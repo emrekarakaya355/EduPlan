@@ -23,7 +23,7 @@ class InstructorConflictValidator implements ConflictValidatorInterface{
             return true;
         }
 
-        $conflicts = ScheduleSlot::whereHas('course', function($query) use ($dynamicId) {
+        $conflicts = ScheduleSlot::whereHas('courseClass', function($query) use ($dynamicId) {
                 $query->where('instructorId', $dynamicId);
             })
             ->where('day', $day)
@@ -35,7 +35,7 @@ class InstructorConflictValidator implements ConflictValidatorInterface{
                             ->where('end_time', '>=', $endTime);
                     });
             })
-            ->with('course.course')
+            ->with('courseClass.course')
             ->get();
 
         if ($conflicts->isEmpty()) {
@@ -52,9 +52,9 @@ class InstructorConflictValidator implements ConflictValidatorInterface{
         $message = '';
         foreach($conflicts as $conflict){
 
-            $instructorName = $conflict?->course?->instructor?->name ?? ' ?? ';
-            $programName = $conflict?->course?->program?->name ?? ' bir yerde ';
-            $courseCode = $conflict?->course?->course?->code ?? '???';
+            $instructorName = $conflict?->courseClass?->instructor?->name ?? ' ?? ';
+            $programName = $conflict?->courseClass?->program?->name ?? ' bir yerde ';
+            $courseCode = $conflict?->courseClass?->course?->code ?? '???';
 
             $message .= "$instructorName isimli hocamız bu saatte $programName programı için $courseCode kodlu dersi vermektedir.\n";
         }

@@ -17,11 +17,13 @@ class InstructorBasedScheduleSlotProvider implements ScheduleSlotProviderInterfa
      */
     public function getScheduleSlots(): Collection
     {
-        return ScheduleSlot::with(['course', 'course.instructor'])
-            ->whereHas('course', function ($q) {
+
+        return ScheduleSlot::with(['courseClass', 'courseClass.instructor'])
+            ->whereHas('courseClass', function ($q) {
                 $q->where('instructorId', $this->instructorId);
             })
             ->get();
+
     }
 
     /**

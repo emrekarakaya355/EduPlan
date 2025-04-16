@@ -62,7 +62,6 @@
                 <div class="text-center font-bold p-2 bg-gray-800 text-white">{{ $day }}</div>
             @endforeach
 
-            <!-- Grid içeriği -->
             @foreach($scheduleData as $time => $days)
                 <div class="text-center font-bold p-2 bg-gray-200">
                     {{ $time }}
@@ -71,7 +70,7 @@
                     @include('livewire.schedule.partials.day-cell', [
                         'day' => $day,
                         'time' => $time,
-                        'courses' => $days[$day] ?? null,
+                        'classes' => $days[$day] ?? null,
                         'scheduleId' => $schedule?->id ?? -1
                     ])
                 @endforeach

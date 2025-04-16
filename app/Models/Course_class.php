@@ -38,7 +38,7 @@ class Course_class extends Model
 
     public function scheduleSlots()
     {
-        return $this->hasMany(ScheduleSlot::class, 'course_id', 'id');
+        return $this->hasMany(ScheduleSlot::class, 'class_id', 'id');
     }
 
     public function getDetailColumns()

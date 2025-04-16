@@ -30,14 +30,14 @@ trait UsesScheduleDataFormatter
                     $temp = [];
                     foreach ($lessons as $scheduleSlot) {
                         $temp[] = [
-                            'id' => $scheduleSlot->course->id,
-                            'class_name' => $scheduleSlot->course->course?->name,
-                            'class_code' => $scheduleSlot->course->course?->code,
-                            'instructor_name' => $scheduleSlot->course->instructor
-                                ?$scheduleSlot->course->instructorTitle . ' '. $scheduleSlot->course->instructor->name
+                            'id' => $scheduleSlot->courseClass->id,
+                            'class_name' => $scheduleSlot->courseClass->course?->name,
+                            'class_code' => $scheduleSlot->courseClass->course?->code,
+                            'instructor_name' => $scheduleSlot->courseClass->instructor
+                                ?$scheduleSlot->courseClass->instructorTitle . ' '. $scheduleSlot->courseClass->instructor->name
                                 : '(Hoca Belirtilmemiş)',
-                            'program_name' => $scheduleSlot->course->program?->name ?? ' ',
-                            'instructor_id' => $scheduleSlot->course->instructor?->id  ?? ' ',
+                            'program_name' => $scheduleSlot->courseClass->program?->name ?? ' ',
+                            'instructor_id' => $scheduleSlot->courseClass->instructor?->id  ?? ' ',
                             'classrom_name' => $scheduleSlot->classroom?->name ,
                             'building_name' => isset($scheduleSlot->classroom?->building?->name) ? '( ' .$scheduleSlot->classroom?->building?->name .' ) ' :'',
                         ];

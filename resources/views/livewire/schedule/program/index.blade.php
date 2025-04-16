@@ -11,7 +11,6 @@
         <x-slot name="detay">
             <livewire:dynamic-detail />
         </x-slot>
-
     </div>
 
     <script>
@@ -75,7 +74,7 @@
             }
             if (type === "course") {
                 window.dispatchEvent(new CustomEvent('addToSchedule', {
-                    detail: { courseId: dataId, day: day, start_time: hour, scheduleId:schedule }
+                    detail: { classId: dataId, day: day, start_time: hour, scheduleId:schedule }
                 }));
             } else if (type === "classroom") {
                 window.dispatchEvent(new CustomEvent('addClassroomToSchedule', {
