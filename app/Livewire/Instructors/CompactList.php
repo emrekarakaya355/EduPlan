@@ -8,7 +8,6 @@ use Livewire\Component;
 
 class CompactList extends Component
 {
-
     protected $listeners = ['filterUpdated' => 'applyFilters'];
 
     public $department, $year, $semester,$instructors;
@@ -37,7 +36,6 @@ class CompactList extends Component
 
     public function loadInstructors()
     {
-
         $this->instructors = Course_class::with('instructor','program')
             ->whereHas('course', function ($query) {
                return $query->where('year', session('year'))
@@ -55,6 +53,6 @@ class CompactList extends Component
 
     public function render()
     {
-        return view('livewire.instructors.compact-list');
+         return view('livewire.instructors.compact-list');
     }
 }

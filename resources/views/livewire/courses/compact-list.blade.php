@@ -1,7 +1,6 @@
 <div>
     <div class="courses-container">
         @foreach($this->courses as $courseClass)
-
             <div
                 wire:key="course-class-{{ $courseClass->id }}" data-id="{{$courseClass->id}}"
                 wire:mouseover="$dispatch('showDetail', { model: 'Course_class', id: {{ $courseClass->id }} })"

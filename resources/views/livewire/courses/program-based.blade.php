@@ -15,12 +15,13 @@
                 <div
                     wire:key="course-class-{{ $courseClass->id }}" data-id="{{$courseClass->id}}"
                     wire:mouseenter.self.debounce.250.prevent ="$dispatch('showDetail', {
-                                                               '' '',//classroom ile eşit sayıda olsun diye
+                                                                ' ':' ', //classroom ile eşit sayıda olsun diye
                                                                'Ders Adı':'{{ addslashes($courseClass->course->name) }}',
                                                                'Ders Kodu':'{{ addslashes($courseClass->course->code)}}',
                                                                'Kontenjan' : '{{addslashes($courseClass->quota)}} kişi',
                                                                'Süre' : '{{addslashes($courseClass->duration)}} saat',
                                                                'Hoca' : '{{addslashes($courseClass->instructorTitle)}} {{addslashes($courseClass->instructorName)}} {{addslashes($courseClass->instructorSurname)}}'
+
                                                                })"
                     class="course-item"
                     draggable="true"

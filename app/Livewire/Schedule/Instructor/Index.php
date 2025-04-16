@@ -40,7 +40,6 @@ class Index extends Component
     }
     public function render()
     {
-        dd(1);
-        return view('livewire.schedule.instructor.index');
+         return view('livewire.schedule.instructor.index');
     }
 }

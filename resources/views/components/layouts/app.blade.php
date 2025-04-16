@@ -31,16 +31,16 @@
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900" x-data="{ sidebarOpen: true }" @sidebar-toggle.window="sidebarOpen = $event.detail">
 
         <main class="pt-16  min-h-screen w-full" :class="{ 'pl-64': sidebarOpen, 'pl-0': !sidebarOpen }">
-            <div class="p-6 flex  gap-4 min-h-[calc(100vh-4rem)]" style="flex-direction: column">
+            <div class="p-6 flex gap-4 min-h-[calc(100vh-4rem)]" style="flex-direction: column">
                 <!-- Üst Kısım -->
-                <div class="flex space-x-8" style="max-height: 200px">
+                <div class="flex  space-x-8 flex-grow-0"  >
                     @if(isset($top))
                         <div class="flex-1 bg-white rounded-lg shadow-sm overflow-hidden" >
                             {{ $top }}
                         </div>
                     @endif
                     @if(isset($detay))
-                        <div class=" bg-white rounded-lg overflow-hidden" style="flex: 0 0 15%;">
+                        <div class="bg-white rounded-lg overflow-hidden" style="flex: 0 0 15%; height: 120px;">
                             {{ $detay }}
                         </div>
                     @endif

@@ -13,7 +13,13 @@
                 for (const [key, value] of Object.entries(data)) {
                     const li = document.createElement('li');
                     li.style.fontSize = '12px';
-                    li.innerHTML = `<strong>${key}:</strong> ${value}`;
+                    if (!key.trim())
+                    {
+                        li.innerHTML = ` `;
+                    }
+                    else {
+                        li.innerHTML = `<strong>${key}:</strong> ${value}`;
+                    }
                     ul.appendChild(li);
                 }
                 detailElement.appendChild(ul);

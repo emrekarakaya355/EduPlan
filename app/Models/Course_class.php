@@ -48,7 +48,7 @@ class Course_class extends Model
             'Ders Kodu' => $this->course->code,
             'Kontenjan' => $this->quota . ' kişi',
             'Süre' => $this->duration . ' saat',
-            'Hoca' =>$this->instructorTitle.' '. $this->instructorName.' '.$this->instructorSurname,
+            'Hoca' =>   $this->instructorTitle.' '. $this->instructorName.' '.$this->instructorSurname,
             'Dersin Verileceği Sınıf: ' => ''
         ];
     }
