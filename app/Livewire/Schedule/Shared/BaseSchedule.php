@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App\Livewire\Schedule;
+namespace App\Livewire\Schedule\Shared;
 
+use App\Contracts\ScheduleSlotProviderInterface;
 use App\Traits\UsesScheduleDataFormatter;
 use Livewire\Component;
-use App\Contracts\ScheduleSlotProviderInterface;
 
 abstract class BaseSchedule extends Component
 {
@@ -37,7 +37,6 @@ abstract class BaseSchedule extends Component
 
     public function render()
     {
-        dd(1);
          return view("livewire.schedule.{$this->viewMode}.index");
     }
 }

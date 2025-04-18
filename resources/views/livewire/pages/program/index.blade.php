@@ -6,10 +6,10 @@
             <livewire:courses.program-based />
         </x-slot>
         <x-slot name="top">
-            <livewire:classrooms.index />
+            <livewire:classrooms.classroom-listing-with-filters />
         </x-slot>
         <x-slot name="detay">
-            <livewire:dynamic-detail />
+            <livewire:shared.dynamic-detail />
         </x-slot>
     </div>
 

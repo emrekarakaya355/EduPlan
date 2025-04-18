@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Schedule\Program;
+namespace App\Livewire\Pages\Program;
 
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -8,11 +8,8 @@ use Livewire\Component;
 #[Title('Ders Programı')]
 class Index extends Component
 {
-
-
-
     public function render()
     {
-        return view('livewire.schedule.program.index');
+        return view('livewire.pages.program.index');
     }
 }

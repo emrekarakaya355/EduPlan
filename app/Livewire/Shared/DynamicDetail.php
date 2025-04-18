@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Shared;
 
-use Livewire\Attributes\On;
 use Livewire\Component;
 
 class DynamicDetail extends Component
@@ -11,6 +10,6 @@ class DynamicDetail extends Component
 
     public function render()
     {
-        return view('livewire.dynamic-detail');
+        return view('livewire.shared.dynamic-detail');
     }
 }

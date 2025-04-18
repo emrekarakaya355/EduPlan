@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Courses;
+namespace App\Livewire\Schedule\Course;
 
 use App\Services\ScheduleSlotProviders\CourseBasedScheduleSlotProvider;
 use App\Traits\UsesScheduleDataFormatter;
@@ -31,6 +31,6 @@ class ScheduleChart extends Component
 
     public function render()
     {
-        return view('livewire.courses.schedule-chart');
+        return view('livewire.schedule.course.schedule-chart');
     }
 }

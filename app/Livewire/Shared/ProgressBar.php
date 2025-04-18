@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Schedule\Partials;
+namespace App\Livewire\Shared;
 
 use App\Models\Course_class;
 use App\Models\ScheduleSlot;
@@ -38,6 +38,6 @@ class ProgressBar extends Component
 
     public function render()
     {
-        return view('livewire.schedule.progress-bar');
+        return view('livewire.shared.progress-bar');
     }
 }

@@ -40,7 +40,7 @@
             @endforeach
         </div>
         @if($showCourseModal ?? false)
-            <livewire:courses.schedule-chart :course-id="$selectedCourseId" :course-name="$selectedCourseName" />
+            <livewire:schedule.course.schedule-chart :course-id="$selectedCourseId" :course-name="$selectedCourseName" />
         @endif
         <style>
             /* Başlık ve Butonlar */

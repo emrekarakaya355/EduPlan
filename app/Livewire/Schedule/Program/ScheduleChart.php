@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Schedule\Program;
 
-use App\Livewire\Schedule\BaseSchedule;
+use App\Livewire\Schedule\Shared\BaseSchedule;
 use App\Models\ScheduleSlot;
 use App\Services\ScheduleService;
 use App\Services\ScheduleSlotProviders\ProgramBasedScheduleSlotProvider;

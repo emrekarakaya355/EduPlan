@@ -12,7 +12,7 @@ use Livewire\Component;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-class Index extends Component
+class ClassroomListingWithFilters extends Component
 {
 
     public $classrooms = [];
@@ -123,6 +123,6 @@ class Index extends Component
 
     public function render()
     {
-        return view('livewire.classrooms.index');
+        return view('livewire.classrooms.ClassroomListingWithFilters');
     }
 }

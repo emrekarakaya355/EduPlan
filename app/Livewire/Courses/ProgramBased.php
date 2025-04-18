@@ -91,7 +91,6 @@ class ProgramBased extends Component
         $this->loadCourses();
 
     }
-
     public function render()
     {
          return view('livewire.courses.program-based');

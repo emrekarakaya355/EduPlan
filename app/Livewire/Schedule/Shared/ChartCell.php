@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Schedule;
+namespace App\Livewire\Schedule\Shared;
 
 use Livewire\Component;
 
