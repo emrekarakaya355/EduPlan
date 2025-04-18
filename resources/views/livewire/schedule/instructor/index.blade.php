@@ -1,8 +1,8 @@
 <div>
     <livewire:schedule.instructor.schedule-chart />
-    <livewire:instructors.compact-list/>
 
      <x-slot name="top">
+         <livewire:instructors.compact-list/>
 
     </x-slot>
     <x-slot name="right">

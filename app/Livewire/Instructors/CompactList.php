@@ -10,12 +10,12 @@ class CompactList extends Component
 {
     protected $listeners = ['filterUpdated' => 'applyFilters'];
 
-    public $department, $year, $semester,$instructors;
+    public $unit_id, $year, $semester,$instructors;
     public $selectedInstructorId;
 
     public function mount()
     {
-        $this->department = Session::get('department');
+        $this->unit_id = Session::get('unit');
         $this->year = Session::get('year');
         $this->semester = Session::get('semester');
         $this->loadInstructors();
@@ -23,7 +23,7 @@ class CompactList extends Component
 
     public function applyFilters($filters)
     {
-        $this->department = $filters['department'];
+        $this->unit_id = $filters['unit'];
         $this->year = $filters['year'];
         $this->semester = $filters['semester'];
 
@@ -41,8 +41,8 @@ class CompactList extends Component
                return $query->where('year', session('year'))
                     ->where('semester', session('semester'));
             })
-            ->whereHas('program', function ($query) {
-                return $query->where('bolum_id', $this->department);
+            ->whereHas('program.bolum', function ($query) {
+                return $query->where('birim_id', $this->unit_id);
             })
             ->get()
             ->pluck('instructor')

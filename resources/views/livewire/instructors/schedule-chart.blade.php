@@ -4,7 +4,7 @@
          class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg p-6 w-3/4 max-h-screen overflow-auto">
         <div class=" text-center">
-            <h3 class="text-lg font-bold text-center">{{$instructorName}}</h3>
+            <h3 class="text-lg font-bold text-center"> {{ $instructorName }} </h3>
         </div>
         <div class="text-center">
             Ders Programı

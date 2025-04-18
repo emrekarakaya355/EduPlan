@@ -36,8 +36,8 @@ trait UsesScheduleDataFormatter
                             'instructor_name' => $scheduleSlot->courseClass->instructor
                                 ?$scheduleSlot->courseClass->instructorTitle . ' '. $scheduleSlot->courseClass->instructor->name
                                 : '(Hoca Belirtilmemiş)',
-                            'program_name' => $scheduleSlot->courseClass->program?->name ?? ' ',
-                            'instructor_id' => $scheduleSlot->courseClass->instructor?->id  ?? ' ',
+                            'program_name' => $scheduleSlot->courseClass->program?->name ?? '',
+                            'instructor_id' => $scheduleSlot->courseClass->instructor?->id  ?? '',
                             'classrom_name' => $scheduleSlot->classroom?->name ,
                             'building_name' => isset($scheduleSlot->classroom?->building?->name) ? '( ' .$scheduleSlot->classroom?->building?->name .' ) ' :'',
                         ];

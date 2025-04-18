@@ -34,6 +34,10 @@ class ScheduleChart extends BaseSchedule
     #[On('open-instructor-modal')]
     public function openInstructorModal($instructorId,$instructorName): void
     {
+        if(empty($instructorId) ){
+
+            return;
+        }
         $this->selectedInstructorId = $instructorId;
         $this->selectedInstructorName = $instructorName;
         $this->showInstructorModal = true;
