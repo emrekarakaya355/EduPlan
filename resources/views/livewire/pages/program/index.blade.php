@@ -1,4 +1,4 @@
-<div>
+<x-page-layout>
     <livewire:schedule.program.schedule-chart />
 
     <div wire:ignore>
@@ -83,4 +83,4 @@
             }
         }
     </script>
-</div>
+</x-page-layout>

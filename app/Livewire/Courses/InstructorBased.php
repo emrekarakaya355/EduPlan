@@ -13,17 +13,17 @@ class InstructorBased extends Component
     public $semester;
     public $instructorId;
 
-    public function mount(): void
+    public function mount($instructorId): void
     {
         $this->year = Session::get('year');
         $this->semester = Session::get('semester');
-        $this->instructorId = 2;
+        $this->instructorId = $instructorId;
         $this->courses = Course_class::query()->whereHas('course',function($query){
-            return $query->where('year', $this->year)->where('semester', $this->semester)->where('instructorId', $this->instructorId);
+            return $query->where('year', $this->year)->where('semester', $this->semester)->where('instructorId', $this->instructorId ?? 1);
         })->get();
-    }
+     }
     public function render()
     {
-        return view('livewire.courses.instructor-based');
+        return view('livewire.courses.instructor-based')->section('right');
     }
 }
