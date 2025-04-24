@@ -1,6 +1,6 @@
 <x-page-layout>
     <x-slot name="top">
-        <livewire:instructors.compact-list/>
+        <livewire:instructors.compact-list :$instructors :$unit_id />
     </x-slot>
 
     <livewire:schedule.instructor.schedule-chart  :instructorId="$selectedInstructorId" :instructorName="$selectedInstructorName" wire:key="instructor-{{ $selectedInstructorId }}" >
