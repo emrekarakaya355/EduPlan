@@ -11,19 +11,21 @@ class ScheduleChart extends Component
     public $viewMode = 'instructor';
     public $instructorId;
     public $instructorName;
+    public $asModal;
     public $scheduleData = [];
     public $days = [];
 
-    public function mount($instructorId, $instructorName )
+    public function mount($instructorId, $instructorName,$asModal = false )
     {
         $this->instructorId = $instructorId;
         $this->instructorName = $instructorName;
+        $this->asModal = $asModal;
         $this->loadSchedule();
     }
 
     public function loadSchedule()
     {
-        $provider = new InstructorBasedScheduleSlotProvider($this->instructorId);
+        $provider = new InstructorBasedScheduleSlotProvider($this->instructorId ?? -1);
         $this->scheduleData = $this->prepareScheduleSlotData($provider->getScheduleSlots());
         //$this->days = $this->formatScheduleData($this->scheduleData);
     }

@@ -1,4 +1,4 @@
-<div class="p-4">
+<x-page-layout>
     <h2 class="text-xl font-bold mb-4">Dersler</h2>
     @if($courses->isNotEmpty())
         <div class="mt-4">{{$courses->links()}}</div>
@@ -42,4 +42,4 @@
     @else
         <p class="text-gray-500">Hiç ders bulunamadı.</p>
     @endif
-</div>
+</x-page-layout>

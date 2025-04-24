@@ -1,13 +1,12 @@
 <div>
-    <div class="flex flex-wrap gap-2">
-        @if($instructors)
+    <div class="w-full max-w-sm mb-4">
+        <label for="instructor" class="block mb-1 font-medium text-gray-700">Hoca Seçin</label>
+        <select id="instructor" wire:model="selectedInstructorId" wire:change="$dispatch('instructorSelected', {id: $event.target.value,selectedInstructorName: $event.target.options[$event.target.selectedIndex].dataset.selectedInstructorName })"
+                class="w-full border border-gray-300 rounded px-3 py-2">
+            <option value="">-- Hoca Seçin --</option>
             @foreach($instructors as $instructor)
-                <div wire:click="selectInstructor({{ $instructor->id }})"
-                     class="px-4 py-2 border rounded cursor-pointer transition-colors
-                            {{ $selectedInstructorId == $instructor->id ? 'bg-blue-500 text-white' : 'bg-white hover:bg-gray-100' }}">
-                    {{ $instructor->name }}
-                </div>
+                <option value="{{ $instructor->id }}"  data-selectedInstructorName = "{{$instructor->name }}">{{ $instructor->name }}</option>
             @endforeach
-        @endif
+        </select>
     </div>
 </div>

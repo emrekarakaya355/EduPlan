@@ -52,7 +52,7 @@
             </div>
         </div>
         @if($showInstructorModal ?? false)
-            <livewire:schedule.instructor.schedule-chart :instructor-id="$selectedInstructorId" :instructor-name="$selectedInstructorName" />
+            <livewire:schedule.instructor.schedule-chart :instructor-id="$selectedInstructorId" :instructor-name="$selectedInstructorName" :as-modal="true" />
         @endif
 
         <div class="grid grid-cols-6 gap-1 p-4 schedule-grid">

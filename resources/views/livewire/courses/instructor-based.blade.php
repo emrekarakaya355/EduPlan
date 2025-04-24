@@ -1,6 +1,5 @@
-<div class="course-section ">
+<div class="course-section">
     <div class="table-header">
-        <!-- Search ve Add Button -->
         <input type="text" placeholder="Ders arayın..." class="search-input">
         <button class="add-button">
             <i class="fa-solid fa-plus-circle fa-flip text-green-500 "></i>
@@ -9,8 +8,19 @@
     <div>
         <div class="courses-container">
             @foreach($this->courses as $courseClass)
-
-                <div>
+                <div
+                    wire:key="course-class-{{ $courseClass->id }}" data-id="{{$courseClass->id}}"
+                    wire:mouseenter.self.debounce.250.prevent ="$dispatch('showDetail', {
+                                                                'class id':'{{$courseClass->external_id}}',
+                                                                'program':'{{$courseClass->program->name}}',
+                                                               'Ders Adı':'{{ addslashes($courseClass->course->name) }}',
+                                                               'Ders Kodu':'{{ addslashes($courseClass->course->code)}}',
+                                                               'Kontenjan' : '{{addslashes($courseClass->quota)}} kişi',
+                                                               'Süre' : '{{addslashes($courseClass->duration)}} saat',
+                                                               'Hoca' : '{{addslashes($courseClass->instructorTitle)}} {{addslashes($courseClass->instructorName)}} {{addslashes($courseClass->instructorSurname)}}'
+                                                               })"
+                    class="course-item"
+                    data-type="course">
                     <div class="course-details" >
                         <span class="course-name">{{str($courseClass->course->code)->words(3) }}</span>
                         <span class="course-duration">{{str($courseClass->unscheduledHours)->words(3) }}</span>
@@ -20,7 +30,6 @@
             @endforeach
         </div>
         <style>
-            /* Başlık ve Butonlar */
             .table-header {
                 display: flex;
                 justify-content: space-between;
@@ -37,7 +46,6 @@
                 outline: none;
             }
 
-            /* Container ve Kart Düzeni */
             .courses-container {
                 display: flex;
                 flex-wrap: wrap;
@@ -76,20 +84,6 @@
             .course-name {
                 font-weight: bold;
                 flex: 1;
-            }
-            .progress-container {
-                width: 100%;
-                height: 8px;
-                background-color: #e5e7eb;
-                border-radius: 4px;
-                overflow: hidden;
-                margin-top: 5px;
-            }
-
-            .progress-bar {
-                height: 100%;
-                background-color: #10b981;
-                transition: width 0.4s ease-in-out;
             }
         </style>
     </div>

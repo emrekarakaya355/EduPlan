@@ -29,11 +29,6 @@ class CompactList extends Component
 
     }
 
-    public function selectInstructor($instructorId)
-    {
-        $this->selectedInstructorId = $instructorId;
-    }
-
     public function loadInstructors()
     {
         $this->instructors = Course_class::with('instructor','program')

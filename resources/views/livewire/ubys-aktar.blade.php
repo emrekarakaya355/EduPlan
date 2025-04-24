@@ -1,4 +1,4 @@
-<div>
+<x-page-layout>
     <button type="button" wire:click="fetchData" class="px-4 py-2 bg-blue-500 rounded-lg hover:bg-blue-600">
         Birimleri Al
     </button>
@@ -134,27 +134,5 @@
             @endif
         </div>
     </form>
-</div>
-<x-slot name="right">
-    <div>
-        <h2>
-            Sağ
-        </h2>
-    </div>
-</x-slot>
-<x-slot name="top">
-    <div>
-        <h2>
-            Üst
-        </h2>
-    </div>
-</x-slot>
+</x-page-layout>
 
-
-<x-slot name="foot">
-    <div>
-        <h2>
-            alt
-        </h2>
-    </div>
-</x-slot>

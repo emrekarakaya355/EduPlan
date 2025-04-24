@@ -10,10 +10,10 @@ class Index extends Component
     public $selectedInstructorId ;
     public $selectedInstructorName = 'emre';
     #[On('instructorSelected')]
-    public function instructorSelected($id)
+    public function instructorSelected($id,$selectedInstructorName)
     {
         $this->selectedInstructorId = $id;
-
+        $this->selectedInstructorName = $selectedInstructorName;
     }
     public function render()
     {
