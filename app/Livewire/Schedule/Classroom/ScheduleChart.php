@@ -14,17 +14,17 @@ class ScheduleChart extends Component
     public $classroomName;
     public $scheduleData = [];
     public $days = [];
-
-    public function mount($classroomId, $classroomName )
+    public $asModal;
+    public function mount($classroomId,$asModal = false )
     {
         $this->classromId = $classroomId;
-        $this->classroomName = $classroomName;
+        $this->asModal = $asModal;
         $this->loadSchedule();
     }
 
     public function loadSchedule()
     {
-        $provider = new ClassroomBasedScheduleSlotProvider($this->classromId);
+        $provider = new ClassroomBasedScheduleSlotProvider($this->classromId ?? -1);
         $this->scheduleData = $this->prepareScheduleSlotData($provider->getScheduleSlots());
         //$this->days = $this->formatScheduleData($this->scheduleData);
     }

@@ -21,23 +21,6 @@
     </div>
 
     <style>
-        /* Başlık ve Butonlar */
-        .table-header {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .search-input {
-            padding: 8px 16px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            width: 250px;
-            font-size: 14px;
-            outline: none;
-        }
-
         /* Container ve Kart Düzeni */
         .courses-container {
             display: flex;

@@ -9,9 +9,13 @@ use Livewire\Component;
 
 class Index extends Component
 {
-    public $unit_id, $year, $semester,$instructors;
+    public $unit_id, $year, $semester;
     public $selectedInstructorId ;
     public $selectedInstructorName;
+
+    public $selectedBuildingId;
+    public $selectedClassroomId ;
+
     protected $listeners = ['filterUpdated' => 'applyFilters'];
 
     public function mount()
@@ -19,7 +23,6 @@ class Index extends Component
         $this->unit_id = Session::get('unit');
         $this->year = Session::get('year');
         $this->semester = Session::get('semester');
-        $this->loadInstructors();
     }
 
     public function applyFilters($filters)
@@ -27,33 +30,29 @@ class Index extends Component
         $this->unit_id = $filters['unit'];
         $this->year = $filters['year'];
         $this->semester = $filters['semester'];
-        $this->loadInstructors();
-    }
-    public function loadInstructors()
-    {
-        $this->instructors = Course_class::with('instructor','program')
-            ->whereHas('course', function ($query) {
-                return $query->where('year', session('year'))
-                    ->where('semester', session('semester'));
-            })
-            ->whereHas('program.bolum', function ($query) {
-                return $query->where('birim_id', $this->unit_id);
-            })
-            ->get()
-            ->pluck('instructor')
-            ->sortBy('adi')
-            ->filter()
-            ->unique('id')
-            ->values();
     }
     #[On('instructorSelected')]
-    public function instructorSelected($id)
+    public function instructorSelected($id )
     {
+        $this->selectedBuildingId = null;
+        $this->selectedClassroomId = null;
         $this->selectedInstructorId = $id;
-        $this->selectedInstructorName = $this->instructors->firstWhere('id', $id)?->name;
-        if($this->selectedInstructorName == null){
-            $this->selectedInstructorName = Instructor::where('id', $id)->first()?->name;
-        }
+        $this->selectedInstructorName = Instructor::where('id', $id)->first()?->name;
+    }
+    #[On('buildingSelected')]
+    public function buildingSelected($id){
+        $this->selectedClassroomId = null;
+        $this->selectedInstructorId = null;
+        $this->selectedInstructorName = null;
+        $this->selectedBuildingId = $id;
+
+    }
+    #[On('classroomSelected')]
+    public function classroomSelected($id)
+    {
+
+        $this->selectedClassroomId = $id;
+
     }
     public function render()
     {

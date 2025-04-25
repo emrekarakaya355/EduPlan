@@ -1,8 +1,12 @@
-<div     x-data
-         x-on:keydown.escape.window="$wire.dispatch('close-modal')"
-         x-on:click.self="$wire.dispatch('close-modal')"
-         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-6 w-3/4 max-h-screen overflow-auto">
+<div
+@if($asModal)
+     x-data
+     x-on:keydown.escape.window="$wire.dispatch('close-modal')"
+     x-on:click.self="$wire.dispatch('close-modal')"
+     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+@endif
+>
+    <div class="bg-white rounded-lg p-6 overflow-auto">
         <div class=" text-center">
             <h3 class="text-lg font-bold text-center">{{$classroomName}}</h3>
         </div>
