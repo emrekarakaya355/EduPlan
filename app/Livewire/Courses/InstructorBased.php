@@ -21,7 +21,12 @@ class InstructorBased extends Component
 
         $this->courses = Course_class::query()->whereHas('course',function($query){
             return $query->where('year', $this->year)->where('semester', $this->semester)->where('instructorId', $this->instructorId ?? -1);
-        })->with('program')->get();
+        })
+            ->distinct('external_id')
+            ->with('program')->get()
+            ->filter(function ($course) {
+            return $course->unscheduled_hours > 0;
+        });;
       }
     public function render()
     {

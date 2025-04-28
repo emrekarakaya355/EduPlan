@@ -12,5 +12,9 @@
       {{ $slot }}
 
       <livewire:scripts />
-     </body>
+
+      @livewireCharts
+      @livewireChartsScripts
+
+    </body>
 </html>

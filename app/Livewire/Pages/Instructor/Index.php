@@ -46,6 +46,7 @@ class Index extends Component
         $this->selectedInstructorName = null;
         $this->selectedBuildingId = $id;
 
+
     }
     #[On('classroomSelected')]
     public function classroomSelected($id)

@@ -15,10 +15,10 @@ class ScheduleChart extends Component
     public $scheduleData = [];
     public $days = [];
 
-    public function mount($instructorId, $instructorName,$asModal = false )
+    public function mount($instructorId, $instructorName = 'test',$asModal = false )
     {
         $this->instructorId = $instructorId;
-        $this->instructorName = $instructorName;
+         $this->instructorName = $instructorName;
         $this->asModal = $asModal;
         $this->loadSchedule();
     }

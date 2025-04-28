@@ -27,8 +27,8 @@ class FilterSelect extends Component
     }
 
     public function updatedSelectedInstructor($value){
-        Session::forget('selectedCampus');
-        Session::forget('selectedBuilding');
+        Session::forget('selectedCampusId');
+        Session::forget('selectedBuildingId');
         Session::put('selectedInstructor', $this->selectedInstructor);
         $this->selectedInstructor = $value;
         $this->dispatch('instructorSelected',id: $this->selectedInstructor);

@@ -6,7 +6,11 @@
      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
 @endif
 >
-    <div class="bg-white rounded-lg p-6 overflow-auto">
+    <div class="bg-white rounded-lg p-6
+    @if($asModal)
+        w-3/4
+        @endif
+        ">
         <div class=" text-center">
             <h3 class="text-lg font-bold text-center">{{$classroomName}}</h3>
         </div>

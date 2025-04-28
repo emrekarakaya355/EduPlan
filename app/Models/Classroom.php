@@ -37,7 +37,7 @@ class Classroom extends Model
 
     public function getTotalUsageDurationAttribute()
     {
-        return $this->scheduleSlots->sum('duration');
+        return $this->scheduleSlots->count();
     }
 
     public function getDetailColumns()

@@ -31,7 +31,7 @@
             });
 
             Livewire.on('ask-confirmation', (event) => {
-                const data = event[0]; // Livewire 3'te veriler event[0] içinde
+                const data = event[0];
 
                 Swal.fire({
                     title: 'Emin misiniz?',

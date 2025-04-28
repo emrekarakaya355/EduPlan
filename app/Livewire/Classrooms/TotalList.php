@@ -16,7 +16,13 @@ class TotalList extends Component
 
     public function mount($selectedBuildingId)
     {
-        $this->classrooms = Classroom::where('building_id', $selectedBuildingId)->get() ?? [];
+        $this->classrooms = Classroom::where('building_id', $selectedBuildingId)
+            ->with('scheduleSlots')
+            ->get()
+            ->sortByDesc(function ($classroom) {
+                return $classroom->total_usage_duration;
+            })
+            ->values() ?? collect();
     }
 
     public function selectedClassroom($value ){

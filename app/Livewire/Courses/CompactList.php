@@ -28,11 +28,6 @@ class CompactList extends Component
         $this->courses = $this->courses->filter(fn($course) => $course->id != $courseId);
     }
 
-    public function removeFromSchedule($courseId)
-    {
-
-    }
-
     public function render()
     {
         return view('livewire.courses.compact-list');

@@ -21,8 +21,9 @@ class ScheduleService {
         ];
     }
 
-    public function addToSchedule($scheduleId, $classId, $day, $startTime, $force = false)
+    public function addCourseToSchedule($scheduleId, $classId, $day, $startTime, $force = false)
     {
+
         $course = Course_class::find($classId);
         if(!$course){
             return ['success' => false];
@@ -32,7 +33,7 @@ class ScheduleService {
             return ['success' => false,'status' => 'Ders zaten planlanmış'];
         }
         $endTime = date('H:i', strtotime($startTime . ' +45 minute'));
-        $conflicts = $this->detectConflicts($course->instructorId, $day, $startTime, $endTime);
+        $conflicts = $this->detectConflicts($course->instructorId, $day, $startTime, $endTime,$this->courseValidators);
 
         if (!empty($conflicts) && !$force) {
             return ['has_conflicts' => true, 'conflicts' => $conflicts];
@@ -45,15 +46,40 @@ class ScheduleService {
             'end_time' => $endTime,
             'day' => $day,
         ]);
-
         return ['success' => true, 'slot' => $slot];
     }
 
-    private function detectConflicts($instructorId, $day, $startTime, $endTime): array
+
+
+    public function addClassroomToSlot($classroomId,$scheduleId,$day,$startTime, $force = false)
+    {
+
+        $endTime = date('H:i', strtotime($startTime . ' +45 minute'));
+        $conflicts = $this->detectConflicts($classroomId, $day, $startTime, $endTime,$this->classroomValidators);
+        if (!empty($conflicts) && !$force) {
+            return ['has_conflicts' => true, 'conflicts' => $conflicts];
+        }else{
+
+             $slot = ScheduleSlot::query()->where('schedule_id',$scheduleId)
+                 ->where('day',$day)
+                 ->where('start_time',$startTime)->first();
+            if($slot){
+                $slot->classroom_id = $classroomId;
+                $slot->save();
+                return ['success' => true, 'slot' => $slot];
+
+            }
+        }
+        return ['success' => false, 'slot' => $slot];
+
+
+    }
+
+    private function detectConflicts($id, $day, $startTime, $endTime,$validators): array
     {
         $conflicts = [];
-        foreach ($this->courseValidators as $validator) {
-            $result = $validator->validate($instructorId, $day, $startTime, $endTime);
+        foreach ($validators as $validator) {
+            $result = $validator->validate($id, $day, $startTime, $endTime);
 
             if ($result !== true) {
                 $conflicts[$validator->getName()] = $result;
@@ -61,5 +87,6 @@ class ScheduleService {
         }
         return $conflicts;
     }
+
 
 }

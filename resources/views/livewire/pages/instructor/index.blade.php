@@ -16,10 +16,10 @@
         </div>
     </x-slot>
 
-    @if($selectedInstructorId)
-        <livewire:schedule.instructor.schedule-chart  :instructorId="$selectedInstructorId" :instructorName="$selectedInstructorName" wire:key="instructor-{{ $selectedInstructorId }}" >
+    @if(isset($selectedClassroomId) && $selectedClassroomId)
+        <livewire:schedule.classroom.schedule-chart :classroomId="$selectedClassroomId"  wire:key="classroom-{{$selectedClassroomId}}"/>
     @else
-    <livewire:schedule.classroom.schedule-chart :classroomId="$selectedClassroomId"  wire:key="classroom-{{$selectedClassroomId}}"/>
+        <livewire:schedule.instructor.schedule-chart  :instructorId="$selectedInstructorId" :instructorName="$selectedInstructorName" wire:key="instructor-schedule-{{ $selectedInstructorId }}" >
     @endif
 
     <x-slot name="right">

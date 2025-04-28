@@ -19,6 +19,7 @@ class ClassroomConflictValidator implements ConflictValidatorInterface
      */
     public function validate($dynamicId, $day, $startTime, $endTime)
     {
+
         $conflicts = ScheduleSlot::where('classroom_id', $dynamicId)
             ->where('day', $day)
             ->where(function($query) use ($startTime, $endTime) {
@@ -29,14 +30,13 @@ class ClassroomConflictValidator implements ConflictValidatorInterface
                             ->where('end_time', '>=', $endTime);
                     });
             })
-            ->with('course.course')
+            ->with('courseClass.course')
             ->get();
-        dd($conflicts);
         if ($conflicts->isEmpty()) {
             return true;
         }
         return [
-            'message' => 'Hocanın bu saatte başka bir yerde dersi var.',
+            'message' => 'Sınıf Dolu!',
             'conflicts' => $this->getConflictMessage($conflicts)
         ];
     }
@@ -53,10 +53,10 @@ class ClassroomConflictValidator implements ConflictValidatorInterface
     {
         $message = '';
         foreach($conflicts as $conflict){
-
-            $coursename = $conflict?->course?->course?->name ?? '???';
-
-            $message .= "$coursename dersi bu saatte bu sınıfta yapılıyor.";
+            $coursename = $conflict?->courseClass?->course?->name ?? '???';
+            $startTime = $conflict?->startTime ?? '???';
+            $endTime = $conflict?->endTime ?? '???';
+            $message .= "$startTime ile $endTime arasında $coursename dersi bu sınıfta yapılıyor.";
         }
         return $message;
 

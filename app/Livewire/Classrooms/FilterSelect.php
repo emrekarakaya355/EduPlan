@@ -19,9 +19,9 @@ class FilterSelect extends Component
     public function mount()
     {
         $this->campuses = Campus::all();
-        $this->selectedCampus = Session::get('selectedCampus');
-        $this->selectedBuilding = Session::get('selectedBuilding');
-        if ($this->selectedCampus) {
+        $this->selectedCampus = Session::get('selectedCampusId');
+        $this->selectedBuilding = Session::get('selectedBuildingId');
+        if (is_numeric($this->selectedCampus)) {
             $this->buildings = Building::where('campus_id', $this->selectedCampus)->get();
         }
         if($this->selectedBuilding){
@@ -30,8 +30,8 @@ class FilterSelect extends Component
     }
     public function updatedSelectedCampus(){
         Session::forget('selectedInstructor');
-        Session::put('selectedCampus', $this->selectedCampus);
-        Session::forget('selectedBuilding');
+        Session::put('selectedCampusId', $this->selectedCampus);
+        Session::forget('selectedBuildingId');
         $this->selectedBuilding = null;
 
         if(!$this->selectedCampus || !$this->selectedBuilding == '' ){
@@ -43,7 +43,7 @@ class FilterSelect extends Component
     }
     public function updatedSelectedBuilding()
     {
-         Session::put('selectedBuilding', $this->selectedBuilding);
+         Session::put('selectedBuildingId', $this->selectedBuilding);
          $this->dispatch('buildingSelected',id: $this->selectedBuilding);
     }
 

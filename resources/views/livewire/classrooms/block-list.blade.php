@@ -4,7 +4,7 @@
         @foreach ($classrooms as $classroom)
             @php
                 // totalUsageDuration'a göre yüzdelik hesapla
-                $progress = $classroom['total'] > 0 ? ($classroom['total'] / 70) * 100 : 0;
+                $progress = $classroom['total'] > 0 ? ($classroom['total'] / 50) * 100 : 0;
             @endphp
             <div
                 wire:key="classroom-class-{{ $classroom['id'] }}"

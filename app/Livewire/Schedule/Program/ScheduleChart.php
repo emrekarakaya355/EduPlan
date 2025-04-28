@@ -19,6 +19,7 @@ class ScheduleChart extends BaseSchedule
 
     protected function initializeProvider()
     {
+
         $this->program = session('program') == '' ? -1 : session('program');
         $this->year = session('year') ?? 2000;
         $this->semester = session('semester') ?? 'Fall';
@@ -63,7 +64,7 @@ class ScheduleChart extends BaseSchedule
     }
 
     #[On('addClassroomToSchedule')]
-    public function addClassroom($classroomId,$day,$start_time)
+    public function addClassroomToSchedule($classroomId,$day,$start_time)
     {
         $data = [
             'classroomId' => $classroomId,
@@ -75,21 +76,31 @@ class ScheduleChart extends BaseSchedule
             'day' => 'required|integer|min:1|max:8',
             'start_time' => 'required|date_format:H:i',
         ])->validate();
-        $course = ScheduleSlot::query()->where('schedule_id',$this->schedule->id??null)
-            ->where('day',$data['day'])
-            ->where('start_time',$data['start_time'])->first();
-        if($course){
-            $course->classroom_id = $data['classroomId'];
 
-            $course->save();
+        $result = app(ScheduleService::class)->addClassroomToSlot(
+            $classroomId,
+            $this->schedule->id,
+            $day,
+            $start_time,
+        );
+        if (isset($result['has_conflicts'])) {
+            $this->dispatch('show-confirm', [
+                'message' =>  $this->formatConflictMessage($result['conflicts']),
+                'type' => 'error'
+            ]);
+            return;
         }
+        $this->dispatch('show-confirm', [
+            'message' => 'Derslik Çakışma olmadan eklendi.',
+            'type' => 'success'
+        ]);
         $this->loadSchedule();
     }
     #[On('addToSchedule')]
-    public function addToSchedule($classId,$day,$start_time,$scheduleId)
+    public function addCourseToSchedule($classId,$day,$start_time,$scheduleId)
     {
         $startTime = explode(' - ', $start_time)[0];
-        $result = app(ScheduleService::class)->addToSchedule(
+        $result = app(ScheduleService::class)->addCourseToSchedule(
             $scheduleId,
             $classId,
             $day,
@@ -121,16 +132,16 @@ class ScheduleChart extends BaseSchedule
         $this->loadSchedule();
     }
     #[On('forceAddToSchedule')]
-    public function forceAddToSchedule($classId, $day, $start_time)
+    public function forceAddCourseToSchedule($classId, $day, $start_time)
     {
         $startTime = explode(' - ', $start_time)[0];
 
-        app(ScheduleService::class)->addToSchedule(
+        app(ScheduleService::class)->addCourseToSchedule(
             $this->schedule->id,
             $classId,
             $day,
             $startTime,
-            true // Force add
+            true
         );
 
         $this->loadSchedule();

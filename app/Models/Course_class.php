@@ -17,7 +17,6 @@ class Course_class extends Model
         'instructorEmail',
         'instructorTitle',
         'instructorId',
-        'external_id'
     ];
 
 
@@ -52,6 +51,8 @@ class Course_class extends Model
             'Dersin Verileceği Sınıf: ' => ''
         ];
     }
+
+
     public function setTemporaryScheduledHours($hours)
     {
         $this->attributes['temporary_scheduled_hours'] = $hours;
@@ -66,6 +67,20 @@ class Course_class extends Model
         $scheduledHours = $this->scheduled_hours ?? 0;
 
         return max(0, $this->duration - $scheduledHours);
+    }
+
+    public function scopeScheduled($query)
+    {
+        return $query->whereHas('scheduleSlots', function ($query) {
+            $query->where('duration', '>', 0);
+        });
+    }
+
+    public function scopeUnscheduled($query)
+    {
+        return $query->whereDoesntHave('scheduleSlots', function ($query) {
+            $query->where('duration', '>', 0);
+        });
     }
 
 }
