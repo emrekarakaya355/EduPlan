@@ -23,4 +23,12 @@ class Birim extends Model
         return $this->belongsToMany(Classroom::class, 'dp_birim_classrooms', 'birim_id', 'classroom_id')
             ->withTimestamps();
     }
+
+    public function getDisplayNameAttribute(): string
+    {
+        return collect(explode(' ', $this->name))
+            ->filter()
+            ->map(fn($word) => mb_substr($word, 0, 1))
+            ->join('');
+    }
 }

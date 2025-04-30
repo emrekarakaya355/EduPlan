@@ -22,4 +22,11 @@ class Building extends Model
     {
         return $this->hasMany(Classroom::class, 'building_id', 'id');
     }
+    public function getDisplayNameAttribute(): string
+    {
+        return collect(explode(' ', $this->name))
+            ->filter()
+            ->map(fn($word) => mb_substr($word, 0, 1))
+            ->join('');
+    }
 }

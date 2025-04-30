@@ -11,6 +11,9 @@
             </button>
 
             <div class="space-x-4">
+                <a href="{{ route('dashboard') }}" >
+                    <i class="fa-solid fa-home text-4xl @if(request()->routeIs('dashboard')) text-blue-500  fa-beat-fade @else text-gray-500 @endif"></i>
+                </a>
                 <a href="{{ route('schedule') }}" >
                     <i class="fa-regular fa-calendar-days text-4xl @if(request()->routeIs('schedule')) text-blue-500  fa-beat-fade @else text-gray-500 @endif"></i>
                 </a>
@@ -19,9 +22,6 @@
                 </a>
                 <a href="{{ route('instructors') }}" >
                     <i class="fa-solid fa-people-carry-box text-4xl @if(request()->routeIs('instructors')) text-blue-500  fa-beat-fade @else text-gray-500 @endif"></i>
-                </a>
-                <a href="{{ route('dashboard') }}" >
-                    <i class="fa-solid fa-people-carry-box text-4xl @if(request()->routeIs('dashboard')) text-blue-500  fa-beat-fade @else text-gray-500 @endif"></i>
                 </a>
             </div>
 

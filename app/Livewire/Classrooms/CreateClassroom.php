@@ -24,7 +24,6 @@ class CreateClassroom extends Component
         $this->form->store();
         $this->form->reset();
         session()->flash('success', 'Sınıf Oluşturuldu.');
-        dd(1);
         $this->dispatch('close-create-classroom-form');
     }
     public function render()
