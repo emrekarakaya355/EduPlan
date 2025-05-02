@@ -10,4 +10,10 @@
     @else
         <p class="text-center">Veri yok.</p>
     @endif
+
+        <style>
+            svg text {
+                font-size: 8px !important;
+            }
+        </style>
 </div>

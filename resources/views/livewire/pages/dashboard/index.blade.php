@@ -3,22 +3,29 @@
             <livewire:dashboard.scheduled-percentage />
         </div>
 
-        <div class="grid-stack p-2 fixed">
+        <div class="grid-stack p-2">
             <div class="grid-stack-item">
-                <div class="grid-stack-item-content cursor-move rounded overflow-hidden relative">
+                <div class="grid-stack-item-content cursor-move overflow-y-visible rounded " gs-w="6" gs-h="3">
                     <livewire:dashboard.scheduled-percentage/>
                 </div>
             </div>
-            <div class="grid-stack-item" gs-w="12" gs-h="3">
-                <div class="grid-stack-item-content cursor-move rounded overflow-hidden">
+            <div class="grid-stack-item">
+                <div class="grid-stack-item-content" gs-w="6" gs-h="3" >
+                    <livewire:dashboard.buildinged-based-classroom-usage/>
+                </div>
+            </div>
+            <div class="grid-stack-item" gs-w="6" gs-h="3">
+                <div class="grid-stack-item-content cursor-move rounded ">
                     <livewire:dashboard.unscheduled-lessons-per-unit/>
                 </div>
             </div>
-            <div class="grid-stack-item overflow-hidden" gs-w="4" gs-h="3">
-                <div class="grid-stack-item-content cursor-move rounded overflow-hidden ">
+            <div class="grid-stack-item " gs-w="6" gs-h="3">
+                <div class="grid-stack-item-content cursor-move rounded">
                     <livewire:dashboard.classroom-usage-per-building/>
                 </div>
             </div>
+
+
         </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -41,15 +48,14 @@
         .grid-stack {
             width: 100%;
             height:100%;
-
         }
 
         .grid-stack-item-content {
             width: 100%;
             height: 100%;
-            position: relative;
-            overflow: hidden;
-            border-radius: 0.75rem;
+            overflow-x: visible !important;
+            overflow-y: visible !important;
+
 
         }
     </style>

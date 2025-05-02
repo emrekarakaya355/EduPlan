@@ -64,6 +64,7 @@ class ClassroomUsagePerBuilding extends Component
             ->setSmoothCurve()
             ->setHorizontal()
             ->stacked()
+            ->setXAxisCategories([10,20,30,40,50,60,70,80,90,100])
              ;
 
         foreach ($this->buildingUsage as $building) {

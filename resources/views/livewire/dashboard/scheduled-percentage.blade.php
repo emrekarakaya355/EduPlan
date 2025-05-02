@@ -10,4 +10,10 @@
     @else
         <p class="text-center">Veri bulunamadı.</p>
     @endif
+
+    <style>
+       text {
+            font-size: 4px !important;
+        }
+    </style>
 </div>

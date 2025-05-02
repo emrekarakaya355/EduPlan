@@ -29,9 +29,9 @@ class ScheduledPercentage extends Component
             ->addSlice("Planlanan %{$scheduledPercentage}", $scheduled, '#16a34a')
             ->addSlice("Planlanmamış %{$unscheduledPercentage}", $unscheduled, '#ef4444')
             ->setAnimated(false)
-            ->setLegendVisibility(false)
+            ->setLegendVisibility(true)
             ->asDonut()
-        ;
+            ->enableShades();
 
         return view('livewire.dashboard.scheduled-percentage', [
             'pieChartModel' => $pieChart
