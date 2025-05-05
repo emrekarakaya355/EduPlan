@@ -1,4 +1,4 @@
-<div class="flex items-center space-x-2" wire:poll.5s="updateProgress">
+<div class="flex items-center space-x-2">
     <div class="text-xs text-gray-600 text-center mt-1">
         Saat olarak Yerleştirilen: {{ $placed }} / {{ $total }}
     </div>

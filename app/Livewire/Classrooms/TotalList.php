@@ -4,6 +4,7 @@ namespace App\Livewire\Classrooms;
 
 use App\Models\Building;
 use App\Models\Classroom;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class TotalList extends Component
@@ -16,6 +17,8 @@ class TotalList extends Component
 
     public function mount($selectedBuildingId)
     {
+
+
         $this->classrooms = Classroom::where('building_id', $selectedBuildingId)
             ->with('scheduleSlots')
             ->get()

@@ -14,9 +14,7 @@
                     <h2 class="text-2xl font-extrabold text-blue-600">{{ config('app.name', 'Laravel') }}</h2>
                 </a>
             </div>
-
-            <livewire:layout.navigation />
-
+                <livewire:layout.navigation/>
         </nav>
     </header>
 

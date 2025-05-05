@@ -18,8 +18,8 @@
     >
 
     @if($viewMode === 'program')
-        <button wire:click="$dispatch('removeFromSchedule', { hour: '{{ $time }}', day: '{{ $day + 1 }}', classId: '{{ $class['id'] ?? '' }}' })"
-                class="absolute right-0 top-0 text-red-500" style="margin-top: -5px">
+        <button data-html2canvas-ignore="true" wire:click="$dispatch('removeFromSchedule', { hour: '{{ $time }}', day: '{{ $day + 1 }}', classId: '{{ $class['id'] ?? '' }}' })"
+                class="absolute right-0 top-0 text-red-500 " style="margin-top: -5px">
             <i class="fa-solid fa-square-xmark fa-fade"></i>
         </button>
     @endif

@@ -5,9 +5,11 @@ use App\Livewire\UbysAktar;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
-Route::get('dashboard', \App\Livewire\Pages\Dashboard\Index::class)
+Route::get('dashboard', \App\Livewire\Pages\Dashboard\IndexApex::class)
     ->name('dashboard')->middleware('auth');
 
+Route::get('dashboard2', \App\Livewire\Pages\Dashboard\Index::class)
+    ->name('dashboard2')->middleware('auth');
 
 Route::get('/ubys', UbysAktar::class)->middleware('auth')->name('ubys');
 Route::get('/courses', \App\Livewire\Courses\CourseList::class)->middleware('auth')->name('course-list');

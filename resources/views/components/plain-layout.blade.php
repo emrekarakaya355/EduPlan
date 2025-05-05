@@ -1,6 +1,6 @@
 
-<div class="min-h-screen bg-gray-100 dark:bg-gray-900" x-data="{ sidebarOpen: true }" @sidebar-toggle.window="sidebarOpen = $event.detail">
-    <header class="flex items-center h-20 md:h-auto" x-data="{ open: false }">
+<div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <header class="flex items-center h-20 md:h-auto">
         <nav class="relative flex items-center w-full px-4">
             <!-- Mobile Header -->
             <div class="inline-flex items-center justify-center w-full md:hidden">
@@ -15,12 +15,12 @@
             </div>
             <div >
 
-            <livewire:layout.navbar />
+            <livewire:layout.navbar :sidebarOption="false"/>
             </div>
         </nav>
     </header>
 
-    <main class="pt-16  min-h-screen w-full" :class="{ 'pl-64': sidebarOpen, 'pl-0': !sidebarOpen }">
+    <main class="pt-16  min-h-screen w-full" >
         <div class="p-6 flex gap-4 min-h-[calc(100vh-4rem)]" style="flex-direction: column">
             <div class="flex  space-x-8 flex-grow-0"  >
                 @if(isset($top))

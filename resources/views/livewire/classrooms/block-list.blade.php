@@ -13,7 +13,7 @@
                 draggable="true"
                 data-type="classroom"
                 ondragstart="drag(event, {{ $classroom['id'] }})"
-                ondblclick="Livewire.dispatch('open-classroom-modal', {classroomId: '{{$classroom['id'] }}', classroomName: '{{ $classroom['name']  }}'})"
+                ondblclick="Livewire.dispatch('open-classroom-modal', {classroomId: '{{$classroom['id'] }}', classroomName: '{{addslashes( $classroom['name'])}}'})"
 
                 wire:mouseenter.debounce.250="$dispatch('showDetail', {  'Derslik Adı' : '{{addslashes( $classroom['name'])}}',
                                                                      'Fakülte' : '{{ addslashes($classroom['building']['campus']['name']) }}',
