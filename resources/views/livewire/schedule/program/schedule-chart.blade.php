@@ -87,6 +87,7 @@
 
     </div>
     <script>
+
         function downloadScheduleAsPng() {
             const target = document.getElementById('schedule-chart-content');
             html2canvas(target, { scale: 2 }).then(canvas => {

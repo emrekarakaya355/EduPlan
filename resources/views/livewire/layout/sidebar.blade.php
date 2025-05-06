@@ -3,11 +3,4 @@
 
     <livewire:layout.sidebar-filters />
 
-    <div  class="flex justify-between">
-        <div class="p-4 space-y-4">
-            <x-responsive-nav-link :href="route('ubys')" :active="request()->routeIs('ubys')" wire:navigate>
-                {{__('📚 Dersler')}}
-            </x-responsive-nav-link>
-        </div>
-    </div>
 </aside>

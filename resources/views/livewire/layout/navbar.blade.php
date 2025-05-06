@@ -36,6 +36,11 @@
             @if(request()->routeIs('instructors')) text-blue-500 fa-beat-fade @else text-gray-500 @endif"></i>
                         <span class="text-xs mt-1 text-gray-600 group-hover:text-blue-500">Haftalık Program</span>
                     </a>
+                    <a href="{{ route('reports') }}" class="flex flex-col items-center group">
+                        <i class="fa-solid fa-file-pdf text-4xl
+            @if(request()->routeIs('reports')) text-blue-500 fa-beat-fade @else text-gray-500 @endif"></i>
+                        <span class="text-xs mt-1 text-gray-600 group-hover:text-blue-500">Raporlar</span>
+                    </a>
                 </div>
 
 

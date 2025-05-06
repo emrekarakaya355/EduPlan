@@ -4,7 +4,9 @@
      data-type="course"
      data-schedule="{{ $schedule->id ?? '' }}"
      data-day="{{ $day + 1 }}"
-     data-hour="{{ $time }}">
+     data-hour="{{ $time }}"
+     style="background-color: {{ $class['color'] ?? '#FFFFFF' }};"
+>
 
     <div class="text-sm name" style="pointer-events: none">{{ $class['class_code'] }}</div>
     <div class="name" style="pointer-events: none; font-size: xx-small">{{ $class['class_name'] }}</div>

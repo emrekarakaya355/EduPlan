@@ -44,7 +44,6 @@ class ClassroomUsagePerBuildingApex extends Component
 
     public function prepareChartOptions()
     {
-        // Extract building names and usage percentages
         $buildingNames = $this->buildingUsage->pluck('name')->toArray();
         $usagePercentages = $this->buildingUsage->pluck('usage_percentage')->toArray();
 
@@ -58,7 +57,7 @@ class ClassroomUsagePerBuildingApex extends Component
         $this->chartOptions = [
             'chart' => [
                 'type' => 'bar',
-                'height' => 350,
+                'height' => 550,
                 'toolbar' => [
                     'show' => true,
                 ],
@@ -70,7 +69,7 @@ class ClassroomUsagePerBuildingApex extends Component
                     'dataLabels' => [
                         'position' => 'top',
                     ],
-                    'barHeight' => '50%',
+                    'barHeight' => '100%',
                 ],
             ],
             'colors' => $this->getChartColors(),
@@ -105,6 +104,9 @@ class ClassroomUsagePerBuildingApex extends Component
                 'max' => 100,
                 'labels' => [
                     'formatter' => 'function(val) { return val + "%" }',
+                    'style' => [
+                        'fontSize' => '10px',
+                    ],
                 ],
             ],
             'tooltip' => [

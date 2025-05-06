@@ -4,6 +4,7 @@ namespace App\Livewire\Dashboard;
 
 use App\Models\Building;
 use App\Models\Classroom;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class BuildingBasedClassroomUsage extends Component
@@ -11,6 +12,11 @@ class BuildingBasedClassroomUsage extends Component
     public $selectedBuildingId;
     public $buildings;
     public $chartData = [];
+
+    public $selectedClassroomId;
+    public $selectedClassroomName;
+    public $showClassroomModal = false;
+
 
     public function mount()
     {
@@ -27,6 +33,19 @@ class BuildingBasedClassroomUsage extends Component
         $this->prepareChartData();
     }
 
+
+    #[On('classroomShow')]
+    public function openClassroomSchedule($classroomId,$classroomName)
+    {
+        $this->selectedClassroomId = $classroomId;
+        $this->selectedClassroomName = $classroomName;
+        $this->showClassroomModal = true;
+    }
+    #[On('close-modal')]
+    public function closeClassroom()
+    {
+        $this->showClassroomModal = false;
+    }
     private function prepareChartData()
     {
         $classrooms = Classroom::withCount(['scheduleSlots'])
@@ -36,12 +55,13 @@ class BuildingBasedClassroomUsage extends Component
         $labels = [];
         $data = [];
         $colors = [];
-
+        $ids = [];
         foreach ($classrooms as $classroom) {
             $usage = round(($classroom->schedule_slots_count / 50) * 100);
             $usage = min($usage, 100);
 
             $labels[] = $classroom->name;
+            $ids[] = $classroom->id;
             $data[] = $usage;
 
             if ($usage < 30) {
@@ -57,7 +77,8 @@ class BuildingBasedClassroomUsage extends Component
             'labels' => $labels,
             'data' => $data,
             'colors' => $colors,
-            'title' => $building?->name
+            'title' => $building?->name,
+            'classroomIds' => $ids,
         ];
 
         $this->dispatch('classroomChartDataUpdated', chartData: $this->chartData);

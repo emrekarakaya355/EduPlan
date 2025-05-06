@@ -40,6 +40,7 @@ trait UsesScheduleDataFormatter
                             'instructor_id' => $scheduleSlot->courseClass->instructor?->id  ?? '',
                             'classrom_name' => $scheduleSlot->classroom?->name ,
                             'building_name' => isset($scheduleSlot->classroom?->building?->name) ? '( ' .$scheduleSlot->classroom?->building?->name .' ) ' :'',
+                            'color' => $this->getColorForClass(($scheduleSlot->courseClass?->id.$scheduleSlot->courseClass?->name) ),
                         ];
 
                     }
@@ -76,5 +77,39 @@ trait UsesScheduleDataFormatter
 
             return $timeRange;
         }
+
+    }
+    public function getColorForClass($key)
+    {
+         $colors = [
+            '#4E79A7', // muted blue
+            '#F28E2B', // orange
+            '#E15759', // soft red
+            '#76B7B2', // teal
+            '#59A14F', // green
+            '#EDC949', // gold
+            '#AF7AA1', // muted purple
+            '#FF9DA7', // pink
+            '#9C755F', // brownish
+            '#BAB0AC', // gray
+            '#D37295', // rose
+            '#FABFD2', // light pink
+            '#B07AA1', // dusty purple
+            '#86BCB6', // desaturated teal
+            '#F1CE63', // mustard
+            '#8CD17D', // lime green
+            '#499894', // muted cyan
+            '#D4A6C8', // lavender
+            '#60B6E3', // sky blue
+            '#FFBE7D', // peach
+        ];
+
+        $hash = 0;
+        for ($i = 0; $i < strlen($key); $i++) {
+            $hash = ord($key[$i]) + (($hash << 5) - $hash);
+        }
+
+        $index = abs($hash) % count($colors);
+        return $colors[$index];
     }
 }

@@ -1,8 +1,8 @@
 <x-page-layout>
     <x-slot name="top" >
-        <div class="flex justify-between space-x-8">
-            <div  class="flex-1 justify-between">
-                <div class="w-1/3 max-w-sm mb-4">
+        <div class="flex justify-between ">
+            <div  class="flex-1 justify-between ml-4">
+                <div class="w-1/3  mb-4">
                     <livewire:instructors.filter-select :$unit_id :$semester :$year wire:key="select_{{$year.$unit_id.$semester.$selectedInstructorId}}"/>
                 </div>
                 <!--livewire:instructors.compact-list :$unit_id wire:key="{{$unit_id}}"/-->
@@ -10,7 +10,7 @@
                     <livewire:shared.instructor-search />
                 </div>
             </div>
-            <div >
+            <div class="mr-2">
                 <livewire:classrooms.filter-select wire:key="selectClassroom_{{$year.$unit_id.$semester.$selectedBuildingId}}"/>
             </div>
         </div>

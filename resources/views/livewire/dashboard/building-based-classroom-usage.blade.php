@@ -21,11 +21,19 @@
             </div>
 
     </div>
+    @if($showClassroomModal ?? false)
+        <livewire:schedule.classroom.schedule-chart
+            :classroom-id="$selectedClassroomId"
+            :classroom-name="$selectedClassroomName"
+            :as-modal="true"
+        />
+    @endif
     <script>
         document.addEventListener('livewire:initialized', () => {
             let chart;
             function initChart(chartData) {
                 const options = {
+
                     series: [{
                         name: 'Kullanım Oranı',
                         data: chartData.data || []
@@ -44,7 +52,21 @@
                                 pan: true,
                                 reset: true
                             }
-                        }
+                        },
+                        events: {
+                            dataPointSelection : function(event, chartContext, config) {
+                                const selectedClassroomId = chartData.classroomIds[config.dataPointIndex];
+                                console.log(selectedClassroomId);
+
+                                const selectedClassroomName = chartData.labels[config.dataPointIndex];
+                                console.log(selectedClassroomName);
+
+                                @this.dispatch('classroomShow', {
+                                    classroomId: selectedClassroomId,
+                                    classroomName: selectedClassroomName
+                                });
+                            }
+                        },
                     },
                     title: {
                         text: `${chartData.title}`+`\n`+` birimine ait derslik kullanım oranları`,

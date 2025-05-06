@@ -177,6 +177,7 @@ class ScheduleChart extends BaseSchedule
         $this->loadSchedule();
 
     }
+
     public function render()
     {
         return view('livewire.schedule.program.schedule-chart');

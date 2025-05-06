@@ -9,6 +9,7 @@
      ondragstart="drag(event)"
      ondragover="event.preventDefault()"
      ondrop="drop(event)"
+     style="background-color: {{ $class['color'] ?? '#FFFFFF' }};"
      @if(!empty($class['instructor_id']))
          ondblclick="Livewire.dispatch('open-instructor-modal', {
                 instructorId: '{{ $class['instructor_id'] }}',

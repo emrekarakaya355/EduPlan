@@ -2,17 +2,17 @@
     <div class="w-full min-h-screen p-4">
         <div class="grid-stack w-full">
             <div class="grid-stack-item p-4" gs-w="5" gs-h="4">
-                <div class="grid-stack-item-content h-full w-full rounded">
+                <div class="grid-stack-item-content h-full w-full ">
                     <livewire:dashboard.schedule-heat-map />
                 </div>
             </div>
-            <div class="grid-stack-item" gs-w="5" gs-h="3">
-                <div class="grid-stack-item-content h-full w-full rounded">
+            <div class="grid-stack-item" gs-w="5" gs-h="4">
+                <div class="grid-stack-item-content h-full w-full">
                     <livewire:dashboard.classroom-usage-per-building-apex />
                 </div>
             </div>
             <div class="grid-stack-item" gs-w="5" gs-h="4">
-                <div class="grid-stack-item-content h-full w-full rounded-lg shadow-md">
+                <div class="grid-stack-item-content h-full w-full">
                     <livewire:dashboard.building-based-classroom-usage />
                 </div>
             </div>
