@@ -13,15 +13,14 @@ class ReportFilters extends Component
     ];
     public $selectedReportType;
 
-    protected $queryString = [
-        'selectedReportType' => ['except' => '']
-    ];
+    public function mount() {
+        $this->selectedReportType = session('selectedReportType', $this->selectedReportType ?? 'classroom');
+    }
 
     public function updatedSelectedReportType($reportType){
         $this->selectedReportType = $reportType;
+        session()->put('selectedReportType', $this->selectedReportType);
         $this->dispatch('report-type-changed', reportType: $this->selectedReportType,);
-
-
     }
 
     public function render()

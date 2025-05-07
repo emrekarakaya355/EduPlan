@@ -1,6 +1,5 @@
 <x-report-layout>
-
-    @if($reportType)
-        <livewire:is component="reports.{{ $reportType }}-list" wire:key="{{$reportType.}}"/>
+    @if($selectedReportType)
+        <livewire:is component="reports.{{ $selectedReportType }}-list" wire:key="{{$selectedReportType}}-list"/>
     @endif
 </x-report-layout>

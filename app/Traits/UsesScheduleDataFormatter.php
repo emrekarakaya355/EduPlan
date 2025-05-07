@@ -79,6 +79,54 @@ trait UsesScheduleDataFormatter
         }
 
     }
+
+    public function formatWeeklyAvailability($scheduleSlots)
+    {
+        $availability = [];
+        $timeRange = $this->generateTimeRange();
+
+        foreach ($timeRange as $time) {
+            $timeText = $time['start'] . ' - ' . $time['end'];
+            $availability[$timeText] = [];
+
+            foreach (DayOfWeek::cases() as $day) {
+                $slot = $scheduleSlots
+                    ->where('day', $day)
+                    ->filter(function ($slot) use ($time) {
+                        return $slot->start_time->format('H:i') == $time['start'];
+                    })
+                    ->first();
+
+                $availability[$timeText][$day->value] = isset($slot) ? $slot->courseClass->course->name: 'boş';
+            }
+        }
+
+        return $availability;
+    }
+    public function formatDailyAvailability($scheduleSlots)
+    {
+        $availability = [];
+        $timeRange = $this->generateTimeRange();
+
+        foreach (DayOfWeek::cases() as $day) {
+            $availability[$day->name] = [];
+
+            foreach ($timeRange as $time) {
+                $timeText = $time['start'] . ' - ' . $time['end'];
+                $slot = $scheduleSlots
+                    ->where('day', $day)
+                    ->filter(function ($slot) use ($time) {
+                        return $slot->start_time->format('H:i') == $time['start'];
+                    })
+                    ->first();
+
+                $availability[$day->name][$timeText] = isset($slot) ? $slot->courseClass->course->name : 'boş';
+            }
+        }
+
+        return $availability;
+    }
+
     public function getColorForClass($key)
     {
          $colors = [

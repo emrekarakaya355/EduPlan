@@ -20,7 +20,7 @@ class ClassroomFilter extends Component
     public $minExamCapacity= null;
     public $maxExamCapacity= null;
     public $isActive = true;
-    public $isFull= false;
+    public $showAvailable= "";
 
     public function mount()
     {
@@ -63,13 +63,13 @@ class ClassroomFilter extends Component
         $filterData = [
             'campus_id' => $this->selectedCampus,
             'building_id' => $this->selectedBuilding,
-            'classroom_type_id' => $this->selectedClassroomType,
+            'classroom_type' => $this->selectedClassroomType,
             'min_capacity' => $this->minCapacity,
             'max_capacity' => $this->maxCapacity,
             'min_exam_capacity' => $this->minExamCapacity,
             'max_exam_capacity' => $this->maxExamCapacity,
             'is_active' => $this->isActive,
-            'is_full' => $this->isFull,
+            'show_available' => $this->showAvailable,
         ];
         $this->dispatch('filters-applied', reportType: 'classroom', filters: $filterData);
     }
@@ -84,7 +84,7 @@ class ClassroomFilter extends Component
         $this->minExamCapacity = null;
         $this->maxExamCapacity = null;
         $this->isActive = true;
-        $this->isFull = false;
+        $this->showAvailable = "";
         $this->buildings = [];
     }
 

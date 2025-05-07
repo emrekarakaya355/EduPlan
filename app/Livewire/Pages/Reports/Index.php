@@ -7,11 +7,16 @@ use Livewire\Component;
 
 class Index extends Component
 {
-    public $reportType;
+    public $selectedReportType;
+
+    public function mount(){
+        $this->selectedReportType = session('selectedReportType', $this->selectedReportType ?? 'classroom');
+    }
+
     #[On('report-type-changed')]
     public function applyFilter($reportType)
     {
-        $this->reportType = $reportType;
+        $this->selectedReportType = $reportType;
     }
 
     public function render()

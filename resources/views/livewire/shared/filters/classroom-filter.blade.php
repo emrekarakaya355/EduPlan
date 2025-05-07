@@ -58,6 +58,15 @@
 
         </select>
     </div>
+    <div>
+        <label class="block text-sm font-medium mb-1">Müsaitlik</label>
+        <select wire:model="showAvailable" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
+            <option value="">Tümü</option>
+            <option value="true">Dolu</option>
+            <option value="false">Boş</option>
+
+        </select>
+    </div>
     <!-- Filtre Butonları -->
     <div class="flex justify-between pt-4">
         <button wire:click="resetFilters" class="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm">

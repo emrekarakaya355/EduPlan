@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Enums\DayOfWeek;
+use App\Traits\UsesScheduleDataFormatter;
 use Illuminate\Database\Eloquent\Model;
 
 class Classroom extends Model
 {
+    use UsesScheduleDataFormatter;
     protected $table = 'dp_classrooms';
     public $timestamps = true;
     protected $fillable = [
@@ -38,6 +41,17 @@ class Classroom extends Model
     public function getTotalUsageDurationAttribute()
     {
         return $this->scheduleSlots->count();
+    }
+    public function getWeeklyAvailabilityAttribute()
+    {
+        $slots = $this->scheduleSlots;
+        return $this->formatWeeklyAvailability($slots);
+    }
+
+    public function getDailyAvailabilityAttribute()
+    {
+        $slots = $this->scheduleSlots;
+        return $this->formatDailyAvailability($slots);
     }
 
     public function getDetailColumns()
