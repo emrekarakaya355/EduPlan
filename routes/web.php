@@ -4,8 +4,9 @@ use App\Livewire\Classrooms\CreateClassroom;
 use App\Livewire\UbysAktar;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome');
 Route::get('dashboard', \App\Livewire\Pages\Dashboard\IndexApex::class)
+    ->name('dashboard')->middleware('auth');
+Route::get('/', \App\Livewire\Pages\Dashboard\IndexApex::class)
     ->name('dashboard')->middleware('auth');
 
 Route::get('dashboard2', \App\Livewire\Pages\Dashboard\Index::class)

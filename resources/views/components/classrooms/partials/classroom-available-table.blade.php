@@ -28,21 +28,14 @@
                     <tr>
                         <th class="border px-2 py-1">Saat</th>
                         @foreach(\App\Enums\DayOfWeek::cases() as $day)
-                            <th class="border px-2 py-1">{{ $day->name }}</th>
+                            <th class="border px-2 py-1">{{ $day->getLabel() }}</th>
                         @endforeach
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($classroomItem->weekly_availability as $time => $days)
-                        @php
-                            $rowMatchesFilter = collect($days)->contains(function($status) use ($filters) {
-                                return $filters['show_available'] ? $status === 'boş' : $status === 'dolu';
-                            });
-                        @endphp
-
-                        @if($rowMatchesFilter)
                             <tr>
-                                <td class="border px-2 py-1">{{ $time }}</td>
+                                <td class="border text-center">{{ $time }}</td>
                                 @foreach($days as $status)
                                     <td class="border px-2 py-1 text-center">
                                         @if($status === 'boş')
@@ -53,7 +46,6 @@
                                     </td>
                                 @endforeach
                             </tr>
-                        @endif
                     @endforeach
                     </tbody>
                 </table>

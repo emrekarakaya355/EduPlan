@@ -28,8 +28,8 @@
             :as-modal="true"
         />
     @endif
+    @script
     <script>
-        document.addEventListener('livewire:initialized', () => {
             let chart;
             function initChart(chartData) {
                 const options = {
@@ -61,7 +61,7 @@
                                 const selectedClassroomName = chartData.labels[config.dataPointIndex];
                                 console.log(selectedClassroomName);
 
-                                @this.dispatch('classroomShow', {
+                                $wire.dispatch('classroomShow', {
                                     classroomId: selectedClassroomId,
                                     classroomName: selectedClassroomName
                                 });
@@ -148,22 +148,19 @@
                         }
                     }
                 };
-
                 if (chart) {
                     chart.destroy();
                 }
-
                 chart = new ApexCharts(document.querySelector("#classroom-usage-chart"), options);
                 chart.render();
             }
-
-            const componentData = @this.chartData;
+            const componentData = $wire.chartData;
             if (componentData && componentData.labels && componentData.labels.length > 0) {
                 initChart(componentData);
             }
-            @this.on('classroomChartDataUpdated', (data) => {
+            $wire.on('classroomChartDataUpdated', (data) => {
                 initChart(data.chartData);
             });
-        });
     </script>
+    @endscript
 </div>

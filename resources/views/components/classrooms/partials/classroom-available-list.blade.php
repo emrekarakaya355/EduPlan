@@ -21,6 +21,8 @@
             <th class="border px-2 py-1">Kampüs</th>
             <th class="border px-2 py-1">Bina</th>
             <th class="border px-2 py-1">Derslik</th>
+            <th class="border px-2 py-1">Derslik Kapasitesi</th>
+            <th class="border px-2 py-1">Sınav Kapasitesi</th>
             <th class="border px-2 py-1">Gün</th>
             <th class="border px-2 py-1">Saat</th>
             <th class="border px-2 py-1">Durum</th>
@@ -28,15 +30,17 @@
         </thead>
         <tbody>
         @foreach($classrooms as $classroom)
-            @foreach($classroom->daily_availability as  $day => $times)
+            @php
+                $availability = $classroom->dailyAvailability($this->filters['selected_days'],$this->filters['start_time'],$this->filters['end_time'] , $this->filters['show_available']);
+            @endphp
+            @foreach($availability as  $day => $times)
                 @foreach($times as $time => $status)
-                    @if( ($showAvailable == '' ) ||
-                       (!$showAvailable && $status === 'boş') ||
-                       ($showAvailable && $status != 'boş') )
                         <tr class="border-b hover:bg-gray-50">
                             <td class="px-4 py-2">{{ $classroom->building->campus->name }}</td>
                             <td class="px-4 py-2">{{ $classroom->building->name }}</td>
                             <td class="px-4 py-2">{{ $classroom->name }}</td>
+                            <td class="px-4 py-2">{{ $classroom->class_capacity }}</td>
+                            <td class="px-4 py-2">{{ $classroom->exam_capacity }}</td>
                             <td class="px-4 py-2">{{ $day }}</td>
                             <td class="px-4 py-2">{{ $time }}</td>
                             <td class="px-4 py-2">
@@ -48,7 +52,6 @@
                                 </span>
                             </td>
                         </tr>
-                    @endif
                 @endforeach
             @endforeach
         @endforeach

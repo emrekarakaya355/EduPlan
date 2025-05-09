@@ -81,7 +81,7 @@ class ScheduleChart extends BaseSchedule
             $classroomId,
             $this->schedule->id,
             $day,
-            $start_time,
+            $data['start_time'],
         );
         if (isset($result['has_conflicts'])) {
             $this->dispatch('show-confirm', [
@@ -180,6 +180,6 @@ class ScheduleChart extends BaseSchedule
 
     public function render()
     {
-        return view('livewire.schedule.program.schedule-chart');
+         return view('livewire.schedule.program.schedule-chart');
     }
 }

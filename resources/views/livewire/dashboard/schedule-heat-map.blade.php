@@ -1,20 +1,19 @@
-<div class="bg-white rounded-lg shadow p-4">
-    <h2 class="text-lg font-semibold mb-4">Derslik Saatlik Yoğunluk Haritası</h2>
+<div class="w-full">
+    <h2 class="text-lg font-semibold mb-4 text-center">Derslik Saatlik Yoğunluk Haritası</h2>
 
-    <div wire:ignore>
-        <div id="heatmap-chart" style="height: 400px;"></div>
-    </div>
+    <div id="heatmap-chart" ></div>
 
-    <script>
-        document.addEventListener('livewire:initialized', () => {
-            const chartData = @json($heatmapData);
-            const categories = @json($categories);
+        @script
+        <script>
+            const chartData = $wire.heatmapData;
+            const categories = $wire.categories;
 
             const options = {
                 series: chartData,
                 chart: {
                     type: 'heatmap',
-                    height: 400,
+                    height: 'auto',
+                    width: '100%',
                     toolbar: {
                         show: true,
                         tools: {
@@ -48,12 +47,13 @@
                     }
                 },
                 yaxis: {
+                    reversed : true,
                     title: {
                         text: '',
                         style: {
                             fontSize: '14px'
                         }
-                    }
+                    },
                 },
                 plotOptions: {
                     heatmap: {
@@ -86,11 +86,9 @@
 
             const chart = new ApexCharts(document.querySelector("#heatmap-chart"), options);
             chart.render();
-
-            // Livewire veri güncellemeleri için
             Livewire.on('heatmapUpdated', (data) => {
                 chart.updateSeries(data.heatmapData);
             });
-        });
     </script>
+    @endscript
 </div>

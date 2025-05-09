@@ -57,7 +57,7 @@ class ClassroomUsagePerBuildingApex extends Component
         $this->chartOptions = [
             'chart' => [
                 'type' => 'bar',
-                'height' => 550,
+                'width' => '100%',
                 'toolbar' => [
                     'show' => true,
                 ],

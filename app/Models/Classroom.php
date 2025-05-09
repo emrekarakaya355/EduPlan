@@ -48,12 +48,17 @@ class Classroom extends Model
         return $this->formatWeeklyAvailability($slots);
     }
 
-    public function getDailyAvailabilityAttribute()
+    public function getDailyAvailabilityAttribute($dayRange = [], $timeRangeFilter = [], $statusFilter = null)
     {
         $slots = $this->scheduleSlots;
-        return $this->formatDailyAvailability($slots);
+        return $this->formatDailyAvailability($slots,
+            $dayRange,$timeRangeFilter,$statusFilter);
     }
-
+    public function dailyAvailability($dayRange = [], $startTime ="",$endTime="", $statusFilter = null)
+    {
+        $slots = $this->scheduleSlots;
+        return $this->formatDailyAvailability($slots, $dayRange, $startTime,$endTime, $statusFilter);
+    }
     public function getDetailColumns()
     {
         return [

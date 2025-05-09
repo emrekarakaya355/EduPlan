@@ -9,4 +9,15 @@ enum DayOfWeek: int
     case Wednesday = 3;
     case Thursday = 4;
     case Friday = 5;
+
+    public function getLabel(): string
+    {
+        return match($this) {
+            self::Monday => 'Pazartesi',
+            self::Tuesday => 'Salı',
+            self::Wednesday => 'Çarşamba',
+            self::Thursday => 'Perşembe',
+            self::Friday => 'Cuma',
+        };
+    }
 }

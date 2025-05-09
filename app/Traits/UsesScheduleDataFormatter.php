@@ -103,27 +103,46 @@ trait UsesScheduleDataFormatter
 
         return $availability;
     }
-    public function formatDailyAvailability($scheduleSlots)
+    public function formatDailyAvailability($scheduleSlots, $selectedDays = [], $startTime = "",$endTime="", $statusFilter = "")
     {
         $availability = [];
         $timeRange = $this->generateTimeRange();
 
         foreach (DayOfWeek::cases() as $day) {
-            $availability[$day->name] = [];
+            if (!empty($selectedDays) && !in_array($day->name, $selectedDays)) {
+                continue;
+            }
+            $availability[$day->getLabel()] = [];
 
             foreach ($timeRange as $time) {
+                if ($startTime && $time['start'] <= $startTime) {
+                    continue;
+                }
+
+                if ($endTime && $time['end'] >= $endTime) {
+                    continue;
+                }
                 $timeText = $time['start'] . ' - ' . $time['end'];
+
                 $slot = $scheduleSlots
                     ->where('day', $day)
                     ->filter(function ($slot) use ($time) {
                         return $slot->start_time->format('H:i') == $time['start'];
                     })
                     ->first();
-
-                $availability[$day->name][$timeText] = isset($slot) ? $slot->courseClass->course->name : 'boş';
+                $status = isset($slot) ? $slot->courseClass->course->name : 'boş';
+                if($statusFilter == ""){
+                    $availability[$day->getLabel()][$timeText] = $status;
+                }
+                if (!filter_var($statusFilter, FILTER_VALIDATE_BOOLEAN) && $status !== 'boş') {
+                    continue;
+                }
+                if (filter_var($statusFilter, FILTER_VALIDATE_BOOLEAN) && $status === 'boş') {
+                    continue;
+                }
+                $availability[$day->getLabel()][$timeText] = $status;
             }
         }
-
         return $availability;
     }
 

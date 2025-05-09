@@ -5,19 +5,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <title>{{ $title ?? 'Page Title' }}</title>
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <livewire:styles />
     </head>
     <body  class="font-sans antialiased">
+
       {{ $slot }}
+
       @stack('scripts')
       <livewire:scripts />
-      @livewireChart
-      @livewireChartsScripts
 
     </body>
 </html>

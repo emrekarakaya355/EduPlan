@@ -61,7 +61,6 @@ class ScheduleHeatMap extends Component
             }
             $result[] = $row;
         }
-
         $this->heatmapData = $result;
     }
 

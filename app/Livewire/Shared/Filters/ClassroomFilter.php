@@ -10,6 +10,7 @@ class ClassroomFilter extends Component
 {
     public $campuses = [];
     public $buildings = [];
+    public $days = [];
     public $classroomTypes = [];
 
     public $selectedCampus = null;
@@ -22,10 +23,18 @@ class ClassroomFilter extends Component
     public $isActive = true;
     public $showAvailable= "";
 
+    public $selectedDays = [];
+    public $startTime = "";
+    public $endTime = "";
+
+    public $showAdvancedSearch = false;
+
     public function mount()
     {
         $this->loadCampuses();
         $this->loadClassroomTypes();
+        $this->loadDays();
+
     }
 
     public function updatedSelectedCampus()
@@ -56,6 +65,16 @@ class ClassroomFilter extends Component
     {
         $this->classroomTypes = ['Laboratuar', 'Sınıf', 'Atölye', 'Salon', 'Ö.Ü. Odası', 'Seminer Odası', 'Anfi'];
     }
+    private function loadDays()
+    {
+        $this->days = [
+            'Monday' => 'Paz',
+            'Tuesday' => 'Sal',
+            'Wednesday' => 'Çar',
+            'Thursday' => 'Per',
+            'Friday' => 'Cum',
+        ];
+    }
 
     public function applyFilters()
     {
@@ -70,6 +89,10 @@ class ClassroomFilter extends Component
             'max_exam_capacity' => $this->maxExamCapacity,
             'is_active' => $this->isActive,
             'show_available' => $this->showAvailable,
+            'selected_days' => $this->selectedDays,
+            'start_time' => $this->startTime,
+            'end_time' => $this->endTime,
+
         ];
         $this->dispatch('filters-applied', reportType: 'classroom', filters: $filterData);
     }
@@ -86,6 +109,9 @@ class ClassroomFilter extends Component
         $this->isActive = true;
         $this->showAvailable = "";
         $this->buildings = [];
+        $this->selectedDays = [];
+        $this->startTime = "";
+        $this->endTime = "";
     }
 
     public function render()

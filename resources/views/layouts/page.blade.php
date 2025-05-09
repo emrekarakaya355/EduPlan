@@ -1,4 +1,3 @@
-
 <div class="min-h-screen bg-gray-100 dark:bg-gray-900" x-data="{ sidebarOpen: true }" @sidebar-toggle.window="sidebarOpen = $event.detail">
 
     <header class="flex items-center h-20 md:h-auto" x-data="{ open: false }">
@@ -53,4 +52,5 @@
             @endif
         </div>
     </main>
+
 </div>

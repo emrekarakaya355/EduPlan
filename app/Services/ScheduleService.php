@@ -53,8 +53,8 @@ class ScheduleService {
 
     public function addClassroomToSlot($classroomId,$scheduleId,$day,$startTime, $force = false)
     {
-
         $endTime = date('H:i', strtotime($startTime . ' +45 minute'));
+
         $conflicts = $this->detectConflicts($classroomId, $day, $startTime, $endTime,$this->classroomValidators);
         if (!empty($conflicts) && !$force) {
             return ['has_conflicts' => true, 'conflicts' => $conflicts];
@@ -71,16 +71,12 @@ class ScheduleService {
             }
         }
         return ['success' => false, 'slot' => $slot];
-
-
     }
-
     private function detectConflicts($id, $day, $startTime, $endTime,$validators): array
     {
         $conflicts = [];
         foreach ($validators as $validator) {
             $result = $validator->validate($id, $day, $startTime, $endTime);
-
             if ($result !== true) {
                 $conflicts[$validator->getName()] = $result;
             }

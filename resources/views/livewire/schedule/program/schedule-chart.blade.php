@@ -56,6 +56,10 @@
                     >
                         <i class="fa-solid fa-file-image mr-2"></i> PNG Olarak Kaydet
                     </button>
+                    <button onclick="openEditModal()"
+                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        <i class="fa-solid fa-edit mr-2"></i> Düzelt ve Kaydet
+                    </button>
                 </div>
             </div>
         </div>
@@ -86,8 +90,8 @@
         </div>
 
     </div>
+    @include('livewire.schedule.partials.edit-modal', ['scheduleData' => $scheduleData,'schedule'=>$schedule])
     <script>
-
         function downloadScheduleAsPng() {
             const target = document.getElementById('schedule-chart-content');
             html2canvas(target, { scale: 2 }).then(canvas => {
@@ -98,4 +102,17 @@
             });
         }
     </script>
+    <style>
+        /* Düzenlenebilir hücrelere görsel feedback */
+        [contenteditable="true"]:focus {
+            background-color: #f0f9ff;
+            outline: 2px solid #3b82f6 !important;
+            min-height: 50px;
+        }
+
+        /* Modal için geçiş efekti */
+        #editModal {
+            transition: opacity 0.3s ease;
+        }
+    </style>
 </div>

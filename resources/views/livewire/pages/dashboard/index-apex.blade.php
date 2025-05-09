@@ -1,35 +1,35 @@
-<x-page-layout>
-    <div class="w-full min-h-screen p-4">
-        <div class="grid-stack w-full">
-            <div class="grid-stack-item p-4" gs-w="5" gs-h="4">
-                <div class="grid-stack-item-content h-full w-full ">
+<x-plain-layout>
+    <div class="p-4">
+        <div class="grid-stack ">
+            <div class="grid-stack-item " gs-w="5" gs-h="4">
+                <div class="grid-stack-item-content " style="width: 800px;">
                     <livewire:dashboard.schedule-heat-map />
                 </div>
             </div>
-            <div class="grid-stack-item" gs-w="5" gs-h="4">
-                <div class="grid-stack-item-content h-full w-full">
+            <div class="grid-stack-item" gs-w="5" gs-h="4" >
+                <div class="grid-stack-item-content h-full w-full" style="width: 900px; margin-left: 50px">
+
                     <livewire:dashboard.classroom-usage-per-building-apex />
                 </div>
             </div>
-            <div class="grid-stack-item" gs-w="5" gs-h="4">
-                <div class="grid-stack-item-content h-full w-full">
+            <div class="grid-stack-item w-1/2" gs-w="5" gs-h="4" >
+                <div class="grid-stack-item-content " style="width: 900px;">
                     <livewire:dashboard.building-based-classroom-usage />
                 </div>
             </div>
 
-
-
         </div>
     </div>
 
+    @script
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
             const grids = GridStack.initAll({
                 column: 12,
                 float: true,
                 cellHeight: 'auto',
                 margin: 5,
                 maxRow: 12,
+
                 resizable: {
                     handles: 'e, se, s, sw, w'
                 },
@@ -38,22 +38,18 @@
                     handle: '.grid-stack-item-content'
                 }
             });
-
-            window.addEventListener('load', function() {
-                grids.forEach(grid => grid.cellHeight());
-            });
-        });
+            grids.forEach(grid => grid.cellHeight());
     </script>
-
+    @endscript
     <style>
         .grid-stack {
-            width: 100% !important;
+
         }
         .grid-stack-item {
+
         }
         .grid-stack-item-content {
-            overflow-x: visible !important;
-            overflow-y: visible !important;
+            overflow: visible !important;
         }
     </style>
-</x-page-layout>
+</x-plain-layout>

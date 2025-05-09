@@ -19,7 +19,6 @@ class ClassroomConflictValidator implements ConflictValidatorInterface
      */
     public function validate($dynamicId, $day, $startTime, $endTime)
     {
-
         $conflicts = ScheduleSlot::where('classroom_id', $dynamicId)
             ->where('day', $day)
             ->where(function($query) use ($startTime, $endTime) {

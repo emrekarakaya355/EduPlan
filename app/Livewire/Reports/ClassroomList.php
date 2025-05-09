@@ -20,8 +20,13 @@ class ClassroomList extends Component
         'classroom_type' => null,
         'min_capacity' => null,
         'max_capacity' => null,
+        'min_exam_capacity' => null,
+        'max_exam_capacity' => null,
         'is_active' => true,
         'show_available' => "",
+        'selected_days' => "",
+        'start_time' => "",
+        'end_time' => "",
     ];
 
     // Tablo seçenekleri
@@ -35,11 +40,6 @@ class ClassroomList extends Component
 
     public $viewType = 'table';
 
-    // Sayfa yükleme ve filtre dinleme
-    public function mount()
-    {
-
-    }
 
     /**
      * Filtre event'i yakalandığında çalışır
@@ -49,7 +49,7 @@ class ClassroomList extends Component
     {
         $this->resetPage();
         $this->filters = $filters;
-        $this->generateReport();
+        //$this->generateReport();
     }
 
     /**
@@ -125,7 +125,6 @@ class ClassroomList extends Component
             $sorted = $collection->sortByDesc($this->sortField);
         }
 
-        // Sonucu tekrar diziye çevir
         $this->reportData = $sorted->values()->all();
     }
 
@@ -151,6 +150,8 @@ class ClassroomList extends Component
      */
     public function getFilteredClassrooms()
     {
+        $this->isReportGenerated = true;
+
         $query = Classroom::query();
 
         if ($this->filters['campus_id']) {
@@ -173,6 +174,13 @@ class ClassroomList extends Component
 
         if ($this->filters['max_capacity']) {
             $query->where('class_capacity', '<=', $this->filters['max_capacity']);
+        }
+        if ($this->filters['min_exam_capacity']) {
+            $query->where('exam_capacity', '>=', $this->filters['min_exam_capacity']);
+        }
+
+        if ($this->filters['max_exam_capacity']) {
+            $query->where('exam_capacity', '<=', $this->filters['min_exam_capacity']);
         }
 
         if (!is_null($this->filters['is_active'])) {
