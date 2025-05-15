@@ -41,6 +41,7 @@ trait UsesScheduleDataFormatter
                             'classrom_name' => $scheduleSlot->classroom?->name ,
                             'building_name' => isset($scheduleSlot->classroom?->building?->name) ? '( ' .$scheduleSlot->classroom?->building?->name .' ) ' :'',
                             'color' => $this->getColorForClass(($scheduleSlot->courseClass?->id.$scheduleSlot->courseClass?->name) ),
+                            'external_id' => $scheduleSlot->courseClass->external_id ?? '',
                         ];
 
                     }

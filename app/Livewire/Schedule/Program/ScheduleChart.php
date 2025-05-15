@@ -67,7 +67,7 @@ class ScheduleChart extends BaseSchedule
     }
 
     #[On('addClassroomToSchedule')]
-    public function addClassroomToSchedule($classroomId,$day,$start_time)
+    public function addClassroomToSchedule($classroomId,$day,$start_time,$classId)
     {
         $data = [
             'classroomId' => $classroomId,
@@ -85,6 +85,7 @@ class ScheduleChart extends BaseSchedule
             $this->schedule->id,
             $day,
             $data['start_time'],
+            $classId
         );
         if (isset($result['has_conflicts'])) {
             $this->dispatch('show-confirm', [

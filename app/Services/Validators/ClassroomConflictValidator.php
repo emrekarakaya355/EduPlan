@@ -26,6 +26,7 @@ class ClassroomConflictValidator implements ConflictValidatorInterface
         }
         $conflicts = ScheduleSlot::where('classroom_id', $dynamicId)
             ->where('day', $day)
+            ->where('courseClassç.external_id','<>',$classId)
             ->where(function($query) use ($startTime, $endTime) {
                 $query->whereBetween('start_time', [$startTime, $endTime])
                     ->orWhereBetween('end_time', [date('H:i', strtotime($startTime . ' +1 minute')), $endTime])
@@ -36,6 +37,8 @@ class ClassroomConflictValidator implements ConflictValidatorInterface
             })
             ->with('courseClass.course')
             ->get();
+
+        dd($conflicts);
         if ($conflicts->isEmpty()) {
             return true;
         }

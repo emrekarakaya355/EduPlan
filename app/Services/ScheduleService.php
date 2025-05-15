@@ -51,18 +51,21 @@ class ScheduleService {
 
 
 
-    public function addClassroomToSlot($classroomId,$scheduleId,$day,$startTime, $force = false)
+    public function addClassroomToSlot($classroomId,$scheduleId,$day,$startTime,$classId, $force = false)
     {
+
         $endTime = date('H:i', strtotime($startTime . ' +45 minute'));
 
-        $conflicts = $this->detectConflicts($classroomId, $day, $startTime, $endTime,null,$this->classroomValidators);
+        $conflicts = $this->detectConflicts($classroomId, $day, $startTime, $endTime,$classId,$this->classroomValidators);
+        $slot = ScheduleSlot::query()->where('schedule_id',$scheduleId)
+            ->where('class_id',$classId)
+            ->where('day',$day)
+            ->where('start_time',$startTime)->first();
         if (!empty($conflicts) && !$force) {
             return ['has_conflicts' => true, 'conflicts' => $conflicts];
         }else{
 
-             $slot = ScheduleSlot::query()->where('schedule_id',$scheduleId)
-                 ->where('day',$day)
-                 ->where('start_time',$startTime)->first();
+
             if($slot){
                 $slot->classroom_id = $classroomId;
                 $slot->save();

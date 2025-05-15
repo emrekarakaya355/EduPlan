@@ -2,6 +2,7 @@
      class="border-l dropzone relative flex-1"
      draggable="true"
      data-id="{{ $class['id'] ?? '' }}"
+     data-external="{{ $class['external_id'] ?? '1' }}"
      data-type="course"
      data-schedule="{{ $scheduleId ?? '' }}"
      data-day="{{ $day + 1 }}"

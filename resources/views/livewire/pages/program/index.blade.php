@@ -69,6 +69,7 @@
             let day = targetCell.dataset.day;
             let hour = targetCell.dataset.hour;
             let schedule = targetCell.dataset.schedule;
+            let classId = targetCell.dataset.external;
             if (!targetCell.classList.contains("dropzone") || targetCell.querySelector(".draggable")) {
                 return;
             }
@@ -78,7 +79,7 @@
                 }));
             } else if (type === "classroom") {
                 window.dispatchEvent(new CustomEvent('addClassroomToSchedule', {
-                    detail: { classroomId: dataId, day: day, start_time: hour }
+                    detail: { classroomId: dataId, day: day, start_time: hour,classId:classId }
                 }));
             }
         }
