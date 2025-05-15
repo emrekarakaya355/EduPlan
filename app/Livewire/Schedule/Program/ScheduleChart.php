@@ -4,8 +4,11 @@ namespace App\Livewire\Schedule\Program;
 
 use App\Livewire\Schedule\Shared\BaseSchedule;
 use App\Models\ScheduleSlot;
+use App\Services\Pdf\PdfService;
+use App\Services\Pdf\Strategies\ScheduleChartPdf;
 use App\Services\ScheduleService;
 use App\Services\ScheduleSlotProviders\ProgramBasedScheduleSlotProvider;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\Attributes\On;
 
 class ScheduleChart extends BaseSchedule
@@ -135,7 +138,6 @@ class ScheduleChart extends BaseSchedule
     public function forceAddCourseToSchedule($classId, $day, $start_time)
     {
         $startTime = explode(' - ', $start_time)[0];
-
         app(ScheduleService::class)->addCourseToSchedule(
             $this->schedule->id,
             $classId,
@@ -177,7 +179,13 @@ class ScheduleChart extends BaseSchedule
         $this->loadSchedule();
 
     }
+    public function download(PdfService $pdfService)
+    {
 
+        $strategy = new ScheduleChartPdf();
+
+        return $pdfService->stream($strategy, $this->scheduleData);
+    }
     public function render()
     {
          return view('livewire.schedule.program.schedule-chart');

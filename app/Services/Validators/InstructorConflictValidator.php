@@ -10,21 +10,23 @@ class InstructorConflictValidator implements ConflictValidatorInterface{
 
 
     /**
-     * @param $scheduleId
-     * @param $course
+     * @param $dynamicId
      * @param $day
      * @param $startTime
      * @param $endTime
+     * @param $classId
+     * @param $scheduleId
+     * @param $course
      * @return mixed
      */
-    public function validate($dynamicId, $day, $startTime, $endTime)
+    public function validate($dynamicId, $day, $startTime, $endTime, $classId)
     {
         if(!$dynamicId ){
             return true;
         }
-
-        $conflicts = ScheduleSlot::whereHas('courseClass', function($query) use ($dynamicId) {
-                $query->where('instructorId', $dynamicId);
+        $conflicts = ScheduleSlot::whereHas('courseClass', function($query) use ($dynamicId,$classId) {
+                $query->where('instructorId', $dynamicId)
+                    ->where('external_id', '<>', $classId);;
             })
             ->where('day', $day)
             ->where(function($query) use ($startTime, $endTime) {

@@ -10,15 +10,20 @@ class ClassroomConflictValidator implements ConflictValidatorInterface
 
 
     /**
-     * @param $scheduleId
-     * @param $course
+     * @param $dynamicId
      * @param $day
      * @param $startTime
      * @param $endTime
+     * @param $classId
+     * @param $scheduleId
+     * @param $course
      * @return mixed
      */
-    public function validate($dynamicId, $day, $startTime, $endTime)
+    public function validate($dynamicId, $day, $startTime, $endTime, $classId = null)
     {
+        if($dynamicId == 70){
+            return true;
+        }
         $conflicts = ScheduleSlot::where('classroom_id', $dynamicId)
             ->where('day', $day)
             ->where(function($query) use ($startTime, $endTime) {

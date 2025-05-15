@@ -53,7 +53,7 @@ trait UsesScheduleDataFormatter
         return $scheduleData;
     }
 
-    public function generateTimeRange($from = '08:30', $to = '18:00', $lunchStart = '12:00', $lunchEnd = '13:00'){
+    public function generateTimeRange($from = '08:30', $to = '23:00', $lunchStart = '12:30', $lunchEnd = '13:30'){
         {
             $time = Carbon::parse($from);
             $lunchStart = Carbon::parse($lunchStart);
@@ -151,7 +151,6 @@ trait UsesScheduleDataFormatter
          $colors = [
             '#4E79A7', // muted blue
             '#F28E2B', // orange
-            '#E15759', // soft red
             '#76B7B2', // teal
             '#59A14F', // green
             '#EDC949', // gold

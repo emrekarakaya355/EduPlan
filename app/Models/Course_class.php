@@ -39,7 +39,17 @@ class Course_class extends Model
     {
         return $this->hasMany(ScheduleSlot::class, 'class_id', 'id');
     }
-
+    public function getBranchAttribute($value)
+    {
+        return match((int) $value) {
+            1 => 'A Şubesi',
+            2 => 'B Şubesi',
+            3 => 'C Şubesi',
+            4 => 'D Şubesi',
+            5 => 'E Şubesi',
+            default => 'Bilinmeyen Şube'
+        };
+    }
     public function getDetailColumns()
     {
         return [

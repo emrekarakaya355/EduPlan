@@ -51,6 +51,12 @@
                 </div>
                 <div data-html2canvas-ignore="true" class="no-print mb-4">
                     <button
+                        wire:click="download"
+                        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                    >
+                        <i class="fa-solid fa-file-image mr-2"></i> Pdf indir
+                    </button>
+                    <button
                         onclick="downloadScheduleAsPng()"
                         class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
                     >
@@ -101,12 +107,37 @@
                 link.click();
             });
         }
+        function openEditModal() {
+            const modal = document.getElementById('editModal');
+            modal.classList.remove('hidden');
+            modal.style.opacity = 0;
+            setTimeout(() => modal.style.opacity = 1, 10);
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById('editModal');
+            modal.style.opacity = 0;
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+        function saveAndExport() {
+            const target = document.querySelector('#editModal > div');
+            html2canvas(target, {
+                scale: 2,
+                backgroundColor: '#FFFFFF',
+                ignoreElements: el => el.hasAttribute('data-html2canvas-ignore')
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'duzenlenmis_ders_programi.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
     </script>
     <style>
-        /* Düzenlenebilir hücrelere görsel feedback */
         [contenteditable="true"]:focus {
             background-color: #f0f9ff;
             outline: 2px solid #3b82f6 !important;
+            overflow: visible;
             min-height: 50px;
         }
 

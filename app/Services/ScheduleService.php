@@ -33,7 +33,7 @@ class ScheduleService {
             return ['success' => false,'status' => 'Ders zaten planlanmış'];
         }
         $endTime = date('H:i', strtotime($startTime . ' +45 minute'));
-        $conflicts = $this->detectConflicts($course->instructorId, $day, $startTime, $endTime,$this->courseValidators);
+        $conflicts = $this->detectConflicts($course->instructorId, $day, $startTime, $endTime,$course->external_id,$this->courseValidators);
 
         if (!empty($conflicts) && !$force) {
             return ['has_conflicts' => true, 'conflicts' => $conflicts];
@@ -55,7 +55,7 @@ class ScheduleService {
     {
         $endTime = date('H:i', strtotime($startTime . ' +45 minute'));
 
-        $conflicts = $this->detectConflicts($classroomId, $day, $startTime, $endTime,$this->classroomValidators);
+        $conflicts = $this->detectConflicts($classroomId, $day, $startTime, $endTime,null,$this->classroomValidators);
         if (!empty($conflicts) && !$force) {
             return ['has_conflicts' => true, 'conflicts' => $conflicts];
         }else{
@@ -72,11 +72,11 @@ class ScheduleService {
         }
         return ['success' => false, 'slot' => $slot];
     }
-    private function detectConflicts($id, $day, $startTime, $endTime,$validators): array
+    private function detectConflicts($id, $day, $startTime, $endTime,$classId,$validators): array
     {
         $conflicts = [];
         foreach ($validators as $validator) {
-            $result = $validator->validate($id, $day, $startTime, $endTime);
+            $result = $validator->validate($id, $day, $startTime, $endTime,$classId);
             if ($result !== true) {
                 $conflicts[$validator->getName()] = $result;
             }

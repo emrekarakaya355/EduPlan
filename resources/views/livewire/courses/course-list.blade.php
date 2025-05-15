@@ -6,6 +6,7 @@
         <table wire:model.live="courses">
             <thead >
             <tr>
+                <th>id</th>
                 <th>Course Code</th>
                 <th>Course Name</th>
                 <th>Instructor Name</th>
@@ -23,6 +24,7 @@
             <tbody>
             @foreach($courses as $courseClass)
                 <tr>
+                    <td>{{ $courseClass->id }}</td>
                     <td>{{ $courseClass->course->code }}</td>
                     <td>{{ $courseClass->course->name }}</td>
                     <td>{{ $courseClass->instructorName }} {{ $courseClass->instructorSurname }}</td>

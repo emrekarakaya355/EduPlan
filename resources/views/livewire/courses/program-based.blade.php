@@ -20,14 +20,13 @@
                                                                'Ders Kodu':'{{ addslashes($courseClass->course->code)}}',
                                                                'Kontenjan' : '{{addslashes($courseClass->quota)}} kişi',
                                                                'Süre' : '{{addslashes($courseClass->duration)}} saat',
+                                                               'Şube' : '{{addslashes($courseClass->branch)}}',
                                                                'Hoca' : '{{addslashes($courseClass->instructorTitle)}} {{addslashes($courseClass->instructorName)}} {{addslashes($courseClass->instructorSurname)}}'
-
                                                                })"
                     class="course-item"
                     draggable="true"
                     ondragstart="drag(event, {{ $courseClass->id }})"
                     ondblclick="Livewire.dispatch('open-course-modal', {courseId: '{{$courseClass->course->id }}', courseName: '{{$courseClass->course->name }}'})"
-
                     data-type="course">
                     <div class="course-details" >
                         <span class="course-name">{{str($courseClass->course->code)->words(3) }}</span>

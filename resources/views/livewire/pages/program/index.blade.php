@@ -47,7 +47,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         Livewire.dispatch('forceAddToSchedule', {
-                            courseId: data.courseId,
+                            classId: data.classId,
                             day: data.day,
                             start_time: data.start_time
                         });
