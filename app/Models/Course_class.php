@@ -39,6 +39,26 @@ class Course_class extends Model
     {
         return $this->hasMany(ScheduleSlot::class, 'class_id', 'id');
     }
+
+    public function getCommonLessonsAttribute()
+    {
+        return self::where('external_id', $this->external_id)
+            ->where('id', '!=', $this->id)
+            ->get();
+    }
+
+    public function getScheduleIdAttribute()
+    {
+        if (!$this->program || !$this->course) {
+            return null;
+        }
+        return $this->program->schedules()
+            ->where('grade', $this->grade)
+            ->where('year', $this->course->year)
+            ->where('semester', $this->course->semester)
+            ->value('id');
+    }
+
     public function getBranchAttribute($value)
     {
         return match((int) $value) {
@@ -48,6 +68,17 @@ class Course_class extends Model
             4 => 'D Şubesi',
             5 => 'E Şubesi',
             default => 'Bilinmeyen Şube'
+        };
+    }
+    public function getDisplayBranchAttribute()
+    {
+        return match((int)  $this->getRawOriginal('branch')) {
+            1 => 'A',
+            2 => 'B',
+            3 => 'C',
+            4 => 'D',
+            5 => 'E',
+            default => '?'
         };
     }
     public function getDetailColumns()

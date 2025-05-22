@@ -2,7 +2,7 @@
      class="border-l dropzone relative flex-1"
      draggable="true"
      data-id="{{ $class['id'] ?? '' }}"
-     data-external="{{ $class['external_id'] ?? '1' }}"
+     data-external="{{ $class['external_id'] ?? '' }}"
      data-type="course"
      data-schedule="{{ $scheduleId ?? '' }}"
      data-day="{{ $day + 1 }}"
@@ -18,7 +18,11 @@
     })"
     @endif
     >
-
+    @if(!empty($class['commonLesson']))
+        <div class="absolute top-0 left-0 text-blue-600" style=" z-index: 10;">
+            <i class="fa-solid fa-link fa-xs" title="Ortak Ders"></i>
+        </div>
+    @endif
     @if($viewMode === 'program')
         <button data-html2canvas-ignore="true" wire:click="$dispatch('removeFromSchedule', { hour: '{{ $time }}', day: '{{ $day + 1 }}', classId: '{{ $class['id'] ?? '' }}' })"
                 class="absolute right-0 top-0 text-red-500 " style="margin-top: -5px">

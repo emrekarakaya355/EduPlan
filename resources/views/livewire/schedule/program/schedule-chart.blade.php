@@ -28,6 +28,7 @@
                     <div>{{$schedule->year .' - '. Carbon\Carbon::createFromDate($schedule->year)->addYear()->year. ' ' . $schedule->semester  }}</div>
 
                     <div>{{$schedule->program?->name . ' ' }}</div>
+                    <div>{{$schedule->id . ' ' }}</div>
                     <div>{{$schedule->grade .'. Sınıf Ders Programı'}}</div>
                 @endisset
             </div>
@@ -51,7 +52,7 @@
                 </div>
                 <div data-html2canvas-ignore="true" class="no-print mb-4">
                     <button
-                        wire:click="download"
+                        wire:click="downloadPdf"
                         class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
                     >
                         <i class="fa-solid fa-file-image mr-2"></i> Pdf indir

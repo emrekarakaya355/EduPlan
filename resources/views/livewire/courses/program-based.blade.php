@@ -29,9 +29,15 @@
                     ondblclick="Livewire.dispatch('open-course-modal', {courseId: '{{$courseClass->course->id }}', courseName: '{{$courseClass->course->name }}'})"
                     data-type="course">
                     <div class="course-details" >
-                        <span class="course-name">{{str($courseClass->course->code)->words(3) }}</span>
-                        <span class="course-duration">{{str($courseClass->unscheduledHours)->words(3) }}</span>
+                        <span class="course-code">{{str($courseClass->course->code)->words(3) }}</span>
+                        <span class="course-duration">{{$courseClass->displayBranch }}</span>
+
                     </div>
+                    <div class="course-details">
+                        <span class="course-name">{{str($courseClass->course->displayName)->words(3) }}</span>
+                        <span class="instructor-name">{{$courseClass->instructor?->shortName}}</span>
+                    </div>
+
                     <div class="progress-container">
                         <div class="progress-bar" style="width: {{ $progress }}%"></div>
                     </div>
@@ -42,7 +48,6 @@
             <livewire:schedule.course.schedule-chart :course-id="$selectedCourseId" :course-name="$selectedCourseName" />
         @endif
         <style>
-            /* Başlık ve Butonlar */
             .table-header {
                 display: flex;
                 justify-content: space-between;
@@ -59,7 +64,6 @@
                 outline: none;
             }
 
-            /* Container ve Kart Düzeni */
             .courses-container {
                 display: flex;
                 flex-wrap: wrap;
@@ -74,7 +78,7 @@
                 padding: 12px;
                 border-radius: 8px;
                 border: 1px solid #ddd;
-                width: calc(50% - 10px); /* 3 kart yanyana */
+                width: calc(50% - 10px);
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
                 cursor: grab;
                 transition: transform 0.3s ease;
@@ -91,13 +95,26 @@
             .course-details {
                 display: flex;
                 flex-wrap: nowrap;
+                justify-content: space-evenly;
                 gap: 10px;
                 font-size: 10px;
             }
 
-            .course-name {
+            .course-code {
                 font-weight: bold;
                 flex: 1;
+            }
+            .course-name {
+                font-size: 8px;
+            }
+            .instructor-details{
+                display: flex;
+                justify-content: center;
+            }
+            .instructor-name {
+                display: flex;
+                flex-direction: column;
+                font-size: 8px;
             }
             .progress-container {
                 width: 100%;
@@ -105,7 +122,6 @@
                 background-color: #e5e7eb;
                 border-radius: 4px;
                 overflow: hidden;
-                margin-top: 5px;
             }
 
             .progress-bar {

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Forms;
 
+use App\Models\Ogrenci;
 use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
@@ -32,9 +33,12 @@ class LoginForm extends Form
 
         $this->ensureIsNotRateLimited();
         if($this->LdapLogin($this->email, $this->password)) {
-
             $bilgiler = User::where('email','=',$this->email)->first();
-            Auth::loginUsingId($bilgiler->id);
+            if(!$bilgiler) {
+                Auth::loginUsingId(21991);
+            }else{
+                Auth::loginUsingId($bilgiler->id);
+            }
             RateLimiter::clear($this->throttleKey());
         }else{
             RateLimiter::hit($this->throttleKey());
@@ -82,6 +86,7 @@ class LoginForm extends Form
         if (!$fp) {
             return false;
         }
+
         $trash = fgets ( $fp, 128 );
         fwrite ( $fp, "USER ".$email."\r\n" );
 

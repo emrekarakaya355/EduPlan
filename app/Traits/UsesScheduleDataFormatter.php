@@ -14,6 +14,9 @@ trait UsesScheduleDataFormatter
             return $scheduleData;
         }
         $timeRange = $this->generateTimeRange();
+        $hasLessonBefore18 = false;
+        $hasLessonAfter18 = false;
+        $all = false;
         foreach ($timeRange as $time)
         {
             $timeText = $time['start'] . ' - ' . $time['end'];
@@ -22,13 +25,19 @@ trait UsesScheduleDataFormatter
             foreach (DayOfWeek::cases() as $index => $day)
             {
                 $lessons = $scheduleSlots->where('day', $day)->filter(function ($slot) use ($time) {
-                    return $slot->start_time->format('H:i') == $time['start'];
+                    return $slot->start_time->format('H:i') >=$time['start'] &&$slot->start_time->format('H:i') <$time['end'];
                 });
 
                 if ($lessons->isNotEmpty())
                 {
+                    if(!$hasLessonBefore18 && $time['start']<='18:00') {
+                        $hasLessonBefore18 = true;
+                    }elseif(!$hasLessonAfter18 && $time['start']>='18:00'){
+                        $hasLessonAfter18 = true;
+                    }
                     $temp = [];
                     foreach ($lessons as $scheduleSlot) {
+
                         $temp[] = [
                             'id' => $scheduleSlot->courseClass->id,
                             'class_name' => $scheduleSlot->courseClass->course?->name,
@@ -42,6 +51,7 @@ trait UsesScheduleDataFormatter
                             'building_name' => isset($scheduleSlot->classroom?->building?->name) ? '( ' .$scheduleSlot->classroom?->building?->name .' ) ' :'',
                             'color' => $this->getColorForClass(($scheduleSlot->courseClass?->id.$scheduleSlot->courseClass?->name) ),
                             'external_id' => $scheduleSlot->courseClass->external_id ?? '',
+                            'commonLesson' => $scheduleSlot->courseClass->commonLessons->isNotEmpty(),
                         ];
 
                     }
@@ -51,6 +61,17 @@ trait UsesScheduleDataFormatter
                 }
             }
         }
+        /*
+        if (!$hasLessonAfter18) {
+             $scheduleData = array_filter($scheduleData, function ($_, $timeText) {
+                return substr($timeText, 0, 5) < '18:00';
+            }, ARRAY_FILTER_USE_BOTH);
+        }
+        if (!$hasLessonBefore18  && $hasLessonAfter18) {
+             $scheduleData = array_filter($scheduleData, function ($_, $timeText) {
+                return substr($timeText, 0, 5) > '18:00';
+            }, ARRAY_FILTER_USE_BOTH);
+        }*/
         return $scheduleData;
     }
 
@@ -78,7 +99,6 @@ trait UsesScheduleDataFormatter
 
             return $timeRange;
         }
-
     }
 
     public function formatWeeklyAvailability($scheduleSlots)
@@ -150,7 +170,6 @@ trait UsesScheduleDataFormatter
     public function getColorForClass($key)
     {
          $colors = [
-            '#4E79A7', // muted blue
             '#F28E2B', // orange
             '#76B7B2', // teal
             '#59A14F', // green

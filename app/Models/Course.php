@@ -19,6 +19,13 @@ class Course extends Model
         return $this->hasMany(Course_class::class, 'course_id', 'id');
     }
 
+    public function getDisplayNameAttribute(){
+
+        return collect(explode(' ', $this->name))
+            ->map(fn($word) => mb_substr($word, 0, 3))
+            ->implode(' ');
+    }
+
 
 
 }

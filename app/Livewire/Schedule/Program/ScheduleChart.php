@@ -3,6 +3,8 @@
 namespace App\Livewire\Schedule\Program;
 
 use App\Livewire\Schedule\Shared\BaseSchedule;
+use App\Models\Course;
+use App\Models\Course_class;
 use App\Models\ScheduleSlot;
 use App\Services\Pdf\PdfService;
 use App\Services\Pdf\Strategies\ScheduleChartPdf;
@@ -22,7 +24,6 @@ class ScheduleChart extends BaseSchedule
 
     protected function initializeProvider()
     {
-
         $this->program = session('program') == '' ? -1 : session('program');
         $this->year = session('year') ?? 2000;
         $this->semester = session('semester') ?? 'Fall';
@@ -39,7 +40,6 @@ class ScheduleChart extends BaseSchedule
     public function openInstructorModal($instructorId,$instructorName): void
     {
         if(empty($instructorId) ){
-
             return;
         }
         $this->selectedInstructorId = $instructorId;
@@ -67,7 +67,7 @@ class ScheduleChart extends BaseSchedule
     }
 
     #[On('addClassroomToSchedule')]
-    public function addClassroomToSchedule($classroomId,$day,$start_time,$classId)
+    public function addClassroomToSchedule($classroomId,$day,$start_time,$classId,$externalId)
     {
         $data = [
             'classroomId' => $classroomId,
@@ -85,7 +85,8 @@ class ScheduleChart extends BaseSchedule
             $this->schedule->id,
             $day,
             $data['start_time'],
-            $classId
+            $classId,
+            $externalId
         );
         if (isset($result['has_conflicts'])) {
             $this->dispatch('show-confirm', [
@@ -165,28 +166,36 @@ class ScheduleChart extends BaseSchedule
                 #$messages[] = "\n- {$conflict['course']['course']['name']} at {$conflict['start_time']}\n\n";
             }
         }
-
         return $messages . "\n\nYinede Eklemek İstiyor musun?";
     }
     #[On('removeFromSchedule')]
     public function removeFromSchedule($hour,$day,$classId): void
     {
-        ScheduleSlot::query()
-            ->where('schedule_id',$this->schedule->id)
-            ->where('day',$day)
-            ->where('start_time',explode(' - ', $hour)[0])
-            ->where('class_id',$classId)
-            ->delete();
+        $courseClass = Course_class::find($classId);
+        if($courseClass->external_id){
+            ScheduleSlot::query()
+                ->where('day',$day)
+                ->where('start_time',explode(' - ', $hour)[0])
+                ->whereHas('courseClass',function($query) use ($courseClass){
+                    $query->where('external_id', $courseClass->external_id);
+                })
+                ->delete();
+        }else{
+            ScheduleSlot::query()
+                ->where('schedule_id',$this->schedule->id)
+                ->where('day',$day)
+                ->where('start_time',explode(' - ', $hour)[0])
+                ->where('class_id',$classId);
+        }
         $this->loadSchedule();
-
     }
-    public function download(PdfService $pdfService)
+
+    public function downloadPdf(PdfService $pdfService)
     {
-
         $strategy = new ScheduleChartPdf();
-
-        return $pdfService->stream($strategy, $this->scheduleData);
+         return $pdfService->stream($strategy, ['scheduleData' => $this->scheduleData,'schedule'=>$this->schedule]);
     }
+
     public function render()
     {
          return view('livewire.schedule.program.schedule-chart');

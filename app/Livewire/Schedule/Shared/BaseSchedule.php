@@ -4,6 +4,8 @@
 namespace App\Livewire\Schedule\Shared;
 
 use App\Contracts\ScheduleSlotProviderInterface;
+use App\Models\Course;
+use App\Models\Course_class;
 use App\Traits\UsesScheduleDataFormatter;
 use Livewire\Component;
 
@@ -30,8 +32,8 @@ abstract class BaseSchedule extends Component
 
         $this->initializeProvider();
         $this->schedule = $this->provider->getSchedule();
-
         $this->scheduleData = $this->prepareScheduleSlotData($this->provider->getScheduleSlots());
+
         //$this->days = $this->prepareScheduleSlotData($this->scheduleData);
     }
 

@@ -14,31 +14,30 @@ class ClassroomConflictValidator implements ConflictValidatorInterface
      * @param $day
      * @param $startTime
      * @param $endTime
-     * @param $classId
-     * @param $scheduleId
-     * @param $course
+     * @param null $classId
      * @return mixed
      */
-    public function validate($dynamicId, $day, $startTime, $endTime, $classId = null)
+    public function validate($validationData)
     {
-        if($dynamicId == 70){
+        if($validationData->classroomId == 70 || $validationData->classroomId == 43){
             return true;
         }
-        $conflicts = ScheduleSlot::where('classroom_id', $dynamicId)
-            ->where('day', $day)
-            ->where('courseClassç.external_id','<>',$classId)
-            ->where(function($query) use ($startTime, $endTime) {
-                $query->whereBetween('start_time', [$startTime, $endTime])
-                    ->orWhereBetween('end_time', [date('H:i', strtotime($startTime . ' +1 minute')), $endTime])
-                    ->orWhere(function($q) use ($startTime, $endTime) {
-                        $q->where('start_time', '<=', $startTime)
-                            ->where('end_time', '>=', $endTime);
+        $conflicts = ScheduleSlot::where('classroom_id', $validationData->classroomId)
+            ->where('day', $validationData->day)
+            ->whereHas('courseClass', function ($query) use ($validationData) {
+                return $query->where('external_id','<>',$validationData->externalId);
+            })
+            ->where(function($query) use ($validationData) {
+                $query->whereBetween('start_time', [$validationData->startTime, $validationData->endTime])
+                    ->orWhereBetween('end_time', [date('H:i', strtotime($validationData->startTime . ' +1 minute')), $validationData->endTime])
+                    ->orWhere(function($q) use ($validationData) {
+                        $q->where('start_time', '<=', $validationData->startTime)
+                            ->where('end_time', '>=', $validationData->endTime);
                     });
             })
             ->with('courseClass.course')
             ->get();
 
-        dd($conflicts);
         if ($conflicts->isEmpty()) {
             return true;
         }

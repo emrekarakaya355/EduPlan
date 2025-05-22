@@ -4,6 +4,7 @@ namespace App\Services\Validators;
 
 
 use App\Contracts\ConflictValidatorInterface;
+use App\Dto\ScheduleValidationData;
 use App\Models\ScheduleSlot;
 
 class InstructorConflictValidator implements ConflictValidatorInterface{
@@ -19,27 +20,26 @@ class InstructorConflictValidator implements ConflictValidatorInterface{
      * @param $course
      * @return mixed
      */
-    public function validate($dynamicId, $day, $startTime, $endTime, $classId)
+    public function validate(ScheduleValidationData $validationData)
     {
-        if(!$dynamicId ){
+        if(!$validationData->instructorId ){
             return true;
         }
-        $conflicts = ScheduleSlot::whereHas('courseClass', function($query) use ($dynamicId,$classId) {
-                $query->where('instructorId', $dynamicId)
-                    ->where('external_id', '<>', $classId);;
+        $conflicts = ScheduleSlot::whereHas('courseClass', function($query) use ($validationData) {
+                $query->where('instructorId', $validationData->instructorId)
+                    ->where('external_id', '<>', $validationData->externalId);
             })
-            ->where('day', $day)
-            ->where(function($query) use ($startTime, $endTime) {
-                $query->whereBetween('start_time', [$startTime, $endTime])
-                    ->orWhereBetween('end_time', [date('H:i', strtotime($startTime . ' +1 minute')), $endTime])
-                    ->orWhere(function($q) use ($startTime, $endTime) {
-                        $q->where('start_time', '<=', $startTime)
-                            ->where('end_time', '>=', $endTime);
+            ->where('day', $validationData->day)
+            ->where(function($query) use ($validationData) {
+                $query->whereBetween('start_time', [$validationData->startTime, $validationData->endTime])
+                    ->orWhereBetween('end_time', [date('H:i', strtotime($validationData->startTime . ' +1 minute')), $validationData->endTime])
+                    ->orWhere(function($q) use ($validationData) {
+                        $q->where('start_time', '<=', $validationData->startTime)
+                            ->where('end_time', '>=', $validationData->endTime);
                     });
             })
             ->with('courseClass.course')
             ->get();
-
         if ($conflicts->isEmpty()) {
             return true;
         }
