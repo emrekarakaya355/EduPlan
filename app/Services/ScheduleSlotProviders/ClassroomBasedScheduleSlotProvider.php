@@ -16,7 +16,9 @@ class ClassroomBasedScheduleSlotProvider implements ScheduleSlotProviderInterfac
     /**
      * @return Schedule|null
      */
-    public function getSchedule(): ?Schedule {return null;}
+    public function getSchedule(): ?Schedule {
+        return null;
+    }
 
     /**
      * @return Collection

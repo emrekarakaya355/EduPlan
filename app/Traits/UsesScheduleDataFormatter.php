@@ -9,6 +9,7 @@ trait UsesScheduleDataFormatter
 {
     public function prepareScheduleSlotData($scheduleSlots): array
     {
+
         $scheduleData = [];
         if(!$scheduleSlots) {
             return $scheduleData;
@@ -17,12 +18,30 @@ trait UsesScheduleDataFormatter
         $hasLessonBefore18 = false;
         $hasLessonAfter18 = false;
         $all = false;
+
+        $usedDays = $scheduleSlots->pluck('day')->unique()->map(fn($i) => DayOfWeek::from($i));
+
+        if ($usedDays->contains(DayOfWeek::Sunday)) {
+            $daysToShow = collect(DayOfWeek::cases());
+        }
+        else{
+            $daysToShow = collect(DayOfWeek::cases())->filter(fn($day) =>
+                $usedDays->contains($day)
+                || in_array($day,
+                    [
+                        DayOfWeek::Monday,
+                        DayOfWeek::Tuesday,
+                        DayOfWeek::Wednesday,
+                        DayOfWeek::Thursday,
+                        DayOfWeek::Friday,
+                    ])
+            );
+        }
         foreach ($timeRange as $time)
         {
             $timeText = $time['start'] . ' - ' . $time['end'];
             $scheduleData[$timeText] = [];
-
-            foreach (DayOfWeek::cases() as $index => $day)
+            foreach ($daysToShow as $index => $day)
             {
                 $lessons = $scheduleSlots->where('day', $day)->filter(function ($slot) use ($time) {
                     return $slot->start_time->format('H:i') >=$time['start'] &&$slot->start_time->format('H:i') <$time['end'];
@@ -72,7 +91,13 @@ trait UsesScheduleDataFormatter
                 return substr($timeText, 0, 5) > '18:00';
             }, ARRAY_FILTER_USE_BOTH);
         }*/
-        return $scheduleData;
+        return [
+            'scheduleData' => $scheduleData,
+            'days' => $daysToShow->map(fn($d) => [
+                'label' => $d->getLabel(),
+                'value' => $d->value
+            ])->values()
+        ];
     }
 
     public function generateTimeRange($from = '08:30', $to = '23:00', $lunchStart = '12:30', $lunchEnd = '13:30'){

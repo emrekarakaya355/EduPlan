@@ -2,35 +2,33 @@
 
 namespace App\Livewire\Schedule\Classroom;
 
+use App\Livewire\Schedule\Shared\BaseSchedule;
 use App\Services\ScheduleSlotProviders\ClassroomBasedScheduleSlotProvider;
 use App\Traits\UsesScheduleDataFormatter;
 use Livewire\Component;
 
-class ScheduleChart extends Component
+class ScheduleChart extends BaseSchedule
 {
     use UsesScheduleDataFormatter;
     public $viewMode = 'classroom';
-    public $classromId;
+    public $classroomId;
     public $classroomName;
     public $scheduleData = [];
     public $days = [];
-    public $asModal;
-    public function mount($classroomId,$asModal = false )
-    {
-        $this->classromId = $classroomId;
-        $this->asModal = $asModal;
-        $this->loadSchedule();
-    }
+    public $asModal = false;
 
-    public function loadSchedule()
+    /**
+     * @return mixed
+     */
+    protected function initializeProvider()
     {
-        $provider = new ClassroomBasedScheduleSlotProvider($this->classromId ?? -1);
-        $this->scheduleData = $this->prepareScheduleSlotData($provider->getScheduleSlots());
-        //$this->days = $this->formatScheduleData($this->scheduleData);
+        $this->provider = new ClassroomBasedScheduleSlotProvider($this->classroomId ?? -1);
     }
 
     public function render()
     {
         return view('livewire.schedule.classroom.schedule-chart');
     }
+
+
 }

@@ -2,11 +2,11 @@
 
 namespace App\Livewire\Schedule\Course;
 
+use App\Livewire\Schedule\Shared\BaseSchedule;
 use App\Services\ScheduleSlotProviders\CourseBasedScheduleSlotProvider;
 use App\Traits\UsesScheduleDataFormatter;
-use Livewire\Component;
 
-class ScheduleChart extends Component
+class ScheduleChart extends BaseSchedule
 {
     use UsesScheduleDataFormatter;
     public $viewMode = 'classroom';
@@ -15,22 +15,16 @@ class ScheduleChart extends Component
     public $scheduleData = [];
     public $days = [];
 
-    public function mount($courseId, $courseName )
+    protected function initializeProvider()
     {
-        $this->courseId = $courseId;
-        $this->courseName = $courseName;
-        $this->loadSchedule();
-    }
-
-    public function loadSchedule()
-    {
-        $provider = new CourseBasedScheduleSlotProvider($this->courseId);
-        $this->scheduleData = $this->prepareScheduleSlotData($provider->getScheduleSlots());
-        //$this->days = $this->formatScheduleData($this->scheduleData);
+        $this->provider = new CourseBasedScheduleSlotProvider($this->courseId);
+        dd('Bunu Görürsenin Bana Haber Verin Emre Karakaya :):)');
     }
 
     public function render()
     {
         return view('livewire.schedule.course.schedule-chart');
     }
+
+
 }

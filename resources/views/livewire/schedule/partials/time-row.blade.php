@@ -4,7 +4,7 @@
     </div>
 @endif
 
-@foreach(range(0,4) as $day)
+@foreach(range(0,count($days)-1) as $day)
     @include('livewire.schedule.partials.day-cell', [
         'day' => $day,
         'time' => $time,

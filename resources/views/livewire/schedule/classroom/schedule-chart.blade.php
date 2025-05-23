@@ -18,14 +18,12 @@
             Ders Programı
         </div>
 
-        <div class="grid grid-cols-6 gap-1 p-4 schedule-grid">
-
+        <div class="grid grid-cols-{{count($days)+1}} gap-1 p-4 schedule-grid">
             <div class="p-2"></div>
-            @foreach(['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'] as $day)
-                <div class="text-center font-bold p-2 bg-gray-800 text-white">{{ $day }}</div>
+            @foreach($days as $day)
+                <div class="text-center font-bold p-2 bg-gray-800 text-white">{{ $day['label'] }}</div>
             @endforeach
 
-            <!-- Grid içeriği -->
             @foreach($scheduleData as $time => $daysData)
                 @include('livewire.schedule.partials.time-row', ['time' => $time, 'days' => $daysData])
             @endforeach

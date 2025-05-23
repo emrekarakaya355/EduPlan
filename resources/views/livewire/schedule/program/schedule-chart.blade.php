@@ -28,10 +28,10 @@
                     <div>{{$schedule->year .' - '. Carbon\Carbon::createFromDate($schedule->year)->addYear()->year. ' ' . $schedule->semester  }}</div>
 
                     <div>{{$schedule->program?->name . ' ' }}</div>
-                    <div>{{$schedule->id . ' ' }}</div>
                     <div>{{$schedule->grade .'. Sınıf Ders Programı'}}</div>
                 @endisset
             </div>
+            <div class="flex" style="flex-direction: column">
             <div class="flex items-center space-x-2"  >
                 <div>
                     <span data-html2canvas-ignore="true">Versiyon</span>
@@ -68,24 +68,39 @@
                         <i class="fa-solid fa-edit mr-2"></i> Düzelt ve Kaydet
                     </button>
                 </div>
+
+                </div>
+                <div class="space-x-4 flex items-end justify-end ">
+                    <label class=" items-center cursor-pointer">
+                        <input wire:model.live="showSaturday" type="checkbox" id="showSaturday" class="mr-2" @if($showSunday || $saturdayDisabled) disabled @endif >
+                        <span>Cumartesi </span>
+                    </label>
+
+                    <label class="flex items-center cursor-pointer">
+                        <input wire:model.live="showSunday" type="checkbox" id="showSunday" class="mr-2"   @if(!$showSaturday || $sundayDisabled) disabled @endif >
+                        <span>Pazar</span>
+                    </label>
+                </div>
             </div>
+
         </div>
         @if($showInstructorModal ?? false)
             <livewire:schedule.instructor.schedule-chart :instructor-id="$selectedInstructorId" :instructor-name="$selectedInstructorName" :as-modal="true" />
         @endif
 
-        <div  class="grid grid-cols-6 gap-1 p-4 schedule-grid">
+        <div  class="grid grid-cols-{{ count($days) + 1 }} gap-1 p-4 schedule-grid">
 
             <div class="p-2"></div>
-            @foreach(['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'] as $day)
-                <div class="text-center font-bold p-2 bg-gray-800 text-white">{{ $day }}</div>
+            @foreach($days as $day)
+                <div class="text-center font-bold p-2 bg-gray-800 text-white">{{ $day['label'] }}</div>
             @endforeach
 
             @foreach($scheduleData as $time => $days)
                 <div class="text-center font-bold p-2 bg-gray-200">
                     {{ $time }}
                 </div>
-                @foreach(range(0,4) as $day)
+
+                @foreach(range(0,count($days)-1) as $day)
                     @include('livewire.schedule.partials.day-cell', [
                         'day' => $day,
                         'time' => $time,

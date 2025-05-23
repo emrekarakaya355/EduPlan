@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Schedule\Program;
 
+use App\Enums\DayOfWeek;
 use App\Livewire\Schedule\Shared\BaseSchedule;
 use App\Models\Course;
 use App\Models\Course_class;
@@ -27,7 +28,6 @@ class ScheduleChart extends BaseSchedule
         $this->program = session('program') == '' ? -1 : session('program');
         $this->year = session('year') ?? 2000;
         $this->semester = session('semester') ?? 'Fall';
-
         $this->provider = new ProgramBasedScheduleSlotProvider(
             $this->program,
             $this->year,
@@ -35,7 +35,6 @@ class ScheduleChart extends BaseSchedule
             $this->grade
         );
     }
-
     #[On('open-instructor-modal')]
     public function openInstructorModal($instructorId,$instructorName): void
     {
@@ -128,7 +127,7 @@ class ScheduleChart extends BaseSchedule
             return;
         }
 
-        ;
+
         $this->dispatch('show-confirm', [
             'message' => 'Ders Çakışma olmadan eklendi.',
             'type' => 'success'
@@ -198,6 +197,7 @@ class ScheduleChart extends BaseSchedule
 
     public function render()
     {
+
          return view('livewire.schedule.program.schedule-chart');
     }
 }
