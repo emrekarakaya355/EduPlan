@@ -5,6 +5,7 @@ namespace App\Services\Validators;
 
 use App\Contracts\ConflictValidatorInterface;
 use App\Dto\ScheduleValidationData;
+use App\Enums\ConflictType;
 use App\Models\ScheduleSlot;
 
 class InstructorConflictValidator implements ConflictValidatorInterface{
@@ -69,5 +70,13 @@ class InstructorConflictValidator implements ConflictValidatorInterface{
     public function getName()
     {
         return 'teacher_conflict';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAction()
+    {
+        return ConflictType::WARNING;
     }
 }

@@ -4,9 +4,6 @@
 namespace App\Livewire\Schedule\Shared;
 
 use App\Contracts\ScheduleSlotProviderInterface;
-use App\Enums\DayOfWeek;
-use App\Models\Course;
-use App\Models\Course_class;
 use App\Traits\UsesScheduleDataFormatter;
 use Livewire\Component;
 
@@ -39,7 +36,6 @@ abstract class BaseSchedule extends Component
             foreach ($this->scheduleData as $time => &$dayData) {
                 $dayData[6] = $dayData[6] ?? 0;
             }
-            unset($dayData);
         } else {
             $this->days = collect($this->days)
                 ->reject(fn ($day) => $day['value'] === 7)
@@ -49,12 +45,11 @@ abstract class BaseSchedule extends Component
             foreach ($this->scheduleData as $time => &$dayData) {
                 unset($dayData[6]);
             }
-            unset($dayData);
         }
+        unset($dayData);
 
 
     }
-
     public function updatedShowSaturday(){
         if ($this->showSaturday) {
             if (!collect($this->days)->contains('value', 6)) {
@@ -63,7 +58,6 @@ abstract class BaseSchedule extends Component
             foreach ($this->scheduleData as $time => &$dayData) {
                 $dayData[5] = $dayData[5] ?? 0;
             }
-            unset($dayData);
 
         } else {
             $this->days = collect($this->days)
@@ -74,9 +68,9 @@ abstract class BaseSchedule extends Component
             foreach ($this->scheduleData as $time => &$dayData) {
                 unset($dayData[5]);
             }
-            unset($dayData);
 
         }
+        unset($dayData);
 
     }
     public function loadSchedule()
@@ -89,13 +83,17 @@ abstract class BaseSchedule extends Component
         if($this->days->contains('value', 6)){
             $this->showSaturday =true;
             $this->saturdayDisabled = true;
+        }else{
+            $this->showSaturday =false;
+            $this->saturdayDisabled = false;
         }
         if($this->days->contains('value', 7)){
             $this->showSunday =true;
             $this->sundayDisabled = true;
+        }else{
+            $this->showSunday =false;
+            $this->sundayDisabled = false;
         }
-
-
      }
     public function render()
     {

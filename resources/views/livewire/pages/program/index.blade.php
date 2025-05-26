@@ -19,10 +19,10 @@
                 const data = event[0];
                 Swal.fire({
                     title: data.type === 'error' ? 'Hata!' : 'Başarılı!',
-                    text: data.message,
+                    html: data.message,
                     icon: data.type,
                     confirmButtonText: 'Tamam',
-                    timer: data.type === 'error' ? null : 2000,
+                    timer: data.type === 'error' ? 2000 : 2000,
                     timerProgressBar: true,
                     toast: data.type !== 'error',
                     position: data.type === 'error' ? 'center' : 'top-end',
@@ -32,7 +32,6 @@
 
             Livewire.on('ask-confirmation', (event) => {
                 const data = event[0];
-
                 Swal.fire({
                     title: 'Emin misiniz?',
                     text: data.message,

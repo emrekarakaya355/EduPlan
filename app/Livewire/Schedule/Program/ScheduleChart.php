@@ -11,7 +11,6 @@ use App\Services\Pdf\PdfService;
 use App\Services\Pdf\Strategies\ScheduleChartPdf;
 use App\Services\ScheduleService;
 use App\Services\ScheduleSlotProviders\ProgramBasedScheduleSlotProvider;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\Attributes\On;
 
 class ScheduleChart extends BaseSchedule
@@ -87,11 +86,22 @@ class ScheduleChart extends BaseSchedule
             $classId,
             $externalId
         );
-        if (isset($result['has_conflicts'])) {
+        if ($result['status'] === 'blocked') {
             $this->dispatch('show-confirm', [
-                'message' =>  $this->formatConflictMessage($result['conflicts']),
+                'message' => $result['conflict']['details'],
                 'type' => 'error'
             ]);
+            return;
+        }
+        if ($result['status'] === 'soft_conflicts') {
+            foreach ($result['conflicts'] as $conflict) {
+                $this->dispatch('ask-confirmation', [
+                    'message' => $this->formatConflictMessage($conflict['details']),
+                    'classId' => $classId,
+                    'day' => $day,
+                    'start_time' => $start_time
+                ]);
+            }
             return;
         }
         $this->dispatch('show-confirm', [
@@ -110,20 +120,24 @@ class ScheduleChart extends BaseSchedule
             $day,
             $startTime
         );
-        if(isset($result['success']) && !$result['success']){
+        if ($result['status'] === 'blocked') {
             $this->dispatch('show-confirm', [
-                'message' => 'Dersin bütün saatleri zaten planlanmış durumda',
+                'message' => $result['conflict']['details'],
                 'type' => 'error'
             ]);
             return;
         }
-        if (isset($result['has_conflicts'])) {
-            $this->dispatch('ask-confirmation', [
-                'message' => $this->formatConflictMessage($result['conflicts']),
-                'classId' => $classId,
-                'day' => $day,
-                'start_time' => $start_time
-            ]);
+
+
+        if ($result['status'] === 'soft_conflicts') {
+            foreach ($result['conflicts'] as $conflict) {
+                $this->dispatch('ask-confirmation', [
+                    'message' => $this->formatConflictMessage($conflict['details']),
+                    'classId' => $classId,
+                    'day' => $day,
+                    'start_time' => $start_time
+                ]);
+            }
             return;
         }
 
@@ -154,18 +168,9 @@ class ScheduleChart extends BaseSchedule
         ]);
         $this->loadSchedule();
     }
-    protected function formatConflictMessage($conflicts)
+    protected function formatConflictMessage($message)
     {
-        $messages = [];
-        foreach ($conflicts as $type => $data) {
-            $messages[] = $data['message'] ?? '';
-
-            if (isset($data['conflicts'])) {
-                $messages = $data['conflicts'];
-                #$messages[] = "\n- {$conflict['course']['course']['name']} at {$conflict['start_time']}\n\n";
-            }
-        }
-        return $messages . "\n\nYinede Eklemek İstiyor musun?";
+        return $message . "\n\nYinede Eklemek İstiyor musun?";
     }
     #[On('removeFromSchedule')]
     public function removeFromSchedule($hour,$day,$classId): void

@@ -7,4 +7,5 @@ interface ConflictValidatorInterface
 {
     public function validate(ScheduleValidationData $validationData);
     public function getName();
+    public function getAction();
 }

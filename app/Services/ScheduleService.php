@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Dto\ScheduleValidationData;
+use App\Enums\ConflictType;
 use App\Models\Course;
 use App\Models\Course_class;
 use App\Models\ScheduleSlot;
@@ -33,9 +34,16 @@ class ScheduleService {
         }
 
         if ($course->UnscheduledHours < 1) {
-            return ['success' => false,'status' => 'Ders zaten planlanmış'];
+            return [
+                'status' => 'blocked',
+                'conflict' =>[
+                    'name' => null,
+                    'type' => null,
+                    'message' => 'Ders zaten planlanmış',
+                    'details' => 'Ders zaten planlanmış',
+                ]
+            ];
         }
-
         $endTime = date('H:i', strtotime($startTime . ' +45 minute'));
         $validationData = new ScheduleValidationData(
             scheduleId: $scheduleId,
@@ -49,9 +57,20 @@ class ScheduleService {
         );
         $conflicts = $this->detectConflicts($validationData, $this->courseValidators);
         if (!empty($conflicts) && !$force) {
-            return ['has_conflicts' => true, 'conflicts' => $conflicts];
-        }
 
+            if ($conflicts['blocking']) {
+                return [
+                    'status' => 'blocked',
+                    'conflict' => $conflicts['blocking']
+                ];
+            }
+            if (!empty($conflicts['soft'])) {
+                return [
+                    'status' => 'soft_conflicts',
+                    'conflicts' => $conflicts['soft']
+                ];
+            }
+        }
         $slots = [];
         $slots []= ScheduleSlot::create([
             'schedule_id' => $scheduleId,
@@ -73,7 +92,7 @@ class ScheduleService {
                 ]);
             }
         }
-        return ['success' => true, 'slots' => $slots];
+        return ['status' => 'success', 'slots' => $slots];
     }
 
     public function addClassroomToSlot($classroomId, $scheduleId, $day, $startTime, $classId, $externalId, $force = false)
@@ -92,38 +111,70 @@ class ScheduleService {
         );
 
         $conflicts = $this->detectConflicts($validationData, $this->classroomValidators);
-        $slots = ScheduleSlot::query()
-            ->where('schedule_id',$scheduleId)
-            ->where('class_id',$classId)
-            ->where('day',$day)->get();
 
-        $slots = ScheduleSlot::query()->whereHas('courseClass',function($query) use ($externalId,$day){
-            $query->where('external_id',$externalId)
-            ->where('day',$day);
-        })->get();
         if (!empty($conflicts) && !$force) {
-            return ['has_conflicts' => true, 'conflicts' => $conflicts];
-        }else{
-            if($slots){
-                foreach($slots as $slot){
-                    $slot->classroom_id = $classroomId;
-                    $slot->save();
-                }
-                return ['success' => true, 'slots' => $slots];
+            if ($conflicts['blocking']) {
+                return [
+                    'status' => 'blocked',
+                    'conflict' => $conflicts['blocking']
+                ];
+            }
+            if (!empty($conflicts['soft'])) {
+                return [
+                    'status' => 'soft_conflicts',
+                    'conflicts' => $conflicts['soft']
+                ];
             }
         }
-        return ['success' => false, 'slot' => $slots];
+        $slots = ScheduleSlot::query()
+            ->where('start_time', '>=', $startTime)
+            ->whereHas('courseClass', function ($query) use ($externalId, $day) {
+                $query->where('external_id', $externalId)
+                    ->where('day', $day);
+            })->get();
+        if ($slots) {
+            foreach ($slots as $slot) {
+                $slot->classroom_id = $classroomId;
+                $slot->save();
+            }
+        }
+        return ['status' => 'success', 'slots' => $slots];
     }
+
+
     private function detectConflicts($validationData,$validators): array
     {
-        $conflicts = [];
+        $blocking = null;
+        $softConflicts  = [];
+
+
         foreach ($validators as $validator) {
             $result = $validator->validate($validationData);
             if ($result !== true) {
-                $conflicts[$validator->getName()] = $result;
+                $type = $validator->getAction();
+                $conflictItem = [
+                    'name' => $validator->getName(),
+                    'type' => $type,
+                    'message' => $result['message'] ?? 'Çakışma var',
+                    'details' => $result['conflicts'] ?? [],
+                ];
+
+                if ($type === ConflictType::BLOCKING) {
+                    $blocking = $conflictItem;
+                    break;
+                }
+
+                $softConflicts[] = $conflictItem;
             }
         }
-        return $conflicts;
+        if (!$blocking && empty($softConflicts)) {
+            return [];
+        }
+
+        return [
+            'blocking' => $blocking,
+            'soft' => $softConflicts,
+        ];
     }
 
 

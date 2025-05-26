@@ -3,6 +3,7 @@
 namespace App\Services\Validators;
 
 use App\Contracts\ConflictValidatorInterface;
+use App\Enums\ConflictType;
 use App\Models\ScheduleSlot;
 
 class CourseDuplicateValidator implements ConflictValidatorInterface
@@ -35,12 +36,20 @@ class CourseDuplicateValidator implements ConflictValidatorInterface
         ];
 
     }
-    private function getConflictMessage(): string
+    private function getConflictMessage($conflicts): string
     {
         return 'Ders Aynı Saate Koyulamaz';
     }
     public function getName()
     {
         return 'course_conflict';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAction()
+    {
+        return ConflictType::BLOCKING;
     }
 }

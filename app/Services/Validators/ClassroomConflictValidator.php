@@ -3,6 +3,7 @@
 namespace App\Services\Validators;
 
 use App\Contracts\ConflictValidatorInterface;
+use App\Enums\ConflictType;
 use App\Models\ScheduleSlot;
 
 class ClassroomConflictValidator implements ConflictValidatorInterface
@@ -37,16 +38,14 @@ class ClassroomConflictValidator implements ConflictValidatorInterface
             })
             ->with('courseClass.course')
             ->get();
-
-        if ($conflicts->isEmpty()) {
+         if ($conflicts->isEmpty()) {
             return true;
         }
         return [
             'message' => 'Sınıf Dolu!',
-            'conflicts' => $this->getConflictMessage($conflicts)
+            'conflicts' => $this->getConflictMessage($conflicts),
         ];
     }
-
     /**
      * @return mixed
      */
@@ -60,11 +59,19 @@ class ClassroomConflictValidator implements ConflictValidatorInterface
         $message = '';
         foreach($conflicts as $conflict){
             $coursename = $conflict?->courseClass?->course?->name ?? '???';
-            $startTime = $conflict?->startTime ?? '???';
-            $endTime = $conflict?->endTime ?? '???';
-            $message .= "$startTime ile $endTime arasında $coursename dersi bu sınıfta yapılıyor.";
+            $programName = $conflict?->courseClass?->program?->name ?? '???';
+            $startTime = $conflict?->start_time ? $conflict->start_time->format('H:i') : '???';
+            $endTime = $conflict?->end_time ? $conflict->end_time->format('H:i') : '???';
+            $message .= "$startTime ile $endTime arasında $coursename dersi bu sınıfta yapılıyor. \n $programName";
         }
         return $message;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getAction()
+    {
+        return ConflictType::BLOCKING;
     }
 }
