@@ -77,7 +77,7 @@ abstract class BaseSchedule extends Component
     {
         $this->initializeProvider();
         $this->schedule = $this->provider->getSchedule();
-        $data = $this->prepareScheduleSlotData($this->provider->getScheduleSlots());
+        $data = $this->prepareScheduleSlotData($this->provider);
         $this->scheduleData = $data['scheduleData'];
         $this->days = $data['days'];
         if($this->days->contains('value', 6)){

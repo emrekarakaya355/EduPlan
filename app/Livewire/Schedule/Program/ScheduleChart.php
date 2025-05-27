@@ -6,6 +6,7 @@ use App\Enums\DayOfWeek;
 use App\Livewire\Schedule\Shared\BaseSchedule;
 use App\Models\Course;
 use App\Models\Course_class;
+use App\Models\Schedule;
 use App\Models\ScheduleSlot;
 use App\Services\Pdf\PdfService;
 use App\Services\Pdf\Strategies\ScheduleChartPdf;
@@ -33,6 +34,8 @@ class ScheduleChart extends BaseSchedule
             $this->semester,
             $this->grade
         );
+
+        $schedule = Schedule::find(1);
     }
     #[On('open-instructor-modal')]
     public function openInstructorModal($instructorId,$instructorName): void

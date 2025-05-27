@@ -16,7 +16,15 @@ class Schedule extends Model
     public function scheduleSlots() {
         return $this->hasMany(ScheduleSlot::class,'schedule_id', 'id');
     }
-
+    public function configs()
+    {
+        return $this->belongsToMany(
+            ScheduleConfig::class,
+            'dp_schedule_schedule_config',//pivot table
+            'schedule_id',
+            'schedule_config_id'
+        )->withTimestamps();
+    }
     public function getSemesterAttribute($value)
     {
         $translations = [
@@ -27,5 +35,6 @@ class Schedule extends Model
 
         return $translations[$value] ?? $value;
     }
+
 
 }

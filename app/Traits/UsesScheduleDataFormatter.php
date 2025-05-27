@@ -7,13 +7,14 @@ use Carbon\Carbon;
 
 trait UsesScheduleDataFormatter
 {
-    public function prepareScheduleSlotData($scheduleSlots): array
+    public function prepareScheduleSlotData($scheduleSlotProvider): array
     {
-
+        $scheduleSlots = $scheduleSlotProvider->getScheduleSlots();
         $scheduleData = [];
         if(!$scheduleSlots) {
             return $scheduleData;
         }
+        dd($scheduleSlotProvider->getSchedule()->configs);
         $timeRange = $this->generateTimeRange();
         $hasLessonBefore18 = false;
         $hasLessonAfter18 = false;
