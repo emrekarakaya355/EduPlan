@@ -21,6 +21,8 @@ class ScheduleChart extends BaseSchedule
     public $selectedInstructorId = null;
     public $selectedInstructorName = '';
 
+    public $showSettings = false;
+
     protected $viewMode = 'program';
 
     protected function initializeProvider()
@@ -34,8 +36,15 @@ class ScheduleChart extends BaseSchedule
             $this->semester,
             $this->grade
         );
+    }
 
-        $schedule = Schedule::find(1);
+    public function openSettings(): void
+    {
+        $this->showSettings = true;
+    }
+    public function closeSettings(): void
+    {
+        $this->showSettings = false;
     }
     #[On('open-instructor-modal')]
     public function openInstructorModal($instructorId,$instructorName): void

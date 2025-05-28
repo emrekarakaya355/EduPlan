@@ -14,6 +14,7 @@ Route::get('dashboard2', \App\Livewire\Pages\Dashboard\Index::class)
 
 Route::get('/ubys', UbysAktar::class)->middleware('auth')->name('ubys');
 Route::get('/courses', \App\Livewire\Courses\CourseList::class)->middleware('auth')->name('course-list');
+Route::get('/settings', \App\Livewire\Pages\Settings\Index::class)->middleware('auth')->name('settings');
 Route::get('/schedule', \App\Livewire\Pages\Program\Index::class)->middleware('auth')->name('schedule');
 Route::get('/instructors', \App\Livewire\Pages\Instructor\Index::class)->middleware('auth')->name('instructors');
 Route::get('/reports', \App\Livewire\Pages\Reports\Index::class)->middleware('auth')->name('reports');

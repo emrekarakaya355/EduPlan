@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Enums\DayOfWeek;
+use App\Models\Schedule;
 use Carbon\Carbon;
 
 trait UsesScheduleDataFormatter
@@ -14,8 +15,14 @@ trait UsesScheduleDataFormatter
         if(!$scheduleSlots) {
             return $scheduleData;
         }
-        dd($scheduleSlotProvider->getSchedule()->configs);
-        $timeRange = $this->generateTimeRange();
+        $timeRange = [];
+        $configs = $scheduleSlotProvider->getSchedule()?->configs ?? [];
+        foreach ($configs as $config){
+            $timeRange = $this->generateTimeRange($config?->start_time,$config?->end_time,$config?->slot_duration,$config?->break_duration,);
+        }
+        if(empty($timeRange)){
+            $timeRange = $this->generateTimeRange();
+        }
         $hasLessonBefore18 = false;
         $hasLessonAfter18 = false;
         $all = false;
@@ -101,13 +108,14 @@ trait UsesScheduleDataFormatter
         ];
     }
 
-    public function generateTimeRange($from = '08:30', $to = '23:00', $lunchStart = '12:30', $lunchEnd = '13:30'){
+    public function generateTimeRange($from = '08:30', $to = '23:59',$slotInterval = 45,$breakDuration = 15, $lunchStart = '12:30', $lunchEnd = '13:30'){
         {
+            $endOfDay = Carbon::createFromTime(23, 59);
             $time = Carbon::parse($from);
             $lunchStart = Carbon::parse($lunchStart);
             $lunchEnd = Carbon::parse($lunchEnd);
             $timeRange = [];
-            do
+             do
             {
                 if($time>=$lunchStart && $time<=$lunchEnd){
                     $timeRange[] = [
@@ -118,10 +126,10 @@ trait UsesScheduleDataFormatter
                 }
                 $timeRange[] = [
                     'start' => $time->format("H:i"),
-                    'end' => $time->addMinutes(45)->format("H:i")
+                    'end' => $time->addMinutes($slotInterval)->format("H:i")
                 ];
-                $time->addMinutes(15)->format("H:i");
-            } while ($time->format("H:i") < $to);
+                $time->addMinutes($breakDuration)->format("H:i");
+            } while ($time->format("H:i") < $to && $time <= $endOfDay);
 
             return $timeRange;
         }

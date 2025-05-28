@@ -36,7 +36,7 @@ class SidebarFilters extends Component
         }
 
         if ($this->department) {
-            $this->programs = Program::where('bolum_id', $this->department)->orderBy('name')->get();
+            $this->programs = Program::where('bolum_id', $this->department)->whereHas('schedules')->orderBy('name')->get();
         }
         if(!$this->year){
             $this->setDefaultDate();
@@ -63,16 +63,14 @@ class SidebarFilters extends Component
         $this->program=null;
         Session::forget(['program']);
         if($value){
-            $this->programs = Program::where('bolum_id', $value)->get();
+            $this->programs = Program::where('bolum_id', $value)->whereHas('schedules')->orderBy('name')->get();
         }
 
     }
-
     public function updated($property)
     {
         Session::put($property, $this->$property);
     }
-
     public function applyFilters()
     {
         $this->dispatch('filterUpdated', [

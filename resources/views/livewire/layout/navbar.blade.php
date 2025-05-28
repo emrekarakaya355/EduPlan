@@ -41,6 +41,11 @@
             @if(request()->routeIs('reports')) text-blue-500 fa-beat-fade @else text-gray-500 @endif"></i>
                         <span class="text-xs mt-1 text-gray-600 group-hover:text-blue-500">Raporlar</span>
                     </a>
+                    <a href="{{ route('settings') }}" class="flex flex-col items-center group">
+                        <i class="fa-solid fa-gear text-4xl
+            @if(request()->routeIs('settings')) text-blue-500 fa-beat-fade @else text-gray-500 @endif"></i>
+                        <span class="text-xs mt-1 text-gray-600 group-hover:text-blue-500">Ayarlar</span>
+                    </a>
                 </div>
 
 

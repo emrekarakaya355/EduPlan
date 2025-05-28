@@ -46,7 +46,7 @@
                     </button>
                 </div>
                 <div>
-                    <button data-html2canvas-ignore="true" class="rounded text-green-500 text-2xl hover:bg-green-100">
+                    <button wire:click="openSettings" data-html2canvas-ignore="true" class="rounded text-green-500 text-2xl hover:bg-green-100">
                         <i class="fa-solid fa-gear fa-flip"></i>
                     </button>
                 </div>
@@ -86,6 +86,9 @@
         </div>
         @if($showInstructorModal ?? false)
             <livewire:schedule.instructor.schedule-chart :instructor-id="$selectedInstructorId" :instructor-name="$selectedInstructorName" :as-modal="true" />
+        @endif
+        @if($showSettings)
+            <livewire:shared.schedule-settings-modal :scheduleId="$schedule?->id"/>
         @endif
 
         <div  class="grid grid-cols-{{ count($days) + 1 }} gap-1 p-4 schedule-grid">
