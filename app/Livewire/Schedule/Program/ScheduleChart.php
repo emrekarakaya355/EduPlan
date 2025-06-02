@@ -37,7 +37,10 @@ class ScheduleChart extends BaseSchedule
             $this->grade
         );
     }
-
+    protected $listeners = [
+        'open-settings-modal' => 'openSettings',
+        'close-settings-modal' => 'closeSettings'
+    ];
     public function openSettings(): void
     {
         $this->showSettings = true;
@@ -205,16 +208,18 @@ class ScheduleChart extends BaseSchedule
         }
         $this->loadSchedule();
     }
-
     public function downloadPdf(PdfService $pdfService)
     {
         $strategy = new ScheduleChartPdf();
          return $pdfService->stream($strategy, ['scheduleData' => $this->scheduleData,'schedule'=>$this->schedule]);
     }
-
+    #[On('settings-updated')]
+    public function handleSettingsUpdated()
+    {
+        $this->loadSchedule();
+    }
     public function render()
     {
-
-         return view('livewire.schedule.program.schedule-chart');
+          return view('livewire.schedule.program.schedule-chart');
     }
 }

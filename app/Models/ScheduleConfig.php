@@ -19,6 +19,8 @@ class ScheduleConfig extends Model
     ];
     public function schedules()
     {
-        return $this->belongsToMany(Schedule::class, 'dp_schedule_schedule_config', 'schedule_config_id', 'schedule_id');
+        return $this->belongsToMany(Schedule::class);
     }
+
+
 }

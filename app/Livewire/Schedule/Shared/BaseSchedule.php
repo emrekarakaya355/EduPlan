@@ -26,7 +26,7 @@ abstract class BaseSchedule extends Component
     {
         $this->initializeProvider();
         $this->loadSchedule();
-    }
+      }
 
     public function updatedShowSunday(){
         if ($this->showSunday) {
@@ -79,7 +79,9 @@ abstract class BaseSchedule extends Component
         $this->schedule = $this->provider->getSchedule();
         $data = $this->prepareScheduleSlotData($this->provider);
         $this->scheduleData = $data['scheduleData'];
+
         $this->days = $data['days'];
+         /*
         if($this->days->contains('value', 6)){
             $this->showSaturday =true;
             $this->saturdayDisabled = true;
@@ -93,8 +95,8 @@ abstract class BaseSchedule extends Component
         }else{
             $this->showSunday =false;
             $this->sundayDisabled = false;
-        }
-     }
+        }*/
+      }
     public function render()
     {
          return view("livewire.schedule.{$this->viewMode}.index");

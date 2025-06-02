@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Enums\DayOfWeek;
 use App\Models\Schedule;
+use App\Models\ScheduleConfig;
 use Carbon\Carbon;
 
 trait UsesScheduleDataFormatter
@@ -11,24 +12,22 @@ trait UsesScheduleDataFormatter
     public function prepareScheduleSlotData($scheduleSlotProvider): array
     {
         $scheduleSlots = $scheduleSlotProvider->getScheduleSlots();
+        $schedule = $scheduleSlotProvider->getSchedule();
+
         $scheduleData = [];
         if(!$scheduleSlots) {
             return $scheduleData;
         }
-        $timeRange = [];
-        $configs = $scheduleSlotProvider->getSchedule()?->configs ?? [];
-        foreach ($configs as $config){
-            $timeRange = $this->generateTimeRange($config?->start_time,$config?->end_time,$config?->slot_duration,$config?->break_duration,);
-        }
-        if(empty($timeRange)){
-            $timeRange = $this->generateTimeRange();
-        }
-        $hasLessonBefore18 = false;
-        $hasLessonAfter18 = false;
-        $all = false;
+        $config = $schedule?->resolvedScheduleConfig;
+        $timeRange = $this->generateTimeRange(
+            $config?->start_time,
+            $config?->end_time,
+            $config?->slot_duration,
+            $config?->break_duration
+        );
+        //$usedDays = $scheduleSlots->pluck('day')->unique()->map(fn($i) => DayOfWeek::from($i));
 
-        $usedDays = $scheduleSlots->pluck('day')->unique()->map(fn($i) => DayOfWeek::from($i));
-
+        /*
         if ($usedDays->contains(DayOfWeek::Sunday)) {
             $daysToShow = collect(DayOfWeek::cases());
         }
@@ -44,7 +43,15 @@ trait UsesScheduleDataFormatter
                         DayOfWeek::Friday,
                     ])
             );
-        }
+        }*/
+
+        $daysToShow = $schedule?->getShowDays() ?? collect(
+            [DayOfWeek::Monday,
+            DayOfWeek::Tuesday,
+            DayOfWeek::Wednesday,
+            DayOfWeek::Thursday,
+            DayOfWeek::Friday]
+        );
         foreach ($timeRange as $time)
         {
             $timeText = $time['start'] . ' - ' . $time['end'];
@@ -52,16 +59,11 @@ trait UsesScheduleDataFormatter
             foreach ($daysToShow as $index => $day)
             {
                 $lessons = $scheduleSlots->where('day', $day)->filter(function ($slot) use ($time) {
-                    return $slot->start_time->format('H:i') >=$time['start'] &&$slot->start_time->format('H:i') <$time['end'];
+                    return $slot->start_time->format('H:i')>=$time['start'] &&$slot->start_time->format('H:i') <$time['end'];
                 });
 
                 if ($lessons->isNotEmpty())
                 {
-                    if(!$hasLessonBefore18 && $time['start']<='18:00') {
-                        $hasLessonBefore18 = true;
-                    }elseif(!$hasLessonAfter18 && $time['start']>='18:00'){
-                        $hasLessonAfter18 = true;
-                    }
                     $temp = [];
                     foreach ($lessons as $scheduleSlot) {
 
@@ -88,17 +90,7 @@ trait UsesScheduleDataFormatter
                 }
             }
         }
-        /*
-        if (!$hasLessonAfter18) {
-             $scheduleData = array_filter($scheduleData, function ($_, $timeText) {
-                return substr($timeText, 0, 5) < '18:00';
-            }, ARRAY_FILTER_USE_BOTH);
-        }
-        if (!$hasLessonBefore18  && $hasLessonAfter18) {
-             $scheduleData = array_filter($scheduleData, function ($_, $timeText) {
-                return substr($timeText, 0, 5) > '18:00';
-            }, ARRAY_FILTER_USE_BOTH);
-        }*/
+
         return [
             'scheduleData' => $scheduleData,
             'days' => $daysToShow->map(fn($d) => [
@@ -108,13 +100,21 @@ trait UsesScheduleDataFormatter
         ];
     }
 
-    public function generateTimeRange($from = '08:30', $to = '23:59',$slotInterval = 45,$breakDuration = 15, $lunchStart = '12:30', $lunchEnd = '13:30'){
+    public function generateTimeRange($from, $to,$slotInterval,$breakDuration, $lunchStart = '12:30', $lunchEnd = '13:30'){
         {
+            $from ??= '08:30';
+            $to ??= '18:00';
+            $slotInterval ??= 45;
+            $breakDuration ??= 15;
+            $lunchStart ??= '12:30';
+            $lunchEnd ??= '13:30';
+
             $endOfDay = Carbon::createFromTime(23, 59);
             $time = Carbon::parse($from);
             $lunchStart = Carbon::parse($lunchStart);
             $lunchEnd = Carbon::parse($lunchEnd);
             $timeRange = [];
+
              do
             {
                 if($time>=$lunchStart && $time<=$lunchEnd){

@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->time('start_time');
             $table->time('end_time');
-            $table->integer('slot_duration'); // Dakika cinsinden (örn: 45)
-            $table->integer('break_duration')->default(0); // mola süresi, dakika
+            $table->integer('slot_duration');
+            $table->integer('break_duration')->default(0);
             $table->timestamps();
         });
     }

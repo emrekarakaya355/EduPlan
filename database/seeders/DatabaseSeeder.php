@@ -25,11 +25,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         ScheduleConfig::create([
-            'name' => 'Gündüz Öğretimi',
+            'name' => 'Birinci Öğretim',
             'start_time' => '08:30',
             'end_time' => '18:00',
             'slot_duration' => 45,
             'break_duration' => 15,
+            'shift' =>'day',
+            'default' =>true
         ]);
 
         ScheduleConfig::create([
@@ -38,6 +40,8 @@ class DatabaseSeeder extends Seeder
             'end_time' => '23:59',
             'slot_duration' => 45,
             'break_duration' => 15,
+            'shift' =>'night',
+            'default' =>true
         ]);
 
     }

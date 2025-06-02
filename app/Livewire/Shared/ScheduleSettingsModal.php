@@ -2,90 +2,79 @@
 
 namespace App\Livewire\Shared;
 
+use App\Models\Schedule;
+use App\Models\ScheduleConfig;
 use Livewire\Component;
 
 class ScheduleSettingsModal extends Component
 {
 
-    public $showModal = false;
-    public $scheduleId;
-    public $showSaturday = false;
-    public $showSunday = false;
-    public $timeFormat = '24';
-    public $startHour = '08:00';
-    public $endHour = '17:00';
-    public $schedules = [];
-
-    protected $listeners = [
-        'open-settings-modal' => 'openModal',
-        'close-settings-modal' => 'closeModal'
+    public $schedule;
+    public $selectedTimeConfig;
+    public $weekendSettings = [
+        'show_saturday' => false,
+        'show_sunday' => false
     ];
+    public $timeConfigs;
 
     protected $rules = [
-        'selectedScheduleId' => 'required|exists:schedules,id',
-        'showSaturday' => 'boolean',
-        'showSunday' => 'boolean',
-        'timeFormat' => 'in:12,24',
-        'startHour' => 'required|date_format:H:i',
-        'endHour' => 'required|date_format:H:i|after:startHour'
+        'selectedTimeConfig' => 'required|exists:dp_schedule_configs,id',
+        'weekendSettings.show_saturday' => 'boolean',
+        'weekendSettings.show_sunday' => 'boolean',
+    ];
+
+    protected $messages = [
+        'selectedTimeConfig.required' => 'Lütfen bir zaman konfigürasyonu seçin.',
+        'selectedTimeConfig.exists' => 'Seçilen zaman konfigürasyonu geçerli değil.',
+        'weekendSettings.show_saturday.boolean' => 'Cumartesi ayarı geçerli değil.',
+        'weekendSettings.show_sunday.boolean' => 'Pazar ayarı geçerli değil.',
     ];
 
     public function mount($scheduleId = null)
     {
-        $this->scheduleId = $scheduleId;
-        dd($this->scheduleId);
-        $this->loadSchedules();
-    }
-
-    public function loadSchedules()
-    {
-        $this->schedules = Schedule::select('id', 'year', 'semester', 'program_id')
-            ->with('program:id,name')
-            ->orderBy('year', 'desc')
-            ->orderBy('semester')
-            ->get();
-    }
-
-    public function openModal()
-    {
-        $this->showModal = true;
-    }
-
-    public function closeModal()
-    {
-        $this->showModal = false;
+        $this->schedule = $scheduleId ? Schedule::findOrFail($scheduleId) : null;
+        $this->timeConfigs = ScheduleConfig::orderBy('name')->get();
+        if ($this->schedule) {
+            $this->selectedTimeConfig = $this->schedule->schedule_config_id;
+             $this->weekendSettings = [
+                'show_saturday' => $this->schedule->show_saturday ?? false,
+                'show_sunday' => $this->schedule->show_sunday ?? false
+            ];
+        }
     }
 
     public function saveSettings()
     {
         $this->validate();
+         try {
+            if ($this->schedule) {
+                $this->schedule->update([
+                    'schedule_config_id' => $this->selectedTimeConfig,
+                    'show_saturday' => $this->weekendSettings['show_saturday'],
+                    'show_sunday' => $this->weekendSettings['show_sunday'],
+                    'updated_at' => now()
+                ]);
+             }
+             session()->flash('success', 'Takvim ayarları başarıyla kaydedildi.');
+             $this->dispatch('close-settings-modal');
+             $this->dispatch('settings-updated');
 
-        // Ayarları parent component'e gönder
-        $this->dispatch('settings-updated', [
-            'scheduleId' => $this->selectedScheduleId,
-            'showSaturday' => $this->showSaturday,
-            'showSunday' => $this->showSunday,
-            'timeFormat' => $this->timeFormat,
-            'startHour' => $this->startHour,
-            'endHour' => $this->endHour
-        ]);
-
-        $this->dispatch('show-confirm', [
-            'message' => 'Ayarlar başarıyla güncellendi.',
-            'type' => 'success'
-        ]);
-
-        $this->closeModal();
+        } catch (\Exception $e) {
+            session()->flash('error', 'Ayarlar kaydedilirken bir hata oluştu: ' . $e->getMessage());
+        }
     }
 
-    public function resetToDefaults()
+    public function resetSettings()
     {
-        $this->showSaturday = false;
-        $this->showSunday = false;
-        $this->timeFormat = '24';
-        $this->startHour = '08:00';
-        $this->endHour = '17:00';
+        $this->selectedTimeConfig = null;
+        $this->weekendSettings = [
+            'show_saturday' => false,
+            'show_sunday' => false
+        ];
+
+        $this->resetValidation();
     }
+
 
     public function render()
     {

@@ -23,8 +23,8 @@ class ProgramBased extends Component
     public function mount(): void
     {
         $this->scheduleCourses = collect();
-
         $this->program_id = Session::get('program') == '' ? -1 : Session::get('program');
+
         $this->year = Session::get('year');
         $this->semester = Session::get('semester');
         $this->loadCourses();
@@ -43,8 +43,6 @@ class ProgramBased extends Component
                 });
     }
 
-
-    //$course->name->notcontains('%OSD%')
     public $selectedCourseId = null;
     public $selectedCourseName = '';
 
@@ -69,9 +67,12 @@ class ProgramBased extends Component
         $this->program_id = $filters['program'];
         $this->year = $filters['year'];
         $this->semester = $filters['semester'];
-        $this->loadCourses();
+        if($this->program_id == ''){
+            $this->courses = collect();
+        }else{
+            $this->loadCourses();
+        }
     }
-
     #[On('gradeUpdated')]
     public function applyGrade($grade): void
     {
@@ -93,6 +94,8 @@ class ProgramBased extends Component
     }
     public function render()
     {
+
+        dd($this->courses->take(1));
          return view('livewire.courses.program-based');
     }
 }

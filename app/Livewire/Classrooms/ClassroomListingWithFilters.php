@@ -52,10 +52,12 @@ class ClassroomListingWithFilters extends Component
     {
         $this->showClassroomModal = false;
     }
-
-
     public function loadClassrooms(): void
     {
+        if(!$this->unit || !$this->department){
+             $this->classrooms = [];
+             return;
+        }
         $this->classrooms = Classroom::where(function ($query) {
             $query->whereHas('birims', function ($query) {
                 $query->where('birim_id', $this->unit);
@@ -70,7 +72,7 @@ class ClassroomListingWithFilters extends Component
             ->get()
 
             ->groupBy(function ($classroom) {
-                return $classroom->building->campus->name;
+                return $classroom->building?->campus?->name;
             })
 
             ->map(function ($campusClasses) {
@@ -81,7 +83,7 @@ class ClassroomListingWithFilters extends Component
                 });
 
                 return $campusClasses->groupBy(function ($classroom) {
-                    return $classroom->building->name;
+                    return $classroom->building?->name;
                 });
             })->toArray();
 
@@ -120,7 +122,6 @@ class ClassroomListingWithFilters extends Component
             $this->filteredClassrooms = [];
         }
     }
-
     public function render()
     {
         return view('livewire.classrooms.ClassroomListingWithFilters');
