@@ -90,7 +90,6 @@ trait UsesScheduleDataFormatter
                 }
             }
         }
-
         return [
             'scheduleData' => $scheduleData,
             'days' => $daysToShow->map(fn($d) => [
@@ -100,7 +99,7 @@ trait UsesScheduleDataFormatter
         ];
     }
 
-    public function generateTimeRange($from, $to,$slotInterval,$breakDuration, $lunchStart = '12:30', $lunchEnd = '13:30'){
+    public function generateTimeRange($from= '08:30', $to= '18:00',$slotInterval= 45,$breakDuration= 15, $lunchStart = '12:30', $lunchEnd = '13:30'){
         {
             $from ??= '08:30';
             $to ??= '18:00';

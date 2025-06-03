@@ -37,7 +37,7 @@ class ProgramBased extends Component
     {
           return $this->courses = Course_class::query()->whereHas('course', function ($query) {
                 return $query->where('year', $this->year)->where('semester', $this->semester);
-            })->where('program_id', $this->program_id )->where('grade', $this->grade)->with('course')->get()
+            })->where('program_id', $this->program_id )->where('grade', $this->grade)->with('course','instructor.constraints')->get()
                 ->filter(function ($course) {
                     return $course->unscheduled_hours > 0  && !str_contains(strtoupper($course->course->code), 'OSD');
                 });
@@ -94,8 +94,6 @@ class ProgramBased extends Component
     }
     public function render()
     {
-
-        dd($this->courses->take(1));
-         return view('livewire.courses.program-based');
+          return view('livewire.courses.program-based');
     }
 }

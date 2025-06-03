@@ -8,8 +8,9 @@
      data-day="{{ $day + 1 }}"
      data-hour="{{ $time }}"
      ondragstart="drag(event)"
-     ondragover="event.preventDefault()"
      ondrop="drop(event)"
+     ondragover="allowDrop(event)"
+     ondragleave="dragLeave(event)"
      style="background-color: {{ $class['color'] ?? '#FFFFFF' }};"
      @if(!empty($class['instructor_id']))
          ondblclick="Livewire.dispatch('open-instructor-modal', {
@@ -40,4 +41,22 @@
          font-size: xx-small">
         {{ $class['building_name'] ?? '' }}
     </div>
+
+        <style>
+            .drop-forbidden {
+                background-color: #fee2e2 !important;
+                border: 2px dashed #dc2626 !important;
+                position: relative;
+            }
+
+            .drop-forbidden::before {
+                content: '❌';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 20px;
+                z-index: 10;
+            }
+        </style>
 </div>

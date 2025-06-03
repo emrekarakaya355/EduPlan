@@ -13,7 +13,9 @@
                     $progress = $courseClass->duration > 0 ? ($courseClass->unscheduled_hours / $courseClass->duration) * 100 : 0;
                 @endphp
                 <div
-                    wire:key="course-class-{{ $courseClass->id }}" data-id="{{$courseClass->id}}"
+                    wire:key="course-class-{{ $courseClass->id }}"
+                    data-id="{{$courseClass->id}}"
+                    data-constraints="{{ $courseClass?->instructor?->constraints }}"
                     wire:mouseenter.self.debounce.250.prevent ="$dispatch('showDetail', {
                                                                 ' ':' ', //classroom ile eşit sayıda olsun diye
                                                                'Ders Adı':'{{ addslashes($courseClass->course->name) }}',
@@ -26,8 +28,14 @@
                     class="course-item"
                     draggable="true"
                     ondragstart="drag(event, {{ $courseClass->id }})"
+                    ondragend="dragEnd(event)"
                     ondblclick="Livewire.dispatch('open-course-modal', {courseId: '{{$courseClass->course->id }}', courseName: '{{$courseClass->course->name }}'})"
                     data-type="course">
+                    @if($courseClass->instructor?->constraints?->first()?->id)
+                        <div class="constraint-indicator" title="Bu hocanın zaman kısıtları var">
+                            <i class="fa-solid fa-exclamation-triangle text-orange-500"></i>
+                        </div>
+                    @endif
                     <div class="course-details" >
                         <span class="course-code">{{str($courseClass->course->code)->words(3) }}</span>
                         <span class="course-duration">{{$courseClass->displayBranch }}</span>
@@ -53,6 +61,12 @@
                 justify-content: space-between;
                 gap: 10px;
                 margin-bottom: 15px;
+            }
+            .constraint-indicator {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                font-size: 12px;
             }
 
             .search-input {

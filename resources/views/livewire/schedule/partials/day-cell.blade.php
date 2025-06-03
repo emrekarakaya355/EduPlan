@@ -14,8 +14,9 @@
          data-day="{{ $day + 1 }}"
          data-hour="{{ $time }}"
          data-schedule="{{ $scheduleId ?? '-1' }}"
-         ondragover="event.preventDefault()"
-         ondrop="drop(event)">
+         ondrop="drop(event)"
+         ondragover="allowDrop(event)"
+         ondragleave="dragLeave(event)">
     </div>
 
 @endif
