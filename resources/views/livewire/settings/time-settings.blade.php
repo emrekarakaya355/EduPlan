@@ -1,4 +1,4 @@
-<div class="max-w-6xl mx-auto p-6">
+<div class="{{$showForm}} ? '' max-w-6xl mx-auto p-6">
     <div class="bg-white rounded-lg shadow-lg">
         <!-- Header -->
         <div class="px-6 py-4 border-b border-gray-200">

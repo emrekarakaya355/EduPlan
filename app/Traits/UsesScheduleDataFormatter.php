@@ -81,6 +81,7 @@ trait UsesScheduleDataFormatter
                             'color' => $this->getColorForClass(($scheduleSlot->courseClass?->id.$scheduleSlot->courseClass?->name) ),
                             'external_id' => $scheduleSlot->courseClass->external_id ?? '',
                             'commonLesson' => $scheduleSlot->courseClass->commonLessons->isNotEmpty(),
+                            'constraints' => $scheduleSlot->courseClass->instructor?->constraints
                         ];
 
                     }

@@ -49,4 +49,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function getNameAttribute(): string
+    {
+        return $this->adi. ' '.$this->soyadi;
+    }
 }

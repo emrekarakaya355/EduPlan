@@ -20,6 +20,24 @@ class ProgramBased extends Component
 
     public $removedCourses;
 
+    protected $listeners = ['open-instructor-constraints-modal' => 'showInstructorModal'];
+
+    public bool $showInstructorConstraintModal = false;
+    public ?int $selectedInstructorId = null;
+
+    public function showInstructorModal($instructorId)
+    {
+        $this->selectedInstructorId = $instructorId;
+        $this->showInstructorConstraintModal = true;
+    }
+
+    #[On('close-instructor-constraints-modal')]
+    public function closeInstructorConstraintsModal(): void
+    {
+        $this->showInstructorConstraintModal = false;
+        $this->selectedInstructorId = null;
+    }
+
     public function mount(): void
     {
         $this->scheduleCourses = collect();
@@ -31,7 +49,6 @@ class ProgramBased extends Component
 
     }
 
-
     #[Computed]
     public function loadCourses()
     {
@@ -42,7 +59,6 @@ class ProgramBased extends Component
                     return $course->unscheduled_hours > 0  && !str_contains(strtoupper($course->course->code), 'OSD');
                 });
     }
-
     public $selectedCourseId = null;
     public $selectedCourseName = '';
 
@@ -94,6 +110,6 @@ class ProgramBased extends Component
     }
     public function render()
     {
-          return view('livewire.courses.program-based');
+        return view('livewire.courses.program-based');
     }
 }

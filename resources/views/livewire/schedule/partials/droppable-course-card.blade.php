@@ -7,10 +7,12 @@
      data-schedule="{{ $scheduleId ?? '' }}"
      data-day="{{ $day + 1 }}"
      data-hour="{{ $time }}"
+     data-constraints="{{$class['constraints']}}"
      ondragstart="drag(event)"
      ondrop="drop(event)"
      ondragover="allowDrop(event)"
      ondragleave="dragLeave(event)"
+     ondragend="dragEnd(event)"
      style="background-color: {{ $class['color'] ?? '#FFFFFF' }};"
      @if(!empty($class['instructor_id']))
          ondblclick="Livewire.dispatch('open-instructor-modal', {

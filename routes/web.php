@@ -12,6 +12,10 @@ Route::get('/', \App\Livewire\Pages\Dashboard\IndexApex::class)
 Route::get('dashboard2', \App\Livewire\Pages\Dashboard\Index::class)
     ->name('dashboard2')->middleware('auth');
 
+Route::get('/instructor/{instructor}/constraints-modal', function($instructorId) {
+    return view('livewire.settings.instructor-constraints', compact('instructorId'));
+})->name('instructor.constraints.modal');
+
 Route::get('/ubys', UbysAktar::class)->middleware('auth')->name('ubys');
 Route::get('/courses', \App\Livewire\Courses\CourseList::class)->middleware('auth')->name('course-list');
 Route::get('/settings', \App\Livewire\Pages\Settings\Index::class)->middleware('auth')->name('settings');

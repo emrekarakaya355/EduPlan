@@ -6,14 +6,32 @@ use Illuminate\Database\Eloquent\Model;
 
 class InstructorConstraint extends Model
 {
-    protected $table = 'dp_instructor_constraints';
+    protected $table = 'dp_instructor_constraints'
+    ;
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            if (\Auth::check()) {
 
+                $model->created_by = \Auth::id();
+                $model->updated_by = \Auth::id();
+            }
+        });
+
+        static::updating(function ($model) {
+            if (\Auth::check()) {
+                $model->updated_by = \Auth::id();
+            }
+        });
+    }
     protected $fillable = [
         'instructor_id',
         'day_of_week',
         'start_time',
         'end_time',
         'note',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
@@ -31,6 +49,12 @@ class InstructorConstraint extends Model
         return $this->belongsTo(Instructor::class, 'instructor_id');
     }
 
+    public function createdBy(){
+        return $this->belongsTo(User::class, 'created_by');
+    }
+    public function updatedBy(){
+        return $this->belongsTo(User::class, 'updated_by');
+    }
     public function getDayOfWeekLabelAttribute(): ?string
     {
         return is_null($this->day_of_week)

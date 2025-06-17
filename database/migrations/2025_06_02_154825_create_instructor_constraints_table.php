@@ -19,10 +19,18 @@ return new class extends Migration
             $table->time('end_time')->nullable();
             $table->text('note')->nullable();
 
+            $table->foreignId('created_by')
+                ->nullable()
+                ->constrained('kimlik')
+                ->onDelete('set null');
+
+            $table->foreignId('updated_by')
+                ->nullable()
+                ->constrained('kimlik')
+                ->onDelete('set null');
+
             $table->index(['instructor_id', 'day_of_week']);
             $table->index(['day_of_week', 'start_time', 'end_time']);
-
-
             $table->timestamps();
         });
     }
@@ -32,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('instructor_constraints');
+        Schema::dropIfExists('dp_instructor_constraints');
     }
 };

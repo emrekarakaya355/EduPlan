@@ -17,6 +17,7 @@
       {{ $slot }}
 
       @stack('scripts')
+      @stack('styles')
       <livewire:scripts />
 
     </body>
