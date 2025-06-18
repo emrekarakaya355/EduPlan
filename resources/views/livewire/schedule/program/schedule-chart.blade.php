@@ -32,7 +32,7 @@
                 @endisset
             </div>
             <div class="flex" style="flex-direction: column">
-            <div class="flex items-center space-x-2"  >
+            <div class="flex items-center space-x-2">
                 <div>
                     <span data-html2canvas-ignore="true">Versiyon</span>
                     <select data-html2canvas-ignore="true">
@@ -70,17 +70,7 @@
                 </div>
 
                 </div>
-                <div class="space-x-4 flex items-end justify-end ">
-                    <label class=" items-center cursor-pointer">
-                        <input wire:model.live="showSaturday" type="checkbox" id="showSaturday" class="mr-2" @if($showSunday || $saturdayDisabled) disabled @endif >
-                        <span>Cumartesi </span>
-                    </label>
 
-                    <label class="flex items-center cursor-pointer">
-                        <input wire:model.live="showSunday" type="checkbox" id="showSunday" class="mr-2"   @if(!$showSaturday || $sundayDisabled) disabled @endif >
-                        <span>Pazar</span>
-                    </label>
-                </div>
             </div>
 
         </div>

@@ -55,7 +55,7 @@
                                                     <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
                                                     </svg>
-                                                    {{ substr($constraint->start_time, 0, 5) }} - {{ substr($constraint->end_time, 0, 5) }}
+                                                    {{ $constraint->start_time->format('H:i') }} - {{$constraint->end_time->format('H:i') }}
                                                 </div>
                                                 @if($constraint->note)
                                                     <div class="text-red-700 text-xs mt-2 p-2 bg-red-100 rounded">
@@ -160,9 +160,10 @@
 
                         <!-- Not -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Not (Opsiyonel)</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Not</label>
                             <textarea
                                 wire:model="note"
+                                required
                                 rows="3"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                                 placeholder="Bu kısıtlama hakkında not..."

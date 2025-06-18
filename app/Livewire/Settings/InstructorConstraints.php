@@ -37,7 +37,7 @@ class InstructorConstraints extends Component
         'selectedDay' => 'required|integer|between:0,6',
         'startTime' => 'required',
         'endTime' => 'required|after:startTime',
-        'note' => 'nullable|string|max:500'
+        'note' => 'required|string|max:1000'
     ];
 
     protected $messages = [
@@ -94,8 +94,8 @@ class InstructorConstraints extends Component
 
         if ($constraint) {
             $this->selectedDay = $constraint->day_of_week;
-            $this->startTime = substr($constraint->start_time, 0, 5);
-            $this->endTime = substr($constraint->end_time, 0, 5);
+            $this->startTime = $constraint->start_time->format('H:i');
+            $this->endTime =  $constraint->end_time->format('H:i');
             $this->note = $constraint->note ?? '';
             $this->editingConstraintId = $constraintId;
             $this->showForm = true;
