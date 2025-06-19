@@ -1,5 +1,6 @@
-<div id="instructorConstraintsModal" class="fixed constraints-modal inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-    <div class="modal-backdrop" onclick="Livewire.dispatch('close-instructor-constraints-modal')"></div>
+<div id="instructorConstraintsModal" class="fixed constraints-modal inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+     >
+    <div class="modal-backdrop" ></div>
     <div class="modal-content">
 
         <!-- Modal Body -->

@@ -23,7 +23,7 @@
     >
     @if(!empty($class['commonLesson']))
         <div class="absolute top-0 left-0 text-blue-600" style=" z-index: 10;">
-            <i class="fa-solid fa-link fa-xs" title="Ortak Ders"></i>
+            <i class="fa-solid fa-link fa-xs" title="Birleştirilmiş Ders"></i>
         </div>
     @endif
     @if($viewMode === 'program')

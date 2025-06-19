@@ -20,7 +20,7 @@ class Program extends Model
 
     public function courseClasses(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Course_class::class, 'program_id', 'id');  // CourseClass'lar
+        return $this->hasMany(Course_class::class, 'program_id', 'id');
     }
 
 

@@ -33,23 +33,6 @@
             </div>
             <div class="flex" style="flex-direction: column">
             <div class="flex items-center space-x-2">
-                <div>
-                    <span data-html2canvas-ignore="true">Versiyon</span>
-                    <select data-html2canvas-ignore="true">
-                        <option>1</option>
-                        <option>2</option>
-                    </select>
-                </div>
-                <div>
-                    <button data-html2canvas-ignore="true" class="rounded text-blue-500 text-2xl hover:bg-blue-100">
-                        <i class="fa-solid fa-save"></i>
-                    </button>
-                </div>
-                <div>
-                    <button wire:click="openSettings" data-html2canvas-ignore="true" class="rounded text-green-500 text-2xl hover:bg-green-100">
-                        <i class="fa-solid fa-gear fa-flip"></i>
-                    </button>
-                </div>
                 <div data-html2canvas-ignore="true" class="no-print mb-4">
                     <button
                         wire:click="downloadPdf"
@@ -68,7 +51,25 @@
                         <i class="fa-solid fa-edit mr-2"></i> Düzelt ve Kaydet
                     </button>
                 </div>
-
+            </div >
+                <div class="flex items-center space-x-2 justify-end">
+                    <div>
+                        <span data-html2canvas-ignore="true">Versiyon</span>
+                        <select data-html2canvas-ignore="true">
+                            <option>1</option>
+                            <option>2</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button data-html2canvas-ignore="true" class="rounded text-blue-500 text-2xl hover:bg-blue-100">
+                            <i class="fa-solid fa-save"></i>
+                        </button>
+                    </div>
+                    <div>
+                        <button wire:click="openSettings" data-html2canvas-ignore="true" class="rounded text-green-500 text-2xl hover:bg-green-100">
+                            <i class="fa-solid fa-gear fa-flip"></i>
+                        </button>
+                    </div>
                 </div>
 
             </div>

@@ -37,7 +37,7 @@ class InstructorConstraints extends Component
         'selectedDay' => 'required|integer|between:0,6',
         'startTime' => 'required',
         'endTime' => 'required|after:startTime',
-        'note' => 'required|string|max:1000'
+        'note' => 'required|string|max:500'
     ];
 
     protected $messages = [

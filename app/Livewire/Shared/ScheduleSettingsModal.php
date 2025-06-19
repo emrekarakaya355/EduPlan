@@ -2,8 +2,12 @@
 
 namespace App\Livewire\Shared;
 
+use App\Models\Instructor;
+use App\Models\Program;
 use App\Models\Schedule;
 use App\Models\ScheduleConfig;
+use Illuminate\Validation\Rules\In;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ScheduleSettingsModal extends Component
@@ -16,7 +20,9 @@ class ScheduleSettingsModal extends Component
         'show_sunday' => false
     ];
     public $timeConfigs;
-
+    public $instructors;
+    public $showInstructorConstraints = false;
+    public $selectedInstructorId;
     protected $rules = [
         'selectedTimeConfig' => 'required|exists:dp_schedule_configs,id',
         'weekendSettings.show_saturday' => 'boolean',
@@ -40,8 +46,24 @@ class ScheduleSettingsModal extends Component
                 'show_saturday' => $this->schedule->show_saturday ?? false,
                 'show_sunday' => $this->schedule->show_sunday ?? false
             ];
+            $this->loadInstructors();
         }
     }
+
+    public function loadInstructors()
+    {
+        if ($this->schedule && $this->schedule->program_id) {
+            $this->instructors = $this->schedule?->program
+                ?->courseClasses
+                ->pluck('instructor')
+                ->filter()
+                ->unique('id')
+                ->sortBy('name')
+                ->values();
+
+        }
+    }
+
 
     public function saveSettings()
     {
@@ -75,7 +97,17 @@ class ScheduleSettingsModal extends Component
         $this->resetValidation();
     }
 
-
+    public function openInstructorConstraints($selectedInstructorId)
+    {
+        $this->selectedInstructorId = $selectedInstructorId;
+        $this->showInstructorConstraints = true;
+    }
+    #[On('close-instructor-constraints-modal')]
+    public function closeInstructorConstraints()
+    {
+        $this->selectedInstructorId = null;
+        $this->showInstructorConstraints = false;
+    }
     public function render()
     {
         return view('livewire.shared.schedule-settings-modal');
