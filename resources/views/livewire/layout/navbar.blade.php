@@ -26,11 +26,7 @@
             @if(request()->routeIs('schedule')) text-blue-500 fa-beat-fade @else text-gray-500 @endif"></i>
                         <span class="text-xs mt-1 text-gray-600 group-hover:text-blue-500">Ders Programı</span>
                     </a>
-                    <a href="{{ route('course-list') }}" class="flex flex-col items-center group">
-                        <i class="fa-solid fa-book-open text-4xl
-            @if(request()->routeIs('course-list')) text-blue-500 fa-beat-fade @else text-gray-500 @endif"></i>
-                        <span class="text-xs mt-1 text-gray-600 group-hover:text-blue-500">Dersler</span>
-                    </a>
+
                     <a href="{{ route('instructors') }}" class="flex flex-col items-center group">
                         <i class="fa-solid fa-people-carry-box text-4xl
             @if(request()->routeIs('instructors')) text-blue-500 fa-beat-fade @else text-gray-500 @endif"></i>

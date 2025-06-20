@@ -212,7 +212,14 @@
                             <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all duration-200 group">
                                 <div class="flex items-center space-x-4">
                                     <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
-                                        {{ substr($instructor->name, 0, 2) }}
+                                        <img src="
+                                            @if(is_null($instructor))
+                                                /bizdosyalar/profilresimler/{{ @$instructor->gorsel_link }}
+                                            @else
+                                                http://sistem.nevsehir.edu.tr/images/personel/kucuk/{{  md5('bi'.$instructor->sicil.'lim') }}.jpg
+                                            @endif"
+                                             alt="" border="0" width="100px" height="110px">
+
                                     </div>
                                     <div class="flex-1">
                                         <h4 class="font-semibold text-gray-900">{{ $instructor->name }}</h4>

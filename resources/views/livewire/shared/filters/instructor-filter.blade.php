@@ -1,3 +1,75 @@
-<div>
-    instructor
+<div class="p-2 w-full">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="search" class="block text-sm font-medium mb-1">Öğretim Görevlisi</label>
+            <input type="text"
+                   class="w-full p-2 border border-gray-700 bg-white text-black rounded"
+                   id="search"
+                   wire:model.debounce.300ms="search"
+                   placeholder="Arama">
+        </div>
+    </div>
+    <div>
+        <label class="block text-sm font-medium mb-1">Birim</label>
+        <select wire:model.live="selectedBirim" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
+            <option value="">Birim Seçiniz</option>
+            @foreach($birims as $birim)
+                <option value="{{ $birim->id }}">{{ $birim->name }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div>
+        <label class="block text-sm font-medium mb-1">Bölüm</label>
+        <select wire:model="selectedBolum" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded" @if(empty($bolums)) disabled @endif>
+            <option value="">Bölüm Seçiniz</option>
+            @foreach($bolums as $bolum)
+                <option value="{{ $bolum['id'] }}">{{ $bolum['name'] }}</option>
+            @endforeach
+        </select>
+    </div>
+
+
+
+    <div class="pt-2">
+        <button type="button"
+                wire:click="$toggle('showAdvancedSearch')"
+                class="flex items-center text-sm text-blue-400 hover:text-blue-300">
+            <span>{{ $showAdvancedSearch ? 'Detaylı Aramayı Gizle' : 'Detaylı Arama' }}</span>
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $showAdvancedSearch ? 'M19 9l-7 7-7-7' : 'M9 5l7 7-7 7' }}"></path>
+            </svg>
+        </button>
+    </div>
+    @if($showAdvancedSearch)
+        <div>
+            <label class="block text-sm font-medium mb-1">Günler</label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                @foreach($days as $key => $day)
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" wire:model="selectedDays" value="{{ $key }}" class="rounded border-gray-700 bg-gray-800 text-blue-600">
+                        <span class="text-sm">{{ $day }}</span>
+                    </label>
+                @endforeach
+            </div>
+        </div>
+        <div class="flex justify-center gap-4 align-middle">
+            <div class="w-1/2">
+                <label class="block text-sm mb-1">Başlangıç Saati</label>
+                <input type="time" wire:model="startTime" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
+            </div>
+            <div class="w-1/2">
+                <label class="block text-sm mb-1">Bitiş Saati</label>
+                <input type="time" wire:model="endTime" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
+            </div>
+        </div>
+
+    @endif
+    <div class="flex p-4 justify-center space-x-8">
+        <button wire:click="resetFilters" class="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm">
+            Temizle
+        </button>
+        <button wire:click="applyFilters" class="px-4 py-1 bg-blue-500 hover:bg-blue-800 text-white rounded text-sm">
+            Filtrele
+        </button>
+    </div>
 </div>

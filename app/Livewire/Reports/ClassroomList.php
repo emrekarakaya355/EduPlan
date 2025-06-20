@@ -13,7 +13,6 @@ class ClassroomList extends Component
 {
     use WithPagination, UsesScheduleDataFormatter;
 
-    // Filtre değerleri
     public $filters = [
         'campus_id' => null,
         'building_id' => null,
@@ -29,12 +28,10 @@ class ClassroomList extends Component
         'end_time' => "",
     ];
 
-    // Tablo seçenekleri
     public $perPage = 10;
     public $sortField = 'campus_name';
     public $sortDirection = 'asc';
 
-    // Rapor veri depolama
     public $reportData = [];
     public $isReportGenerated = false;
 
@@ -115,10 +112,8 @@ class ClassroomList extends Component
      */
     public function sortReport()
     {
-        // PHP'nin collection kullanımı için rapor verisini Collection'a çevir
         $collection = collect($this->reportData);
 
-        // Sıralama yönüne göre sırala
         if ($this->sortDirection === 'asc') {
             $sorted = $collection->sortBy($this->sortField);
         } else {
