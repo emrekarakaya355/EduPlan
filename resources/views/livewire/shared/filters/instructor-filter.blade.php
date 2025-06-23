@@ -1,13 +1,66 @@
 <div class="p-2 w-full">
     <div class="col-md-4">
         <div class="form-group">
-            <label for="search" class="block text-sm font-medium mb-1">Öğretim Görevlisi</label>
-            <input type="text"
-                   class="w-full p-2 border border-gray-700 bg-white text-black rounded"
-                   id="search"
-                   wire:model.debounce.300ms="search"
-                   placeholder="Arama">
-        </div>
+            <label class="block text-sm font-medium mb-1">Öğretim Görevlisi Ara</label>
+            <div class="relative">
+                <div class="relative">
+                    <input
+                        type="text"
+                        wire:model.live.debounce.300ms="search"
+                        wire:focus="$set('showSearchResults', true)"
+                        placeholder="İsim, email ile arayın..."
+                        class="w-full px-4 py-2 border  border-gray-700 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-10"
+                        autocomplete="off">
+
+                    @if($selectedInstructor)
+                        <button
+                            wire:click="clearInstructorSelection"
+                            class="absolute right-2 top-2 text-gray-400 hover:text-gray-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    @endif
+                </div>
+                @if($showSearchResults && count($searchResults) > 0)
+                    <div class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        @foreach($searchResults as $instructor)
+                            <div
+                                wire:click="selectInstructor({{ $instructor->id }}, '{{ $instructor->name ?? $instructor->adi }}')"
+                                class="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0">
+                                <div class="flex flex-col">
+                                    <div class="font-medium text-gray-900">
+                                        {{ $instructor->name ?? $instructor->adi }}
+                                    </div>
+                                    @if($instructor->email)
+                                        <div class="text-sm text-gray-500">{{ $instructor->email }}</div>
+                                    @endif
+                                    @if($instructor->courses && $instructor->courses->isNotEmpty())
+                                        <div class="text-xs text-gray-400 mt-1">
+                                            @php
+                                                $bolums = $instructor->courses->pluck('bolum.name')->unique()->filter();
+                                            @endphp
+                                            @if($bolums->isNotEmpty())
+                                                {{ $bolums->implode(', ') }}
+                                            @endif
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
+                @if($showSearchResults && strlen($search) >= 2 && count($searchResults) === 0)
+                    <div class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                        <div class="px-4 py-3 text-gray-500 text-center">
+                            Sonuç bulunamadı
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            </div>
     </div>
     <div>
         <label class="block text-sm font-medium mb-1">Birim</label>
