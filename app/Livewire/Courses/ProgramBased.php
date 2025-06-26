@@ -57,7 +57,7 @@ class ProgramBased extends Component
                 return $query->where('year', $this->year)->where('semester', $this->semester);
             })->where('program_id', $this->program_id )->where('grade', $this->grade)->with('course','instructor.constraints')->get()
                 ->filter(function ($course) {
-                    return /*$course->unscheduled_hours > 0  &&*/ !str_contains(strtoupper($course->course->code), 'OSD');
+                    return $course->unscheduled_hours > 0  && !str_contains(strtoupper($course->course->code), 'OSD');
                 });
     }
     public $selectedCourseId = null;

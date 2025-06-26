@@ -5,8 +5,10 @@ use App\Models\Course_class;
 use App\Models\Instructor;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Haftalık Programlar')]
 class Index extends Component
 {
     public $unit_id, $year, $semester;

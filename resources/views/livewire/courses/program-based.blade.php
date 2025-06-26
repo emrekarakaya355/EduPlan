@@ -31,7 +31,7 @@
                     draggable="true"
                     ondragstart="drag(event, {{ $courseClass->id }})"
                     ondragend="dragEnd(event)"
-                    ondblclick="Livewire.dispatch('open-course-modal', {courseId: '{{$courseClass->course->id }}', courseName: '{{$courseClass->course->name }}'})"
+                    ondblclick="Livewire.dispatch('open-instructor-modal', {instructorId: '{{$courseClass?->instructorId }}', instructorName: '{{$courseClass?->instructor?->name}}'})"
                     oncontextmenu="showContextMenu(event, {{ $courseClass->id }}, {{ $courseClass->instructorId ?? 'null' }}, '{{ addslashes($courseClass->course->name) }}', '{{ addslashes($courseClass->instructorName) }} {{ addslashes($courseClass->instructorSurname) }}')"
                     data-type="course">
                     @if($courseClass->instructor?->constraints?->first()?->id)

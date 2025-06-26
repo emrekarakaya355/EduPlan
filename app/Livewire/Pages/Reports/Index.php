@@ -3,8 +3,10 @@
 namespace App\Livewire\Pages\Reports;
 
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Raporlar')]
 class Index extends Component
 {
     public $selectedReportType;
