@@ -1,5 +1,5 @@
 <div class="w-full h-full">
-    <div class="p-4 bg-white rounded-lg shadow-md">
+    <div class="p-4 ">
         <h2 class="text-lg font-semibold mb-4">Bina Bazlı Sınıf Kullanım Oranları</h2>
 
         <div class="mb-4">
@@ -17,7 +17,7 @@
         </div>
 
             <div wire:ignore>
-                <div id="classroom-usage-chart" style="height: 350px;"></div>
+                <div id="classroom-usage-chart"></div>
             </div>
 
     </div>
@@ -32,15 +32,21 @@
     <script>
             let chart;
             function initChart(chartData) {
-                const options = {
+                const numberOfClassrooms = chartData.labels.length;
+                const minHeight = 350;
+                const heightPerClassroom = 30;
+                const dynamicHeight = Math.max(minHeight, numberOfClassrooms * heightPerClassroom);
 
+                const options = {
                     series: [{
                         name: 'Kullanım Oranı',
                         data: chartData.data || []
                     }],
+                    labels: chartData.labels,
                     chart: {
                         type: 'bar',
-                        height: 350,
+                        width : '100%',
+                        height: dynamicHeight,
                         toolbar: {
                             show: true,
                             tools: {
@@ -79,12 +85,13 @@
                     },
                     plotOptions: {
                         bar: {
-                            horizontal: false,
-                            columnWidth: '20%',
+                            horizontal: true,
+                            distributed: true,
                             borderRadius: 4,
                             dataLabels: {
                                 position: 'top'
-                            }
+                            },
+                            barHeight : '50%'
                         },
                     },
                     colors: chartData.colors || ['#3b82f6'],
@@ -93,30 +100,18 @@
                         formatter: function(val) {
                             return val + '%';
                         },
-                        offsetY: -20,
+                        offsetx: -20,
                         style: {
-                            fontSize: '10px',
+                            fontSize: '12px',
                             colors: ["#304758"]
                         }
                     },
-                    xaxis: {
-                        categories: chartData.labels || [],
-                        position: 'bottom',
-                        labels: {
-                            rotate: -45,
-                            rotateAlways: false,
-                            style: {
-                                fontSize: '8px'
-                            }
-                        },
-                        axisBorder: {
-                            show: false
-                        },
-                        axisTicks: {
-                            show: false
-                        }
+                    stroke : {
+                      width:1,
+                        colors:["#fff " ]
                     },
-                    yaxis: {
+
+                    xaxis: {
                         min: 0,
                         max: 100,
                         title: {
@@ -128,24 +123,26 @@
                         labels: {
                             formatter: function(val) {
                                 return val.toFixed(0) + '%';
+                            },
+                            style: {
+                                fontSize : '12px'
                             }
                         }
                     },
                     tooltip: {
                         y: {
                             formatter: function(val) {
-                                return val + '% kullanım oranı';
+                                return val + '%';
                             }
                         }
                     },
                     grid: {
                         borderColor: '#e0e0e0',
-                        strokeDashArray: 4,
-                        yaxis: {
-                            lines: {
-                                show: true
-                            }
-                        }
+                        strokeDashArray: 1,
+
+                    },
+                    legend:{
+                        show:false
                     }
                 };
                 if (chart) {

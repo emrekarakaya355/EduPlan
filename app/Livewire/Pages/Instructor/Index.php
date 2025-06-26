@@ -20,9 +20,9 @@ class Index extends Component
 
     public function mount()
     {
-        $this->unit_id = Session::get('unit');
-        $this->year = Session::get('year');
-        $this->semester = Session::get('semester');
+        $this->unit_id = Session::get('unit') ?? -1;
+        $this->year = Session::get('year') ?? 2000;
+        $this->semester = Session::get('semester') ?? 'Güz';
     }
 
     public function applyFilters($filters)
@@ -32,12 +32,17 @@ class Index extends Component
         $this->semester = $filters['semester'];
     }
     #[On('instructorSelected')]
-    public function instructorSelected($id )
+    public function instructorSelected($id,$name)
     {
         $this->selectedBuildingId = null;
         $this->selectedClassroomId = null;
-        $this->selectedInstructorId = $id;
-        $this->selectedInstructorName = Instructor::where('id', $id)->first()?->name;
+        if (empty($id)) {
+            $this->selectedInstructorId = null;
+            $this->selectedInstructorName = null;
+        } else {
+            $this->selectedInstructorId = $id;
+             $this->selectedInstructorName = $name;
+        }
     }
     #[On('buildingSelected')]
     public function buildingSelected($id){

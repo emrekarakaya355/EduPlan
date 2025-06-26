@@ -1,4 +1,4 @@
-<aside class="fixed left-0 top-0 h-full w-64 bg-gray-900 text-white shadow-lg pt-4 z-40 transition-transform transform "
+<aside class="fixed left-0 top-0 h-full w-64 bg-gray-900 text-white shadow-lg pt-4 z-40 transition-transform transform overflow-y-auto overflow-x-auto "
        :class="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }">
     <div class="w-64 bg-gray-900 text-white p-2">
         <label class="block mb-2">Rapor Türü</label>

@@ -3,24 +3,26 @@
         <div class="flex justify-between" >
             <div class="flex space-x-4"  >
                 <div>
-                    <select data-html2canvas-ignore="true" id="courseSelect" x-data x-on:change="$dispatch('gradeUpdated',{grade : $event.target.value})">
-                        <option value="0">Hazırlık</option>
-                        <option value="1" selected>1. Sınıf</option>
-                        <option value="2">2. Sınıf</option>
-                        <option value="3">3. Sınıf</option>
-                        <option value="4">4. Sınıf</option>
-                        <option value="5">5. Sınıf</option>
-                        <option value="6">6. Sınıf</option>
-                        <option value="7">7. Sınıf</option>
-                        <option value="8">8. Sınıf</option>
-                        <option value="9">9. Sınıf</option>
+                    <select
+                        data-html2canvas-ignore="true"
+                        id="courseSelect"
+                        x-data
+                        x-on:change="$dispatch('gradeUpdated',{grade : $event.target.value})"
+                    >
+                        @foreach($grades as $g)
+                            <option value="{{ $g }}" {{ $grade == $g ? 'selected' : '' }}>
+                                {{ \App\Models\Schedule::getGradeNameFromValue($g) }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
                 <div>
-                    <select id="sube" data-html2canvas-ignore="true">
-                        <option value="A">A Şubesi</option>
-                        <option value="B">B Şubesi</option>
-                    </select>
+                    @if(false)
+                        <select id="sube" data-html2canvas-ignore="true">
+                            <option value="A">A Şubesi</option>
+                            <option value="B">B Şubesi</option>
+                        </select>
+                    @endif
                 </div>
             </div>
             <div class="flex items-center flex-col">
@@ -28,7 +30,7 @@
                     <div>{{$schedule->year .' - '. Carbon\Carbon::createFromDate($schedule->year)->addYear()->year. ' ' . $schedule->semester  }}</div>
 
                     <div>{{$schedule->program?->name . ' ' }}</div>
-                    <div>{{$schedule->grade .'. Sınıf Ders Programı'}}</div>
+                    <div>{{$schedule->gradeName .' Sınıf Ders Programı'}}</div>
                 @endisset
             </div>
             <div class="flex" style="flex-direction: column">
@@ -40,12 +42,14 @@
                     >
                         <i class="fa-solid fa-file-image mr-2"></i> Pdf indir
                     </button>
+                    @if(false)
                     <button
                         onclick="downloadScheduleAsPng()"
                         class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
                     >
                         <i class="fa-solid fa-file-image mr-2"></i> PNG Olarak Kaydet
                     </button>
+                    @endif
                     <button onclick="openEditModal()"
                             class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                         <i class="fa-solid fa-edit mr-2"></i> Düzelt ve Kaydet
@@ -53,16 +57,24 @@
                 </div>
             </div >
                 <div class="flex items-center space-x-2 justify-end">
-                    <div>
-                        <span data-html2canvas-ignore="true">Versiyon</span>
-                        <select data-html2canvas-ignore="true">
-                            <option>1</option>
-                            <option>2</option>
-                        </select>
-                    </div>
+                    @if(false)
+                        <div>
+                            <span data-html2canvas-ignore="true">Versiyon</span>
+                            <select data-html2canvas-ignore="true">
+                                <option>1</option>
+                                <option>2</option>
+                            </select>
+                        </div>
+                    @endif
                     <div>
                         <button data-html2canvas-ignore="true" class="rounded text-blue-500 text-2xl hover:bg-blue-100">
                             <i class="fa-solid fa-save"></i>
+                        </button>
+
+                    </div>
+                    <div>
+                        <button wire:click="toggleLock" data-html2canvas-ignore="true" class="rounded text-2xl hover:bg-gray-100 {{ $isLocked ? 'text-red-500' : 'text-green-500' }}">
+                            <i class="fa-solid {{ $isLocked ? 'fa-lock' : 'fa-lock-open' }}"></i>
                         </button>
                     </div>
                     <div>
@@ -82,7 +94,7 @@
             <livewire:shared.schedule-settings-modal :scheduleId="$schedule?->id"/>
         @endif
 
-        <div  class="grid grid-cols-{{ count($days) + 1 }} gap-1 p-4 schedule-grid">
+        <div  class="grid grid-cols-{{ count($days) + 1 }} gap-1 p-4 schedule-grid ">
 
             <div class="p-2"></div>
             @foreach($days as $day)

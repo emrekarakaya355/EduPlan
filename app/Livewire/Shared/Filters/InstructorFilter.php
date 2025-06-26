@@ -77,6 +77,16 @@ class InstructorFilter extends Component
         $this->search = '';
         $this->showSearchResults = false;
         $this->searchResults = [];
+        $filterData = [
+            'birim_id' => $this->selectedBirim,
+            'bolum_id' => $this->selectedBolum,
+            'selected_days' => $this->selectedDays,
+            'start_time' => $this->startTime,
+            'end_time' => $this->endTime,
+            'instructor_id' => $this->selectedInstructor,
+
+        ];
+        $this->dispatch('filters-applied', reportType: 'instructor', filters: $filterData);
     }
     public function updatedSelectedBirim()
     {

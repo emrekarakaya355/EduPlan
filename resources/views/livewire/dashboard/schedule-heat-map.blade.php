@@ -1,7 +1,7 @@
-<div class="w-full">
+<div class="w-full h-full">
     <h2 class="text-lg font-semibold mb-4 text-center">Derslik Saatlik Yoğunluk Haritası</h2>
 
-    <div id="heatmap-chart" ></div>
+    <div id="heatmap-chart" class="w-full h-full"></div>
 
         @script
         <script>
@@ -63,10 +63,10 @@
                         colorScale: {
                             ranges: [
                                 { from: 0, to: 0, name: 'Boş', color: '#e5e7eb' },
-                                { from: 1, to: 10, name: 'Az', color: '#93c5fd' },
-                                { from: 11, to: 25, name: 'Orta', color: '#3b82f6' },
-                                { from: 26, to: 40, name: 'Yoğun', color: '#1e40af' },
-                                { from: 41, to: 999, name: 'Aşırı Yoğun', color: '#991b1b' }
+                                { from: 1, to: 24, name: 'Az', color: '#93c5fd' },
+                                { from: 25, to: 49, name: 'Orta', color: '#3b82f6' },
+                                { from: 50, to: 99, name: 'Yoğun', color: '#1e40af' },
+                                { from: 100, to: 999, name: 'Aşırı Yoğun', color: '#991b1b' }
                             ]
                         }
                     }

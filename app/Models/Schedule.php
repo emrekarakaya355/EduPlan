@@ -9,7 +9,7 @@ class Schedule extends Model
 {
     protected $table = 'dp_schedules';
 
-    protected $fillable = ['program_id','year','semester','grade','schedule_config_id', 'show_saturday', 'show_sunday'];
+    protected $fillable = ['program_id','year','semester','grade','schedule_config_id', 'show_saturday', 'show_sunday','is_locked','locked_by_user_id'];
     protected $casts = [
         'show_saturday' => 'boolean',
         'show_sunday' => 'boolean',
@@ -18,13 +18,17 @@ class Schedule extends Model
     ];
 
     public function program(){
-        return $this->belongsTo('App\Models\Program');
+        return $this->belongsTo(Program::class);
     }
     public function scheduleSlots() {
         return $this->hasMany(ScheduleSlot::class,'schedule_id', 'id');
     }
     public function scheduleConfig(){
-        return $this->belongsTo(ScheduleConfig::class,'schedule_config_id', 'id');
+        return $this->belongsTo(ScheduleConfig::class);
+    }
+
+    public function lockedBy(){
+        return $this->belongsTo(User::class,'locked_by_user_id', 'id');
     }
 
     public function getResolvedScheduleConfigAttribute()
@@ -67,4 +71,47 @@ class Schedule extends Model
 
         return $days;
     }
+    public function getGradeNameAttribute(): string
+    {
+        switch ($this->grade) {
+            case 0:
+                return 'Hazırlık';
+            case 1:
+                return '1. Sınıf';
+            case 5:
+                return 'Yüksek Lisans Ders Dönemi';
+            case 6:
+                return 'Yüksek Lisans Tez Dönemi';
+            case 7:
+                return 'Doktora Yeterlilik Dönemi';
+            case 8:
+                return 'Doktora Ders Dönemi';
+            case 9:
+                return 'Doktora Tez Dönemi';
+            default:
+                return $this->grade . '. Sınıf';
+        }
+    }
+    public static function getGradeNameFromValue(int $gradeValue): string
+    {
+        switch ($gradeValue) {
+            case 0:
+                return 'Hazırlık';
+            case 1:
+                return '1. Sınıf';
+            case 5:
+                return 'Yüksek Lisans Ders Dönemi';
+            case 6:
+                return 'Yüksek Lisans Tez Dönemi';
+            case 7:
+                return 'Doktora Yeterlilik Dönemi';
+            case 8:
+                return 'Doktora Ders Dönemi';
+            case 9:
+                return 'Doktora Tez Dönemi';
+            default:
+                return $gradeValue . '. Sınıf';
+        }
+    }
+
 }

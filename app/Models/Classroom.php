@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\DayOfWeek;
 use App\Traits\UsesScheduleDataFormatter;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Classroom extends Model
@@ -36,6 +37,24 @@ class Classroom extends Model
     }
     public function scheduleSlots(){
         return  $this->hasMany(ScheduleSlot::class,'classroom_id','id');
+    }
+    public function getDaytimeSlotsAttribute(){
+
+        return $this->scheduleSlots->filter(function ($slot) {
+            return Carbon::parse($slot->start_time)->lt(Carbon::createFromTime(18, 0));
+        });
+
+    }
+    public function getUniqueUsedTimeSlotsCountAttribute(): int
+    {
+        if ($this->scheduleSlots->isEmpty()) {
+            return 0;
+        }
+        return $this->dayTimeSlots
+             ->groupBy(function ($slot) {
+                return $slot->day . '-' . $slot->start_time;
+            })
+            ->count();
     }
 
     public function getTotalUsageDurationAttribute()

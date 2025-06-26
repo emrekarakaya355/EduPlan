@@ -1,15 +1,14 @@
 <div>
 <div >
-            <div wire:ignore>
-                <div id="building-usage-chart"></div>
-            </div>
+    <div wire:ignore>
+        <div id="building-usage-chart"></div>
+    </div>
 </div>
 
 @script
     <script>
         const options = $wire.chartOptions;
         const series = $wire.chartSeries;
-        console.log(options);
         options.dataLabels.formatter = new Function('val', 'return val + "%"');
         options.yaxis.labels.formatter = new Function('val', 'return val + "%"');
         options.tooltip.y.formatter = new Function('val', 'return val + "%"');

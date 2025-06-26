@@ -11,8 +11,6 @@ class Program extends Model
     protected $fillable = [
         'name',
     ];
-
-
     public function bolum(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Bolum::class);
@@ -22,8 +20,12 @@ class Program extends Model
     {
         return $this->hasMany(Course_class::class, 'program_id', 'id');
     }
+    public function getGradesAttribute(){
+        $grades = $this->schedules->pluck('grade')->unique()->toArray();
+        sort($grades);
 
-
+        return $grades;
+    }
 
     public function schedules(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

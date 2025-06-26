@@ -16,7 +16,7 @@
     </select>
 
     <label class="block mt-4 mb-2">Program</label>
-    <select wire:model="program" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">
+    <select wire:model="program" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded" required>
         <option value="">Seçiniz</option>
         @foreach($programs as $program)
             <option value="{{ $program->id }}" {{ $program->id == $this->program ? 'selected' : '' }}>

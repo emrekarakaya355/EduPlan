@@ -6,6 +6,7 @@ use App\Enums\DayOfWeek;
 use App\Livewire\Schedule\Shared\BaseSchedule;
 use App\Models\Course;
 use App\Models\Course_class;
+use App\Models\Program;
 use App\Models\Schedule;
 use App\Models\ScheduleSlot;
 use App\Services\Pdf\PdfService;
@@ -16,11 +17,9 @@ use Livewire\Attributes\On;
 
 class ScheduleChart extends BaseSchedule
 {
-    public $program, $year, $semester, $grade = 1;
     public $showInstructorModal = false;
     public $selectedInstructorId = null;
     public $selectedInstructorName = '';
-
     public $showSettings = false;
 
     protected $viewMode = 'program';
@@ -30,6 +29,14 @@ class ScheduleChart extends BaseSchedule
         $this->program = session('program') == '' ? -1 : session('program');
         $this->year = session('year') ?? 2000;
         $this->semester = session('semester') ?? 'Fall';
+        $program = Program::find($this->program);
+        $this->grades = $program?->grades ?? [1];
+        if (is_array($this->grades) && !empty($this->grades)) {
+            if( is_null($this->grade))
+                $this->grade = min($this->grades);
+        } else {
+            $this->grade = 1;
+        }
         $this->provider = new ProgramBasedScheduleSlotProvider(
             $this->program,
             $this->year,
@@ -48,6 +55,54 @@ class ScheduleChart extends BaseSchedule
     public function closeSettings(): void
     {
         $this->showSettings = false;
+    }
+    public function toggleLock()
+    {
+        if(!$this->schedule){
+            return;
+        }
+        if (!\Auth::check()) {
+            $this->dispatch('show-confirm', [
+                'message' => 'Bu işlemi yapmak için giriş yapmalısınız.',
+                'type' => 'error'
+            ]);
+            return;
+        }
+
+        $currentUser = \Auth::id();
+
+        if ($this->isLocked) {
+            if ($this->lockedByUserId === $currentUser) {
+                $this->schedule->is_locked = false;
+                $this->schedule->locked_by_user_id = null;
+                $this->schedule->save();
+
+                $this->isLocked = false;
+                $this->lockedByUserId = null;
+
+                $this->dispatch('show-confirm', [
+                    'message' => 'Ders programının kilidi açıldı.',
+                    'type' => 'success'
+                ]);
+            } else {
+                $this->dispatch('show-confirm', [
+                    'message' => 'Ders programını sadece '. $this->schedule?->lockedBy?->name. ' tarafından açılabilir.',
+                    'type' => 'error'
+                ]);
+            }
+        } else {
+            $this->schedule->is_locked = true;
+            $this->schedule->locked_by_user_id = $currentUser;
+            $this->schedule->save();
+
+            $this->isLocked = true;
+            $this->lockedByUserId = $currentUser;
+
+            $this->dispatch('show-confirm', [
+                'message' => 'Ders programı kilitlendi. Sadece siz açabilirsiniz.',
+                'type' => 'success'
+            ]);
+        }
     }
     #[On('open-instructor-modal')]
     public function openInstructorModal($instructorId,$instructorName): void
@@ -82,6 +137,14 @@ class ScheduleChart extends BaseSchedule
     #[On('addClassroomToSchedule')]
     public function addClassroomToSchedule($classroomId,$day,$start_time,$classId,$externalId)
     {
+        if ($this->isLocked) {
+            $this->dispatch('show-confirm', [
+                'message' => 'Ders programı kilitli olduğu için ekleme yapılamaz.',
+                'type' => 'error'
+            ]);
+            return;
+        }
+
         $data = [
             'classroomId' => $classroomId,
             'day' => $day,
@@ -128,6 +191,13 @@ class ScheduleChart extends BaseSchedule
     #[On('addToSchedule')]
     public function addCourseToSchedule($classId,$day,$start_time,$scheduleId)
     {
+        if ($this->isLocked) {
+            $this->dispatch('show-confirm', [
+                'message' => 'Ders programı kilitli olduğu için ekleme yapılamaz.',
+                'type' => 'error'
+            ]);
+            return;
+        }
         $startTime = explode(' - ', $start_time)[0];
         $result = app(ScheduleService::class)->addCourseToSchedule(
             $scheduleId,
@@ -167,6 +237,13 @@ class ScheduleChart extends BaseSchedule
     #[On('forceAddToSchedule')]
     public function forceAddCourseToSchedule($classId, $day, $start_time)
     {
+        if ($this->isLocked) {
+            $this->dispatch('show-confirm', [
+                'message' => 'Ders programı kilitli olduğu için ekleme yapılamaz.',
+                'type' => 'error'
+            ]);
+            return;
+        }
         $startTime = explode(' - ', $start_time)[0];
         app(ScheduleService::class)->addCourseToSchedule(
             $this->schedule->id,
@@ -190,6 +267,13 @@ class ScheduleChart extends BaseSchedule
     #[On('removeFromSchedule')]
     public function removeFromSchedule($hour,$day,$classId): void
     {
+        if ($this->isLocked) {
+            $this->dispatch('show-confirm', [
+                'message' => 'Ders programı kilitli olduğu için silme yapılamaz.',
+                'type' => 'error'
+            ]);
+            return;
+        }
         $courseClass = Course_class::find($classId);
         if($courseClass->external_id){
             ScheduleSlot::query()

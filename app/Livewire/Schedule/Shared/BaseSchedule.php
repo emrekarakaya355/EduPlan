@@ -4,6 +4,7 @@
 namespace App\Livewire\Schedule\Shared;
 
 use App\Contracts\ScheduleSlotProviderInterface;
+use App\Models\Program;
 use App\Traits\UsesScheduleDataFormatter;
 use Livewire\Component;
 
@@ -15,11 +16,17 @@ abstract class BaseSchedule extends Component
     protected $viewMode;
     public $schedule;
     public $scheduleData;
+    public bool $isLocked = false;
+    public ?int $lockedByUserId;
     public $days;
     public $showSaturday = false;
     public $saturdayDisabled = false;
     public $showSunday = false;
     public $sundayDisabled = false;
+    public $grades = [];
+    public $grade = 1;
+    public $program, $year, $semester;
+
     abstract protected function initializeProvider();
 
     public function mount()
@@ -77,11 +84,14 @@ abstract class BaseSchedule extends Component
     {
         $this->initializeProvider();
         $this->schedule = $this->provider->getSchedule();
+        $this->isLocked = $this->schedule?->is_locked ?? false;
+        $this->lockedByUserId = $this->schedule?->locked_by_user_id;
+
         $data = $this->prepareScheduleSlotData($this->provider);
         $this->scheduleData = $data['scheduleData'];
 
         $this->days = $data['days'];
-         /*
+
         if($this->days->contains('value', 6)){
             $this->showSaturday =true;
             $this->saturdayDisabled = true;
@@ -95,7 +105,7 @@ abstract class BaseSchedule extends Component
         }else{
             $this->showSunday =false;
             $this->sundayDisabled = false;
-        }*/
+        }
       }
     public function render()
     {

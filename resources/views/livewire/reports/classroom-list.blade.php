@@ -1,13 +1,14 @@
 <div>
     @if($isReportGenerated)
         <div class="flex space-x-2 mb-4">
-            <button wire:click="$set('viewType', 'table')"
-                    class="{{ $viewType === 'table' ? 'font-bold underline' : '' }}">
-                Tablo Görünümü
-            </button>
+
             <button wire:click="$set('viewType', 'list')"
                     class="{{ $viewType === 'list' ? 'font-bold underline' : '' }}">
                 Liste Görünümü
+            </button>
+            <button wire:click="$set('viewType', 'table')"
+                    class="{{ $viewType === 'table' ? 'font-bold underline' : '' }}">
+                Tablo Görünümü
             </button>
         </div>
         @if($viewType === 'table')

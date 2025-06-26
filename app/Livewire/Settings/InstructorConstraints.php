@@ -118,7 +118,8 @@ class InstructorConstraints extends Component
             'start_time' => $this->startTime,
             'end_time' => $this->endTime,
             'note' => $this->note ?: null,
-            'updated_at' => now()
+            'updated_at' => now(),
+            'updated_by' =>Auth()?->user()?->id
         ];
         if ($this->editingConstraintId) {
 

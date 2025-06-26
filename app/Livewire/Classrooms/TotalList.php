@@ -23,7 +23,7 @@ class TotalList extends Component
             ->with('scheduleSlots')
             ->get()
             ->sortByDesc(function ($classroom) {
-                return $classroom->total_usage_duration;
+                return $classroom->UniqueUsedTimeSlotsCount;
             })
             ->values() ?? collect();
     }

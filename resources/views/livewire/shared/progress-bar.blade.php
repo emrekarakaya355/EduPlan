@@ -1,6 +1,6 @@
 <div class="flex items-center space-x-2">
     <div class="text-xs text-gray-600 text-center mt-1">
-        Saat olarak Yerleştirilen: {{ $placed }} / {{ $total }}
+        {{ $placed }} / {{ $total }}
     </div>
     <div class="relative w-5 h-5">
         <svg class="w-full h-full" viewBox="0 0 36 36">

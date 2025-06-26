@@ -90,13 +90,10 @@ class TimeSettings extends Component
     public function delete($id)
     {
         $config = ScheduleConfig::findOrFail($id);
-
-        // İlişkili schedule'ları kontrol et
-        if ($config->schedules()->count() > 0) {
+        if ($config->schedules->count() > 0) {
             session()->flash('error', 'Bu zaman ayarı kullanılıyor, silemezsiniz.');
             return;
         }
-
         $config->delete();
         session()->flash('message', 'Zaman ayarları başarıyla silindi.');
         $this->loadConfigs();

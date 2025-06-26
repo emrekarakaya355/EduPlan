@@ -1,10 +1,11 @@
 <div class="course-section">
     <div class="table-header">
-        <!-- Search ve Add Button -->
         <input type="text" placeholder="Ders arayın..." class="search-input">
-        <button class="add-button">
-            <i class="fa-solid fa-plus-circle fa-flip text-green-500 "></i>
-        </button>
+        @if(false)
+            <button class="add-button">
+                <i class="fa-solid fa-plus-circle fa-flip text-green-500 "></i>
+            </button>
+        @endif
     </div>
     <div>
         <div class="courses-container">
@@ -22,7 +23,7 @@
                                                                'Ders Adı':'{{ addslashes($courseClass->course->name) }}',
                                                                'Ders Kodu':'{{ addslashes($courseClass->course->code)}}',
                                                                'Kontenjan' : '{{addslashes($courseClass->quota)}} kişi',
-                                                               'Süre' : '{{addslashes($courseClass->duration)}} saat',
+                                                               'Süre' : '{{addslashes($courseClass->theoretical_duration) .'T + '. addslashes($courseClass->practical_duration) .'U = '. addslashes($courseClass->duration)}} saat',
                                                                'Şube' : '{{addslashes($courseClass->branch)}}',
                                                                'Hoca' : '{{addslashes($courseClass->instructorTitle)}} {{addslashes($courseClass->instructorName)}} {{addslashes($courseClass->instructorSurname)}}'
                                                                })"
@@ -128,7 +129,7 @@
             padding: 8px 16px;
             border-radius: 5px;
             border: 1px solid #ccc;
-            width: 250px;
+            width: 100%;
             font-size: 14px;
             outline: none;
         }

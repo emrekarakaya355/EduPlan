@@ -3,6 +3,8 @@
 use App\Livewire\Classrooms\CreateClassroom;
 use App\Livewire\UbysAktar;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Http;
+
 
 Route::get('dashboard', \App\Livewire\Pages\Dashboard\IndexApex::class)
     ->name('dashboard')->middleware('auth');
@@ -30,5 +32,30 @@ Route::get('/classroom/create', CreateClassroom::class)->middleware('auth')->nam
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
+
+Route::get('/profil-resmi/{sicil}', function ($sicil) {
+
+    $hashedSicil = md5('bi' . $sicil . 'lim');
+    $imageUrl = "https://sistem.nevsehir.edu.tr/bizdosyalar/profilresimler/{{$sicil}}.jpg";
+
+    try {
+        $response = Http::timeout(10)->get($imageUrl);
+
+        if ($response->successful()) {
+            return response($response->body())
+                ->header('Content-Type', $response->header('Content-Type') ?: 'image/jpeg')
+                ->header('Cache-Control', 'public, max-age=3600');
+        } else {
+            return response()->file(public_path('assets/images/default-avatar.png'));
+        }
+    } catch (\Illuminate\Http\Client\ConnectionException $e) {
+        Log::error("Connection error while proxying image for sicil: {$sicil}, Error: {$e->getMessage()}");
+        return response()->file(public_path('assets/images/default-avatar.png'));
+    } catch (\Exception $e) {
+        Log::error("General error while proxying image for sicil: {$sicil}, Error: {$e->getMessage()}");
+        return response()->file(public_path('assets/images/default-avatar.png'));
+    }
+})->name('get.instructor.profile.image');
+
 
 require __DIR__.'/auth.php';

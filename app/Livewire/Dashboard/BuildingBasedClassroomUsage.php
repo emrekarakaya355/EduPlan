@@ -48,8 +48,7 @@ class BuildingBasedClassroomUsage extends Component
     }
     private function prepareChartData()
     {
-        $classrooms = Classroom::withCount(['scheduleSlots'])
-            ->where('building_id', $this->selectedBuildingId)
+        $classrooms = Classroom::where('building_id', $this->selectedBuildingId)
             ->get();
         $building = $this->buildings->find($this->selectedBuildingId);
         $labels = [];
@@ -57,7 +56,8 @@ class BuildingBasedClassroomUsage extends Component
         $colors = [];
         $ids = [];
         foreach ($classrooms as $classroom) {
-            $usage = round(($classroom->schedule_slots_count / 50) * 100);
+            $usage = round(($classroom->UniqueUsedTimeSlotsCount / 45) * 100);
+
             $usage = min($usage, 100);
 
             $labels[] = $classroom->name;
@@ -72,7 +72,6 @@ class BuildingBasedClassroomUsage extends Component
                 $colors[] = '#ef4444';
             }
         }
-
         $this->chartData = [
             'labels' => $labels,
             'data' => $data,

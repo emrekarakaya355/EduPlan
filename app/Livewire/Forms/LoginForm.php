@@ -30,8 +30,7 @@ class LoginForm extends Form
      */
     public function authenticate(): void
     {
-
-        $this->ensureIsNotRateLimited();
+         $this->ensureIsNotRateLimited();
         if($this->LdapLogin($this->email, $this->password)) {
             $bilgiler = User::where('email','=',$this->email)->first();
             if(!$bilgiler) {
@@ -93,10 +92,12 @@ class LoginForm extends Form
         $trash = fgets ( $fp, 128 );
         fwrite ( $fp, "PASS ".$password."\r\n" );
         $result = fgets ( $fp, 128 );
-
+        fclose($fp);
         if(str_starts_with($result, '+OK'))
             return true;
         else
             return false;
     }
+
+
 }

@@ -32,10 +32,7 @@
         </div>
     </div>
     <div class="flex justify-end"  x-data="{ showCreateForm: false }" @close-create-classroom-form.window="showCreateForm = false">
-        <button class="add-button p-2" style="position:absolute; top: 0; right: 0"
-                @click="showCreateForm = !showCreateForm">
-            <i class="fa-solid fa-plus-circle text-green-500"></i>
-        </button>
+
         <div x-show="showCreateForm"
             class="mt-12 w-full transition ease-out duration-300">
             <livewire:classrooms.create-classroom :key="$selectedBuilding" />

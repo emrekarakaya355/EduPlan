@@ -61,7 +61,7 @@
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <div >
-                    <livewire:shared.progress-bar  />
+                    <!--livewire:shared.progress-bar  /-->
 
                 </div>
                 <x-dropdown align="right" width="48">

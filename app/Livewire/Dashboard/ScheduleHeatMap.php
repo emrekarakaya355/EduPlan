@@ -28,7 +28,7 @@ class ScheduleHeatMap extends Component
             5 => 'Cuma'
         ];
 
-        $hours = range(8, 18);
+        $hours = range(8, 24);
         $this->categories = array_map(fn($h) => "$h:00", $hours);
 
         $data = [];

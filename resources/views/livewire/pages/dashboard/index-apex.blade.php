@@ -1,55 +1,64 @@
 <x-plain-layout>
     <div class="p-4">
-        <div class="grid-stack ">
-            <div class="grid-stack-item " gs-w="5" gs-h="4">
-                <div class="grid-stack-item-content " style="width: 800px;">
-                    <livewire:dashboard.schedule-heat-map />
-                </div>
-            </div>
-            <div class="grid-stack-item" gs-w="5" gs-h="4" >
-                <div class="grid-stack-item-content h-full w-full" style="width: 900px; margin-left: 50px">
+        <div class="grid-stack">
 
+
+            <div class="grid-stack-item" gs-w="6" gs-h="4">
+                <div class="grid-stack-item-content">
                     <livewire:dashboard.classroom-usage-per-building-apex />
                 </div>
             </div>
-            <div class="grid-stack-item w-1/2" gs-w="5" gs-h="4" >
-                <div class="grid-stack-item-content " style="width: 900px;">
+
+            <div class="grid-stack-item" gs-w="6" gs-h="4">
+                <div class="grid-stack-item-content">
                     <livewire:dashboard.building-based-classroom-usage />
                 </div>
             </div>
-
+            <div class="grid-stack-item" gs-w="6" gs-h="4" gs-x="3" gs-y="0" >
+                <div class="grid-stack-item-content">
+                    <livewire:dashboard.schedule-heat-map />
+                </div>
+            </div>
         </div>
     </div>
 
     @script
     <script>
-            const grids = GridStack.initAll({
-                column: 12,
-                float: true,
-                cellHeight: 'auto',
-                margin: 5,
-                maxRow: 12,
+        const grids = GridStack.initAll({
+            column: 12,
+            float: true,
+            cellHeight: 'auto',
+            margin: 10,
+            maxRow: 12,
+            resizable: {
+                handles: 'e, se, s, sw, w'
+            },
+            styleInHead: true,
+            draggable: {
+                handle: '.grid-stack-item-content'
+            },
 
-                resizable: {
-                    handles: 'e, se, s, sw, w'
-                },
-                styleInHead: true,
-                draggable: {
-                    handle: '.grid-stack-item-content'
-                }
-            });
-            grids.forEach(grid => grid.cellHeight());
+            disableOneColumnMode: false,
+            columnOpts: {
+                1200: { column: 12 },
+                992: { column: 8 },
+                768: { column: 6 },
+            }
+        });
+        grids.forEach(grid => grid.cellHeight());
+
     </script>
     @endscript
+
     <style>
-        .grid-stack {
-
-        }
-        .grid-stack-item {
-
-        }
         .grid-stack-item-content {
-            overflow: visible !important;
+            /* overflow: visible !important;*/
+            padding: 1rem;
+            background-color: #fff;
+            border-radius: 0.5rem;
+            height: 100%;
+            width: 100%;
+            box-sizing: border-box;
         }
     </style>
 </x-plain-layout>

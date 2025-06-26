@@ -1,4 +1,4 @@
-<div class="p-2 w-full">
+<div class="p-2 w-full ">
     <div>
         <label class="block text-sm font-medium mb-1">Kampüs</label>
         <select wire:model.live="selectedCampus" class="w-full p-2 border border-gray-700 bg-gray-800 text-white rounded">

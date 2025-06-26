@@ -17,6 +17,8 @@ class Course_class extends Model
         'instructorEmail',
         'instructorTitle',
         'instructorId',
+        'practical_duration',
+        'theoretical_duration',
     ];
 
 
@@ -24,6 +26,7 @@ class Course_class extends Model
     {
         return $this->belongsTo(Course::class, 'course_id', 'id');
     }
+
 
     public function program(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
@@ -106,21 +109,24 @@ class Course_class extends Model
     public function getUnscheduledHoursAttribute()
     {
         $scheduledHours = $this->scheduled_hours ?? 0;
-
         return max(0, $this->duration - $scheduledHours);
     }
 
     public function scopeScheduled($query)
     {
         return $query->whereHas('scheduleSlots', function ($query) {
-            $query->where('duration', '>', 0);
+            $query->where('practical_duration', '>', 0)->orWhere('theoretical_duration', '>', 0);
         });
+    }
+    public function getDurationAttribute()
+    {
+        return $this->practical_duration + $this->theoretical_duration;
     }
 
     public function scopeUnscheduled($query)
     {
         return $query->whereDoesntHave('scheduleSlots', function ($query) {
-            $query->where('duration', '>', 0);
+            $query->where('practical_duration', '>', 0)->orWhere('theoretical_duration', '>', 0);
         });
     }
 

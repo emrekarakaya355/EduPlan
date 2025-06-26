@@ -18,7 +18,6 @@ class ScheduleChart extends BaseSchedule
     protected function initializeProvider()
     {
         $this->provider = new CourseBasedScheduleSlotProvider($this->courseId);
-        dd('Bunu Görürsenin Bana Haber Verin Emre Karakaya :):)');
     }
 
     public function render()

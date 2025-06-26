@@ -23,11 +23,10 @@
         }
     }">
 
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-hidden"
-         wire:click.stop>
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-hidden flex flex-col"
+         >
 
-        <!-- Header -->
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6 text-white relative">
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6 text-white relative flex-shrink-0">
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-2xl font-bold">Takvim Yönetimi</h2>
@@ -41,7 +40,6 @@
                 </button>
             </div>
 
-            <!-- Tab Navigation -->
             <div class="flex space-x-1 mt-6 bg-white/10 rounded-lg p-1">
                 <button @click="activeTab = 'settings'"
                         :class="activeTab === 'settings' ? 'bg-white/20 text-white' : 'text-white/70 hover:text-white hover:bg-white/10'"
@@ -64,7 +62,7 @@
         </div>
 
         @if (session()->has('error'))
-            <div class="bg-red-50 border-l-4 border-red-400 p-4 m-4">
+            <div class="bg-red-50 border-l-4 border-red-400 p-4 m-4 flex-shrink-0">
                 <div class="flex">
                     <div class="flex-shrink-0">
                         <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
@@ -79,7 +77,7 @@
         @endif
 
         @if (session()->has('success'))
-            <div class="bg-green-50 border-l-4 border-green-400 p-4 m-4">
+            <div class="bg-green-50 border-l-4 border-green-400 p-4 m-4 flex-shrink-0">
                 <div class="flex">
                     <div class="flex-shrink-0">
                         <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
@@ -93,9 +91,7 @@
             </div>
         @endif
 
-        <!-- Tab Content -->
-        <div class="p-8 max-h-[calc(95vh-200px)] overflow-y-auto">
-            <!-- Settings Tab -->
+        <div class="p-8 overflow-y-auto flex-grow">
             <div x-show="activeTab === 'settings'" class="grid lg:grid-cols-2 gap-8">
                 <div class="space-y-6">
                     <div class="flex items-center space-x-3 mb-6">
@@ -190,7 +186,6 @@
                 </div>
             </div>
 
-            <!-- Instructors Tab -->
             <div x-show="activeTab === 'instructors'">
                 <div class="mb-6">
                     <div class="flex items-center space-x-3">
@@ -211,15 +206,18 @@
                         @foreach($instructors as $instructor)
                             <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all duration-200 group">
                                 <div class="flex items-center space-x-4">
-                                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-lg overflow-hidden">
                                         <img src="
                                             @if(is_null($instructor))
-                                                /bizdosyalar/profilresimler/{{ @$instructor->gorsel_link }}
+                                                {{ asset('images/default-avatar.png') }} {{-- Varsayılan bir resim kullanın --}}
                                             @else
-                                                http://sistem.nevsehir.edu.tr/images/personel/kucuk/{{  md5('bi'.$instructor->sicil.'lim') }}.jpg
+                                                https://sistem.nevsehir.edu.tr/images/personel/kucuk/{{md5('bi'.$instructor->sicil.'lim')}}.jpg
                                             @endif"
-                                             alt="" border="0" width="100px" height="110px">
+                                             class="rounded-full object-cover w-full h-full">
 
+                                        @if(is_null($instructor))
+                                            <span class="absolute text-sm">AD</span>
+                                        @endif
                                     </div>
                                     <div class="flex-1">
                                         <h4 class="font-semibold text-gray-900">{{ $instructor->name }}</h4>
@@ -266,8 +264,7 @@
             </div>
         </div>
 
-        <!-- Footer -->
-        <div class="bg-gray-50 px-8 py-6 border-t border-gray-200 flex items-center justify-between">
+        <div class="bg-gray-50 px-8 py-6 border-t border-gray-200 flex items-center justify-between flex-shrink-0">
             <div class="text-sm text-gray-500">
                 Son güncelleme: {{ now()->format('d.m.Y H:i') }}
             </div>
@@ -289,11 +286,11 @@
             </div>
         </div>
     </div>
-        @if($showInstructorConstraints)
-            <livewire:settings.instructor-constraints
-                :instructor-id="$selectedInstructorId"
-                is-modal="true"
-                wire:key="instructor-constraints-{{ $selectedInstructorId }}"
-            />
-        @endif
+    @if($showInstructorConstraints)
+        <livewire:settings.instructor-constraints
+            :instructor-id="$selectedInstructorId"
+            is-modal="true"
+            wire:key="instructor-constraints-{{ $selectedInstructorId }}"
+        />
+    @endif
 </div>

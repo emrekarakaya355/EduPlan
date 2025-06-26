@@ -1,89 +1,72 @@
-<div class="course-section">
-    <div class="table-header">
-        <input type="text" placeholder="Ders arayın..." class="search-input">
-        <button class="add-button">
-            <i class="fa-solid fa-plus-circle fa-flip text-green-500 "></i>
-        </button>
-    </div>
+<div class="course-section p-4 bg-white dark:bg-gray-900">
     <div>
-        <div class="courses-container">
+        <div class="courses-container grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 mt-4">
             @foreach($this->courses as $courseClass)
                 <div
-                    wire:key="course-class-{{ $courseClass->id }}" data-id="{{$courseClass->id}}"
-                    wire:mouseenter.self.debounce.250.prevent ="$dispatch('showDetail', {
-                                                                'class id':'{{$courseClass->external_id}}',
-                                                                'program':'{{$courseClass->program->name}}',
-                                                               'Ders Adı':'{{ addslashes($courseClass->course->name) }}',
-                                                               'Ders Kodu':'{{ addslashes($courseClass->course->code)}}',
-                                                               'Kontenjan' : '{{addslashes($courseClass->quota)}} kişi',
-                                                               'Süre' : '{{addslashes($courseClass->duration)}} saat',
-                                                               'Hoca' : '{{addslashes($courseClass->instructorTitle)}} {{addslashes($courseClass->instructorName)}} {{addslashes($courseClass->instructorSurname)}}'
-                                                               })"
-                    class="course-item"
-                    data-type="course">
-                    <div class="course-details" >
-                        <span class="course-name">{{str($courseClass->course->code)->words(3) }}</span>
-                        <span class="course-duration">{{str($courseClass->unscheduledHours)->words(3) }}</span>
+                    class="course-item
+                           bg-white dark:bg-gray-800 p-3 rounded-lg shadow-md border border-gray-200 dark:border-gray-700
+                           flex flex-col gap-1 cursor-grab transition-transform duration-300 hover:scale-[1.02] hover:bg-gray-50 dark:hover:bg-gray-700
+                           text-sm"
+                >
+                    <div class="course-details flex items-center justify-between text-gray-700 dark:text-gray-200">
+                        <span class="course-name font-semibold flex-1 truncate">{{ $courseClass->course->code }}</span>
+                        @if($courseClass->unscheduledHours > 0)
+                            <span class="course-duration text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300 px-2 py-0.5 rounded-full ml-2 flex-shrink-0">
+                                {{ $courseClass->unscheduledHours }}h
+                            </span>
+                        @else
+                            <span class="course-duration text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 px-2 py-0.5 rounded-full ml-2 flex-shrink-0">
+                                Atanmış
+                            </span>
+                        @endif
                     </div>
+                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        <p class="font-medium truncate">{{ $courseClass->course->name }}</p>
+                        {{-- EK BİLGİLER BURADA BAŞLAR --}}
+                        <div class="flex flex-wrap gap-x-2 mt-1"> {{-- Bilgileri yan yana dizmek için flex ve gap-x kullanıldı --}}
+                                <p><span class="font-semibold">Pratik:</span> {{ $courseClass->practical_duration }}s</p>
+                                <p><span class="font-semibold">Teori:</span> {{ $courseClass->theoretical_duration }}s</p>
 
+                        </div>
+                        @if($courseClass->grade)
+                            <p><span class="font-semibold">Sınıf:</span> {{ $courseClass->grade }}</p>
+                        @endif
+                    </div>
                 </div>
             @endforeach
         </div>
         <style>
-            .table-header {
-                display: flex;
-                justify-content: space-between;
-                gap: 10px;
-                margin-bottom: 15px;
-            }
-
-            .search-input {
-                padding: 8px 16px;
-                border-radius: 5px;
-                border: 1px solid #ccc;
-                width: 250px;
-                font-size: 14px;
-                outline: none;
-            }
-
             .courses-container {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px;
-                margin-top: 15px;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             }
-            .course-section {
-                padding: 10px;
+
+            @media (min-width: 640px) {
+                .courses-container {
+                    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                }
             }
+
+            @media (min-width: 768px) { /* md */
+                .courses-container {
+                    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                }
+            }
+
+            @media (min-width: 1024px) { /* lg */
+                .courses-container {
+                    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                }
+            }
+
+            @media (min-width: 1280px) { /* xl */
+                .courses-container {
+                    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                }
+            }
+
+            /* Eğer hala dikeyde çok yer kaplıyorlarsa, course-item'ın paddingini azaltabilirsiniz. */
             .course-item {
-                background-color: #fff;
-                padding: 12px;
-                border-radius: 8px;
-                border: 1px solid #ddd;
-                width: calc(50% - 10px); /* 3 kart yanyana */
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                cursor: grab;
-                transition: transform 0.3s ease;
-                display: flex;
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .course-item:hover {
-                background-color: #f4f4f4;
-                transform: scale(1.05);
-            }
-
-            .course-details {
-                display: flex;
-                flex-wrap: nowrap;
-                gap: 10px;
-                font-size: 10px;
-            }
-
-            .course-name {
-                font-weight: bold;
-                flex: 1;
+                /* min-height: 80px; /* Ya da sabit, küçük bir min-height verebilirsiniz */
             }
         </style>
     </div>

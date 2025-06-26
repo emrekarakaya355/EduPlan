@@ -27,7 +27,7 @@
                     </div>
                 @endif
                 @if(isset($detay))
-                    <div class="bg-white rounded-lg overflow-hidden" style="flex: 0 0 15%; height: 120px;">
+                    <div class="bg-white rounded-lg overflow-hidden" style="flex: 0 0 20%; height: 120px;">
                         {{ $detay }}
                     </div>
                 @endif
@@ -38,7 +38,7 @@
                 </div>
 
                 @if(isset($right))
-                    <div class="bg-white rounded-lg shadow-sm overflow-hidden" style="flex: 0 0 15%;">
+                    <div class="bg-white rounded-lg shadow-sm flex-shrink-0 w-[20%] max-h-[calc(100vh-200px)] overflow-y-auto " >
                         {{ $right }}
                     </div>
                 @endif

@@ -35,7 +35,7 @@ class ClassroomList extends Component
     public $reportData = [];
     public $isReportGenerated = false;
 
-    public $viewType = 'table';
+    public $viewType = 'list';
 
 
     /**

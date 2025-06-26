@@ -19,7 +19,7 @@ class ScheduleConfig extends Model
     ];
     public function schedules()
     {
-        return $this->belongsToMany(Schedule::class);
+        return $this->HasMany(Schedule::class);
     }
 
 

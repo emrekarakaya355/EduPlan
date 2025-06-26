@@ -26,8 +26,8 @@ class ClassroomUsagePerBuildingApex extends Component
             $totalCapacitySlots = 0;
 
             foreach ($building->classrooms as $classroom) {
-                $usedSlots = $classroom->scheduleSlots->count();
-                $classroomCapacity = 50;
+                $usedSlots = $classroom->UniqueUsedTimeSlotsCount;
+                $classroomCapacity = 45;
 
                 $totalUsedSlots += $usedSlots;
                 $totalCapacitySlots += $classroomCapacity;
@@ -54,9 +54,12 @@ class ClassroomUsagePerBuildingApex extends Component
             ]
         ];
 
+
+        $dynamicHeight = max(350, count($buildingNames) * 20);
         $this->chartOptions = [
             'chart' => [
                 'type' => 'bar',
+                'height' => $dynamicHeight,
                 'width' => '100%',
                 'toolbar' => [
                     'show' => true,
@@ -66,6 +69,7 @@ class ClassroomUsagePerBuildingApex extends Component
                 'bar' => [
                     'horizontal' => true,
                     'distributed' => true,
+                    'borderRadius' => 4,
                     'dataLabels' => [
                         'position' => 'top',
                     ],
@@ -76,7 +80,7 @@ class ClassroomUsagePerBuildingApex extends Component
             'dataLabels' => [
                 'enabled' => true,
                 'formatter' => 'function(val) { return val + "%" }',
-                'offsetX' => 0,
+                'offsetX' => -25,
                 'style' => [
                     'fontSize' => '12px',
                     'fontWeight' => 'bold',

@@ -3,10 +3,10 @@
         <div class="flex justify-between ">
             <div  class="flex-1 justify-between ml-4">
                 <div class="w-1/3  mb-4">
-                    <livewire:instructors.filter-select :$unit_id :$semester :$year wire:key="select_{{$year.$unit_id.$semester.$selectedInstructorId}}"/>
+                    <livewire:instructors.filter-select :$unit_id :$semester :$year wire:key="select_{{$year.$unit_id.$semester}}"/>
                 </div>
                 <!--livewire:instructors.compact-list :$unit_id wire:key="{{$unit_id}}"/-->
-                <div class="w-1/3" wire:ignore>
+                <div class="w-1/3 relative z-40">
                     <livewire:shared.instructor-search />
                 </div>
             </div>
@@ -30,7 +30,5 @@
             <livewire:classrooms.total-list :$selectedBuildingId wire:key="list-{{$selectedBuildingId}}" />
         @endif
     </x-slot>
-    <x-slot name="detay">
-        <livewire:shared.dynamic-detail />
-    </x-slot>
+
 </x-page-layout>
