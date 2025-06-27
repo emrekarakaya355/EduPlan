@@ -36,6 +36,7 @@ class ClassroomUsagePerBuildingApex extends Component
             $buildingUsagePercentage = $totalCapacitySlots ? ($totalUsedSlots / $totalCapacitySlots) * 100 : 0;
 
             return [
+                'id' => $building->id,
                 'name' => $building->name,
                 'usage_percentage' => round($buildingUsagePercentage, 1),
             ];
@@ -56,6 +57,7 @@ class ClassroomUsagePerBuildingApex extends Component
 
 
         $dynamicHeight = max(350, count($buildingNames) * 20);
+
         $this->chartOptions = [
             'chart' => [
                 'type' => 'bar',

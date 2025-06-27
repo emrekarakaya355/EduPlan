@@ -46,6 +46,11 @@ class BuildingBasedClassroomUsage extends Component
     {
         $this->showClassroomModal = false;
     }
+    #[On('buildingSelectedFromApexChart')]
+    public function buildingSelected($buildingId){
+        $this->selectedBuildingId = $buildingId;
+        $this->prepareChartData();
+    }
     private function prepareChartData()
     {
         $classrooms = Classroom::where('building_id', $this->selectedBuildingId)
