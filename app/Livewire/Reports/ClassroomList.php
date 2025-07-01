@@ -9,6 +9,7 @@ use App\Traits\UsesScheduleDataFormatter;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class ClassroomList extends Component
 {
     use WithPagination, UsesScheduleDataFormatter;
@@ -38,9 +39,6 @@ class ClassroomList extends Component
     public $viewType = 'list';
 
 
-    /**
-     * Filtre event'i yakalandığında çalışır
-     */
     #[On('filters-applied')]
     public function applyFilters($reportType, $filters)
     {
@@ -181,9 +179,36 @@ class ClassroomList extends Component
         if (!is_null($this->filters['is_active'])) {
             $query->where('is_active', $this->filters['is_active']);
         }
-
-        return $query->with('building.campus','scheduleSlots')->paginate($this->perPage);
+        $classrooms = $query->with('building.campus', 'scheduleSlots.courseClass.course')->paginate($this->perPage);
+        return $classrooms;
+        /*
+        $formattedAvailability = [];
+        foreach ($classrooms as $classroom) {
+            $formattedAvailability[] = $classroom->dailyAvailability(
+                $this->filters['selected_days'],
+                $this->filters['start_time'],
+                $this->filters['end_time'],
+                $this->filters['show_available']
+            );
+        }
+         return $this->paginateArray($formattedAvailability, $this->perPage);
+        */
     }
+    private function paginateArray($items, $perPage = 10)
+    {
+        $currentPage = request()->get('page', 1);
+        $offset = ($currentPage - 1) * $perPage;
+        $itemsForCurrentPage = array_slice($items, $offset, $perPage);
+
+        return new \Illuminate\Pagination\LengthAwarePaginator(
+            $itemsForCurrentPage,
+            count($items),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+    }
+
 
     /**
      * Sınıf için ders programı slotlarını getir

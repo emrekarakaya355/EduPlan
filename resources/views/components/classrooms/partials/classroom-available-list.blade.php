@@ -32,7 +32,7 @@
         @foreach($classrooms as $classroom)
             @php
                 $availability = $classroom->dailyAvailability($this->filters['selected_days'],$this->filters['start_time'],$this->filters['end_time'] , $this->filters['show_available']);
-            @endphp
+                @endphp
             @foreach($availability as  $day => $times)
                 @foreach($times as $time => $status)
                         <tr class="border-b hover:bg-gray-50">
