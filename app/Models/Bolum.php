@@ -11,8 +11,13 @@ class Bolum extends Model
     protected $fillable = [
         'name',
         'birim_id',
+        'manager_id'
     ];
 
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
     public function birim(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Birim::class);

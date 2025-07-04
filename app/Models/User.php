@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\UserHasScopedRoles;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,7 +14,7 @@ class User extends Authenticatable
     protected $table = 'kimlik';
 
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, UserHasScopedRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -53,5 +54,15 @@ class User extends Authenticatable
     public function getNameAttribute(): string
     {
         return $this->adi. ' '.$this->soyadi;
+    }
+
+    public function managedUnits()
+    {
+        return $this->hasMany(Birim::class, 'manager_id');
+    }
+
+    public function managedDepartments()
+    {
+        return $this->hasMany(Bolum::class, 'manager_id');
     }
 }

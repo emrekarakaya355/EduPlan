@@ -11,8 +11,12 @@ class Birim extends Model
     protected $fillable = [
         'name',
         'code',
+        'manager_id'
     ];
-
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
     public function bolums(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Bolum::class)->orderBy('name');
