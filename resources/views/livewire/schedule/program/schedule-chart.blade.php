@@ -3,6 +3,7 @@
         <div class="flex justify-between" >
             <div class="flex space-x-4"  >
                 <div>
+                    @isset($schedule)
                     <select
                         data-html2canvas-ignore="true"
                         id="courseSelect"
@@ -15,6 +16,7 @@
                             </option>
                         @endforeach
                     </select>
+                    @endisset
                 </div>
                 <div>
                     @if(false)
@@ -34,6 +36,7 @@
                 @endisset
             </div>
             <div class="flex" style="flex-direction: column">
+                @isset($schedule)
             <div class="flex items-center space-x-2">
                 <div data-html2canvas-ignore="true" class="no-print mb-4">
                     <button
@@ -83,7 +86,7 @@
                         </button>
                     </div>
                 </div>
-
+                @endisset
             </div>
 
         </div>

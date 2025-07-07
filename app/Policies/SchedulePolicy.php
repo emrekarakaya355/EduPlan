@@ -91,7 +91,6 @@ class SchedulePolicy
         return Response::deny('Bu ders programını onaylama yetkiniz yok.');
     }
 
-    // Özel İşlem: Ders Programını Yayımlama
     public function publish(User $user, Schedule $schedule): Response
     {
         $bolum = $schedule->bolum;

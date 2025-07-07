@@ -23,8 +23,7 @@ class DatabaseSeeder extends Seeder
      * Seed the application's database.
      */
     public function run(): void
-    {
-        ScheduleConfig::create([
+    {/*        ScheduleConfig::create([
             'name' => 'Birinci Öğretim',
             'start_time' => '08:30',
             'end_time' => '18:00',
@@ -43,6 +42,7 @@ class DatabaseSeeder extends Seeder
             'shift' =>'night',
             'default' =>true
         ]);
-
+*/
+        $this->call(RolePermissionSeeder::class);
     }
 }
