@@ -29,8 +29,8 @@ class AuthorizationManager extends Component
     {
         // Eager loading ile manager ilişkisini yüklüyoruz. 'adi' alanı için User modelinizde "$appends" kullanabilirsiniz
         // veya manager ilişkisini çektikten sonra manager->adi diyerek direkt kullanabilirsiniz.
-        $this->birims = Birim::with('manager')->get();
-        $this->bolums = Bolum::with('manager')->get();
+        $this->birims = Birim::with('scopedManager')->get();
+        $this->bolums = Bolum::with('scopedManager')->get();
         $this->users = User::all(); // Tüm kullanıcıları çekiyoruz
 
         // Spatie/Laravel-Permission gibi bir paket kullanıyorsanız

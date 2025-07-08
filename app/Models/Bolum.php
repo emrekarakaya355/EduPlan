@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Role;
 
 class Bolum extends Model
 {
@@ -11,12 +12,24 @@ class Bolum extends Model
     protected $fillable = [
         'name',
         'birim_id',
-        'manager_id'
-    ];
+     ];
 
-    public function manager()
+    public function scopedManager()
     {
-        return $this->belongsTo(User::class, 'manager_id');
+        $roleId = Role::where('name', 'bolum_sorumlusu')->first()->id ?? null;
+        if (!$roleId) {
+            return null; // Rol bulunamazsa addEagerLoading NUll Hatası veriyor!
+        }
+
+        return $this->belongsToMany(
+            User::class,
+            config('permission.table_names.model_has_roles'),
+            'scope_id', // model_has_roles.scope_id = birim id
+            'model_id'  // model_has_roles.model_id = user id
+        )
+            ->wherePivot('role_id', $roleId)
+            ->wherePivot('model_type', User::class)
+            ->wherePivot('scope_type', Bolum::class);
     }
     public function birim(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

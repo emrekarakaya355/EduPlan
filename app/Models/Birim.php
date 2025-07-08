@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Role;
 
 class Birim extends Model
 {
@@ -11,12 +12,25 @@ class Birim extends Model
     protected $fillable = [
         'name',
         'code',
-        'manager_id'
-    ];
-    public function manager()
+     ];
+    public function scopedManager()
     {
-        return $this->belongsTo(User::class, 'manager_id');
+        $roleId = Role::where('name', 'birim_yoneticisi')->first()->id ?? null;
+        if (!$roleId) {
+            return null; // Rol bulunamazsa boş döneriz
+        }
+
+        return $this->belongsToMany(
+            User::class,
+            config('permission.table_names.model_has_roles'),
+            'scope_id', // model_has_roles.scope_id = birim id
+            'model_id'  // model_has_roles.model_id = user id
+        )
+            ->wherePivot('role_id', $roleId)
+            ->wherePivot('model_type', User::class)
+            ->wherePivot('scope_type', Birim::class);
     }
+
     public function bolums(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Bolum::class)->orderBy('name');

@@ -14,10 +14,10 @@
                                 {{ $selectedEntityId === $birim->id && $selectedEntityType === 'birim' ? 'bg-blue-200 text-blue-800 font-medium' : 'bg-white text-gray-700' }}"
                         >
                             <span class="font-bold">{{ $birim->name }}</span>
-                            @if($birim->manager)
-                                <p class="text-xs text-gray-500 mt-1">Sorumlu: {{ $birim->manager->adi }}</p>
+                            @if($birim->scopedManager)
+                                <p class="text-xs text-gray-500 mt-1">Yönetici: {{ $birim->scopedManager->first()?->name }}</p>
                             @else
-                                <p class="text-xs text-gray-500 mt-1">Sorumlu: Atanmamış</p>
+                                <p class="text-xs text-gray-500 mt-1">Yönetici: Atanmamış</p>
                             @endif
                         </div>
 
@@ -31,8 +31,8 @@
                                             {{ $selectedEntityId === $bolum->id && $selectedEntityType === 'bolum' ? 'bg-green-200 text-green-800 font-medium' : 'bg-white text-gray-700' }}"
                                     >
                                         {{ $bolum->name }}
-                                        @if($bolum->manager)
-                                            <p class="text-xs text-gray-500 mt-1">Sorumlu: {{ $bolum->manager->adi }}</p>
+                                        @if($bolum->scopedManager)
+                                            <p class="text-xs text-gray-500 mt-1">Sorumlu: {{ $bolum->scopedManager?->first()?->name }}</p>
                                         @else
                                             <p class="text-xs text-gray-500 mt-1">Sorumlu: Atanmamış</p>
                                         @endif
