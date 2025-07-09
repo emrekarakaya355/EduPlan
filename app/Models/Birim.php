@@ -49,4 +49,9 @@ class Birim extends Model
             ->map(fn($word) => mb_substr($word, 0, 1))
             ->join('');
     }
+
+    public function getInstructors()
+    {
+        return $this?->bolums?->programs?->instructors;
+    }
 }

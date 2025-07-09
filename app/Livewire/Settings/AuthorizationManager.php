@@ -3,144 +3,144 @@
 namespace App\Livewire\Settings;
 
 use Livewire\Component;
-use App\Models\Birim; // Kendi Birim modelinizi import edin
-use App\Models\Bolum; // Kendi Bolum modelinizi import edin
-use App\Models\User;  // Kendi User modelinizi import edin
-
-// Spatie/Laravel-Permission gibi bir paket kullanıyorsanız, bunları da import edin
-use Spatie\Permission\Models\Role; // Spatie için
-use Spatie\Permission\Models\Permission; // Spatie için
+use App\Models\Birim;
+use App\Models\Bolum;
+use App\Models\User;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class AuthorizationManager extends Component
 {
+    // Public properties to be used in the Blade view
     public $birims;
     public $bolums;
-    public $users; // Tüm kullanıcılar
-    public $roles; // Tüm roller
-    public $permissions; // Tüm izinler
+    public $users;
+    public $roles;
 
-    public $selectedEntityType = 'birim'; // 'birim' veya 'bolum'
+    // State for scope selection (Unit or Department)
+    public $selectedEntityType = 'birim';
     public $selectedEntityId = null;
 
-    // Seçili birim veya bölümün bilgilerini tutacak değişkenler
-    public $currentEntity = null; // Seçili Birim veya Bölüm model nesnesi
+    protected $listeners = [
+        'roleAssigned' => 'handleRoleAssigned'
+    ];
 
+    /**
+     * Component's initial setup.
+     * Fetches all necessary data from the database.
+     */
     public function mount()
     {
-        // Eager loading ile manager ilişkisini yüklüyoruz. 'adi' alanı için User modelinizde "$appends" kullanabilirsiniz
-        // veya manager ilişkisini çektikten sonra manager->adi diyerek direkt kullanabilirsiniz.
-        $this->birims = Birim::with('scopedManager')->get();
-        $this->bolums = Bolum::with('scopedManager')->get();
-        $this->users = User::all(); // Tüm kullanıcıları çekiyoruz
+        $this->refreshData();
+    }
 
-        // Spatie/Laravel-Permission gibi bir paket kullanıyorsanız
+    /**
+     * Refreshes all data from the database.
+     */
+    public function refreshData()
+    {
+        $this->birims = Birim::all();
+        $this->bolums = Bolum::all();
+        /*
+        $this->users = User::all();
         $this->roles = Role::all();
-        $this->permissions = Permission::all();
-
-        // Varsayılan olarak ilk birimi seç
-        $firstBirim = $this->birims->first();
-        if ($firstBirim) {
-            $this->selectedEntityId = $firstBirim->id;
-            $this->currentEntity = $firstBirim; // Seçili varlığı başlangıçta ayarla
-        }
-    }
-
-    public function selectBirim($birimId)
-    {
-        $this->selectedEntityType = 'birim';
-        $this->selectedEntityId = $birimId;
-        $this->currentEntity = $this->birims->firstWhere('id', $birimId);
-    }
-
-    public function selectBolum($bolumId)
-    {
-        $this->selectedEntityType = 'bolum';
-        $this->selectedEntityId = $bolumId;
-        $this->currentEntity = $this->bolums->firstWhere('id', $bolumId);
-    }
-
-    // Seçili birime ait bölümleri döndüren computed property
-    public function getBolumsForSelectedBirimProperty()
-    {
-        if ($this->selectedEntityType === 'birim' && $this->currentEntity) {
-            return $this->bolums->where('birim_id', $this->currentEntity->id);
-        }
-        return collect();
-    }
-
-    // Seçili birim veya bölümün yetkililerini döndüren computed property
-    // Bu kısım, Spatie veya benzeri bir yetkilendirme paketini gerçek anlamda nasıl entegre edeceğinizi gösteriyor.
-    public function getEntityAuthorizationsProperty()
-    {
-        $authorizations = collect();
-
-        if (!$this->currentEntity) {
-            return $authorizations;
-        }
-
-        // 1. Sorumlu Kişi (Manager)
-        if ($this->currentEntity->manager) {
-            $authorizations->push((object)[
-                'user_adi' => $this->currentEntity->manager->adi,
-                'type' => 'Sorumlu',
-                'detail' => $this->selectedEntityType === 'birim' ? 'Birim Sorumlusu (Dekan)' : 'Bölüm Sorumlusu (Bölüm Başkanı)',
-                'id' => $this->selectedEntityType . '_manager_' . $this->selectedEntityId,
-            ]);
-        }
-
-        // 2. Rol Atamaları (Örn: Spatie Laravel-Permission ile)
-        // Burada, seçili birim/bölümle ilişkili rolleri çekeceğiz.
-        // Eğer rolleriniz birim/bölüm bazlı ise, Spatie'nin yetkilendirme modelini genişletmeniz gerekir.
-        // Varsayılan olarak Spatie, global roller atar. Ancak bizim konuştuğumuz "entity_type" ve "entity_id" sütunlarını eklediyseniz,
-        // aşağıdaki gibi filtreleyebilirsiniz.
-        // Bu kısım, sizin 'model_has_roles' ve 'model_has_permissions' tablolarınıza nasıl veri kaydettiğinize bağlı.
-
-        // Örnek: "Pazarlama Birimi Editörü" gibi bir rolünüz varsa ve kullanıcıya atanmışsa.
-        // Bu örnek, "entity_type" ve "entity_id" sütunlarını 'model_has_roles' ve 'model_has_permissions' tablolarınıza eklediğinizi varsayar.
-
-        // Eğer Spatie kullanıyorsanız ve polymorphic ilişkilerle genişlettiyseniz:
-        // Spatie'nin Role ve Permission modelleri standart olarak entity_type/id içermez.
-        // Bu genellikle custom bir ara tablo sorgusu veya custom Guard/Gate tanımı ile yapılır.
-        // Daha basit bir yol olarak:
-        // 1. Rollere/İzinlere 'birim_id' veya 'bolum_id' alanı ekleyip ona göre filtrelemek
-        // 2. Kullanıcıların "birim/bölüm" bağlamında belirli rollere sahip olup olmadığını kontrol eden bir mekanizma yazmak
-
-        // Şimdilik, Spatie'den rastgele birkaç rol ve izin atayalım.
-        // GERÇEK UYGULAMADA: Kullanıcıların, ilgili birim/bölüm bağlamında hangi rollere/izinlere sahip olduğunu sorgulamanız GEREKİR.
-
-        // Örneğin, eğer 'model_has_roles' tablonuzda 'entity_type' ve 'entity_id' sütunlarınız varsa:
-        // $usersWithRoles = User::whereHas('roles', function($query) {
-        //     $query->where('entity_type', $this->selectedEntityType)
-        //           ->where('entity_id', $this->selectedEntityId);
-        // })->get();
-        // Veya daha iyisi, User modelinizde yetki kontrol metotları yazmak.
-
-        // Simülasyon: Seçili birime/bölüme özel hayali yetkililer ekleyelim
-        if ($this->selectedEntityType === 'birim' && $this->selectedEntityId === 1) { // Eğitim Fakültesi (id:1)
-            $user = User::find(4); // Zeynep Can (varsayımsal)
-            if ($user) {
-                $authorizations->push((object)[
-                    'user_adi' => $user->adi,
-                    'type' => 'Rol',
-                    'detail' => 'Akademik Danışman (Eğitim Fakültesi)',
-                    'id' => 'akademik_danisman_' . $this->selectedEntityId,
-                ]);
-            }
-        } elseif ($this->selectedEntityType === 'bolum' && $this->selectedEntityId === 101) { // İlköğretim Öğretmenliği (id:101)
-            $user = User::find(1); // Prof. Dr. Ahmet Yılmaz (varsayımsal)
-            if ($user) {
-                $authorizations->push((object)[
-                    'user_adi' => $user->adi,
-                    'type' => 'İzin',
-                    'detail' => 'Sınav Sonuçlarını Görüntüleme',
-                    'id' => 'sinav_sonuc_goruntule_' . $this->selectedEntityId,
-                ]);
+*/
+        // Set initial selected entity to the first Birim if available
+        if (!$this->selectedEntityId) {
+            $firstBirim = $this->birims->first();
+            if ($firstBirim) {
+                $this->selectedEntityId = $firstBirim->id;
+            } else {
+                // If no birims, try to select the first bolum
+                $firstBolum = $this->bolums->first();
+                if ($firstBolum) {
+                    $this->selectedEntityType = 'bolum';
+                    $this->selectedEntityId = $firstBolum->id;
+                }
             }
         }
-
-        return $authorizations;
     }
 
+    /**
+     * Handles changing the scope type (Birim or Bolum).
+     */
+    public function selectScopeType($type)
+    {
+        $this->selectedEntityType = $type;
+        // Reset selected ID to the first item of the new type or null
+        if ($type === 'birim') {
+            $this->selectedEntityId = $this->birims->first()->id ?? null;
+        } else {
+            $this->selectedEntityId = $this->bolums->first()->id ?? null;
+        }
+    }
+
+    /**
+     * Handles selecting a specific Birim or Bolum.
+     */
+    public function selectEntity($id)
+    {
+        $this->selectedEntityId = (int) $id;
+    }
+
+    /**
+     * Opens the role assignment modal via event dispatch.
+     */
+    public function openRoleModal($userId = null)
+    {
+        $this->dispatch('openRoleModal', $userId);
+    }
+
+    /**
+     * Handles the role assignment completion event from the modal.
+     */
+    public function handleRoleAssigned($data)
+    {
+        $this->refreshData();
+        session()->flash('message', $data['message']);
+    }
+
+    /**
+     * Computed property to get departments filtered by the selected unit.
+     */
+    public function getFilteredBolumsProperty()
+    {
+        if ($this->selectedEntityType === 'birim' && $this->selectedEntityId) {
+            return $this->bolums->where('birim_id', $this->selectedEntityId);
+        }
+        return $this->bolums;
+    }
+
+    /**
+     * Computed property to get users who have roles within the currently selected scope.
+     */
+    public function getScopedUsersProperty()
+    {
+        if (!$this->selectedEntityId) {
+            return collect();
+        }
+
+        $scopeModelClass = $this->selectedEntityType === 'birim' ? Birim::class : Bolum::class;
+
+        $usersInScope = User::whereHas('roles', function ($query) use ($scopeModelClass) {
+            $query->where(config('permission.table_names.model_has_roles') . '.scope_type', $scopeModelClass)
+                ->where(config('permission.table_names.model_has_roles') . '.scope_id', $this->selectedEntityId);
+        })->get();
+
+        return $usersInScope->map(function ($user) use ($scopeModelClass) {
+            $user->current_scope_role = $user->roles->first(function($role) use ($scopeModelClass, $user) {
+                return $role->pivot->model_id === $user->id &&
+                    $role->pivot->model_type === User::class &&
+                    $role->pivot->scope_type === $scopeModelClass &&
+                    $role->pivot->scope_id == $this->selectedEntityId;
+            });
+            return $user;
+        });
+    }
+
+    /**
+     * Renders the component's view.
+     */
     public function render()
     {
         return view('livewire.settings.authorization-manager');

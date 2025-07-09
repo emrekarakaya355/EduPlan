@@ -1,96 +1,124 @@
-<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
-    <h2 class="text-3xl font-bold mb-6 text-gray-800">Yetkilendirme Ayarları</h2>
+<div class="p-6 bg-white rounded-lg shadow-sm min-h-[calc(100vh-4rem-16px)]">
+    <h3 class="text-2xl font-semibold text-gray-800 mb-6">Yetkilendirme Yöneticisi</h3>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {{-- Sol Panel: Birimler ve Altındaki Bölümler Listesi --}}
-        <div class="md:col-span-1 bg-gray-50 p-4 rounded-lg shadow-sm max-h-[70vh] overflow-y-auto sticky top-0">
-            <h3 class="text-xl font-semibold mb-4 text-gray-700">Yapısal Birimler</h3>
-            <ul class="space-y-2">
-                @forelse($birims as $birim)
-                    <li>
-                        <div
-                            wire:click="selectBirim({{ $birim->id }})"
-                            class="p-3 rounded-md cursor-pointer hover:bg-blue-100 transition duration-150 ease-in-out
-                                {{ $selectedEntityId === $birim->id && $selectedEntityType === 'birim' ? 'bg-blue-200 text-blue-800 font-medium' : 'bg-white text-gray-700' }}"
-                        >
-                            <span class="font-bold">{{ $birim->name }}</span>
-                            @if($birim->scopedManager)
-                                <p class="text-xs text-gray-500 mt-1">Yönetici: {{ $birim->scopedManager->first()?->name }}</p>
-                            @else
-                                <p class="text-xs text-gray-500 mt-1">Yönetici: Atanmamış</p>
-                            @endif
-                        </div>
+    {{-- Session Flash Messages --}}
+    @if (session()->has('message'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ session('message') }}</span>
+        </div>
+    @endif
+    @if (session()->has('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ session('error') }}</span>
+        </div>
+    @endif
 
-                        {{-- Bölümleri sadece ilgili birim seçili ise göster --}}
-                        @if($selectedEntityType === 'birim' && $selectedEntityId === $birim->id)
-                            <ul class="ml-4 mt-2 space-y-1 border-l-2 border-gray-200 pl-4">
-                                @forelse($this->bolumsForSelectedBirim as $bolum)
-                                    <li
-                                        wire:click="selectBolum({{ $bolum->id }})"
-                                        class="p-2 rounded-md cursor-pointer hover:bg-green-100 transition duration-150 ease-in-out
-                                            {{ $selectedEntityId === $bolum->id && $selectedEntityType === 'bolum' ? 'bg-green-200 text-green-800 font-medium' : 'bg-white text-gray-700' }}"
-                                    >
-                                        {{ $bolum->name }}
-                                        @if($bolum->scopedManager)
-                                            <p class="text-xs text-gray-500 mt-1">Sorumlu: {{ $bolum->scopedManager?->first()?->name }}</p>
-                                        @else
-                                            <p class="text-xs text-gray-500 mt-1">Sorumlu: Atanmamış</p>
-                                        @endif
-                                    </li>
-                                @empty
-                                    <li class="text-gray-500 text-sm">Bu birime bağlı bölüm bulunamadı.</li>
-                                @endforelse
-                            </ul>
-                        @endif
-                    </li>
-                @empty
-                    <li class="text-gray-500">Hiçbir birim bulunamadı.</li>
-                @endforelse
-            </ul>
+    {{-- Kapsam Seçimi --}}
+    <div class="flex flex-col md:flex-row gap-4 mb-6 items-center">
+        <div class="flex space-x-2 bg-gray-100 rounded-lg p-1">
+            <button
+                wire:click="selectScopeType('birim')"
+                class="px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ $selectedEntityType === 'birim' ? 'bg-blue-600 text-white shadow' : 'text-gray-700 hover:bg-gray-200' }}"
+            >
+                Birimler
+            </button>
+            <button
+                wire:click="selectScopeType('bolum')"
+                class="px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ $selectedEntityType === 'bolum' ? 'bg-blue-600 text-white shadow' : 'text-gray-700 hover:bg-gray-200' }}"
+            >
+                Bölümler
+            </button>
         </div>
 
-        {{-- Sağ Panel: Seçili Birim/Bölüm Detayları ve Yetkilileri --}}
-        <div class="md:col-span-2 bg-white p-6 rounded-lg shadow-md border border-gray-200">
-            @if($currentEntity)
-                <h3 class="text-2xl font-bold mb-4 text-gray-800">
-                    {{ $currentEntity->name }} Yetkilileri
-                </h3>
-
-                <p class="text-gray-600 mb-6">
-                    Bu {{ $selectedEntityType === 'birim' ? 'birime' : 'bölüme' }} atanmış yetkili kullanıcılar ve sorumlulukları.
-                </p>
-
-                @if($this->entityAuthorizations->isNotEmpty())
-                    <ul class="space-y-4">
-                        @foreach($this->entityAuthorizations as $auth)
-                            <li class="bg-gray-100 p-4 rounded-md shadow-sm border border-gray-200 flex items-center justify-between">
-                                <div>
-                                    <span class="font-semibold text-gray-800 text-lg">{{ $auth->user_adi }}</span>
-                                    <span class="ml-3 text-sm text-blue-600 font-medium">({{ $auth->type }})</span>
-                                    <p class="text-gray-600 text-sm">{{ $auth->detail }}</p>
-                                </div>
-                                {{-- Yönetim butonları (Ekle, Düzenle, Sil) --}}
-                                <div>
-                                    <button class="text-blue-500 hover:text-blue-700 text-sm font-semibold mr-2">Düzenle</button>
-                                    <button class="text-red-500 hover:text-red-700 text-sm font-semibold">Sil</button>
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
+        <div class="flex-1 w-full md:w-auto">
+            <label for="scope-select" class="sr-only">Kapsam Seç</label>
+            <select
+                id="scope-select"
+                wire:model.live="selectedEntityId"
+                class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            >
+                @if ($selectedEntityType === 'birim')
+                    @foreach($birims as $birim)
+                        <option value="{{ $birim->id }}">{{ $birim->name }}</option>
+                    @endforeach
                 @else
-                    <p class="text-gray-500 p-4 bg-gray-50 rounded-md">
-                        {{ $currentEntity->name }} için henüz bir yetkili atanmamış.
-                    </p>
+                    @foreach($this->filteredBolums as $bolum)
+                        <option value="{{ $bolum->id }}">{{ $bolum->name }} ({{ $birims->firstWhere('id', $bolum->birim_id)?->name }})</option>
+                    @endforeach
                 @endif
-
-                <div class="mt-8 pt-6 border-t border-gray-200">
-                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-150 ease-in-out">
-                        Yeni Yetkili Ekle
-                    </button>
-                </div>
-            @else
-                <p class="text-gray-500 text-lg">Seçilen birim veya bölüm bulunamadı.</p>
-            @endif
+                @if (!$selectedEntityId)
+                    <option value="" disabled>Lütfen bir {{ $selectedEntityType === 'birim' ? 'birim' : 'bölüm' }} seçin</option>
+                @endif
+            </select>
         </div>
     </div>
+
+    {{-- Seçili Kapsamdaki Kullanıcı Listesi --}}
+    @if ($selectedEntityId)
+        <div class="overflow-x-auto bg-gray-50 rounded-lg p-4">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-100">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg">
+                        Kullanıcı Adı
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Email
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Kapsam Rolü
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tr-lg">
+                        Eylemler
+                    </th>
+                </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                @forelse($this->scopedUsers as $user)
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {{ $user->name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {{ $user->email }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ $user->current_scope_role?->name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button
+                                wire:click="openRoleModal({{ $user->id }})"
+                                class="text-blue-600 hover:text-blue-900 font-medium py-1 px-3 rounded-md border border-blue-600 hover:bg-blue-50 transition-colors duration-200"
+                            >
+                                Rolü Değiştir
+                            </button>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                            Bu {{ $selectedEntityType === 'birim' ? 'birimde' : 'bölümde' }} atanmış kullanıcı bulunmamaktadır.
+                        </td>
+                    </tr>
+                @endforelse
+                </tbody>
+            </table>
+
+            <div class="mt-4 text-right">
+                <button
+                    wire:click="openRoleModal()"
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                >
+                    Yeni Rol Ata
+                </button>
+            </div>
+        </div>
+    @else
+        <p class="text-center text-gray-500 mt-8">Lütfen yukarıdan bir birim veya bölüm seçin.</p>
+    @endif
+
+    @if($selectedEntityId)
+
+        <livewire:settings.role-modal :$selectedEntityType :$selectedEntityId />
+    @endif
 </div>

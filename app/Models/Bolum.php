@@ -40,4 +40,8 @@ class Bolum extends Model
     {
         return $this->hasMany(Program::class)->orderBy('name');
     }
+    public function getInstructors()
+    {
+        return $this?->programs?->instructors;
+    }
 }
