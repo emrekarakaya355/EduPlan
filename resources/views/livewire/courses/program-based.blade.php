@@ -1,4 +1,4 @@
-<div class="course-section">
+<div class="course-section ">
     <div class="table-header">
         <input type="text" placeholder="Ders arayın..." class="search-input">
         @if(false)

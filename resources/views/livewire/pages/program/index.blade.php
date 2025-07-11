@@ -3,14 +3,13 @@
 
     <div wire:ignore>
         <x-slot name="right">
-            <livewire:courses.program-based />
+            <livewire:shared.sidebar-right/>
+            <!--livewire:courses.program-based /-->
         </x-slot>
         <x-slot name="top">
             <!--livewire:classrooms.classroom-listing-with-filters /-->
         </x-slot>
-        <x-slot name="detay">
-            <livewire:shared.dynamic-detail />
-        </x-slot>
+
     </div>
 
     <script>

@@ -1,3 +1,4 @@
+<div class="p-6 bg-white rounded-lg shadow-sm min-h-[calc(100vh-4rem-16px)]">
 <div class="{{$showForm}} ? '' max-w-6xl mx-auto p-6">
     <div class="bg-white rounded-lg shadow-lg">
         <!-- Header -->
@@ -200,4 +201,5 @@
             @endif
         </div>
     </div>
+</div>
 </div>

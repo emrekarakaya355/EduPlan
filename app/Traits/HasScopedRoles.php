@@ -48,12 +48,10 @@ trait HasScopedRoles
     }
     public function scopedInstructors()
     {
-        // Birimlerden programlar -> programlardan instructorlar
         $birimInstructors = \App\Models\Instructor::whereHas('courseClasses.program.bolum.birim', function ($query) {
             $query->whereIn('birim_id', $this->scopedBirims()->pluck('id'));
         });
 
-        // Bölümden programlara -> instructorlar
         $bolumInstructors = \App\Models\Instructor::whereHas('courseClasses.program.bolum', function ($query) {
             $query->whereIn('bolum_id', $this->scopedBolums()->pluck('id'));
         });
