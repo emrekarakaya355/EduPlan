@@ -1,5 +1,6 @@
 <div wire:key="{{ $time }}-{{ $class['id'] }}"
-     class="border-l dropzone relative flex-1"
+     class="border-l dropzone relative flex flex-col justify-center flex-1 items-center p-2 rounded-lg "
+
      draggable="true"
      data-id="{{ $class['id'] ?? '' }}"
      data-external="{{ $class['external_id'] ?? '' }}"
@@ -33,14 +34,14 @@
         </button>
     @endif
 
-    <div class="text-sm name" style="pointer-events: none">{{ $class['class_code'] }}</div>
+    <div class="text-sm font-semibold name" style="pointer-events: none">{{ $class['class_code'] }}</div>
     <div class="name" style="pointer-events: none; font-size: xx-small">{{ $class['class_name'] }}</div>
-    <div class="font-bold" style="pointer-events: none;font-size: xx-small">{{$viewMode === 'instructor' ?  $class['program_name'] :$class['instructor_name'] }}</div>
-    <div style="pointer-events: none; font-size: xx-small">
+    <div class="font-medium" style="pointer-events: none;font-size: xx-small">{{$viewMode === 'instructor' ?  $class['program_name'] :$class['instructor_name'] }}</div>
+    <div style="pointer-events: none; font-size: x-small">
         {{ $class['classrom_name'] ?? '(Derslik Sonra Belirtilecek)' }}
     </div>
     <div style="pointer-events: none;
-         font-size: xx-small">
+         font-size: x-small">
         {{ $class['building_name'] ?? '' }}
     </div>
 

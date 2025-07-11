@@ -304,6 +304,6 @@ class ScheduleChart extends BaseSchedule
     }
     public function render()
     {
-          return view('livewire.schedule.program.schedule-chart');
+           return view('livewire.schedule.program.schedule-chart');
     }
 }

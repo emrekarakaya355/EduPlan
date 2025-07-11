@@ -42,7 +42,6 @@ class ProgramBased extends Component
     {
         $this->scheduleCourses = collect();
         $this->program_id = Session::get('program') == '' ? -1 : Session::get('program');
-
         $this->year = Session::get('year');
         $this->semester = Session::get('semester');
         $this->grade = Session::get('grade') ?? 1;

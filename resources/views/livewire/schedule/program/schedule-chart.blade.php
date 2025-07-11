@@ -97,26 +97,30 @@
             <livewire:shared.schedule-settings-modal :scheduleId="$schedule?->id"/>
         @endif
 
-        <div  class="grid grid-cols-{{ count($days) + 1 }} gap-1 p-4 schedule-grid ">
+        <div  class="flex flex-col gap-1 p-4 schedule-grid ">
 
-            <div class="p-2"></div>
+            <div class="flex gap-1">
+                <div class="p-2 w-full"></div>
+
             @foreach($days as $day)
-                <div class="text-center font-bold p-2 bg-gray-800 text-white">{{ $day['label'] }}</div>
+                <div class=" text-center font-bold p-2 bg-gray-800 text-white w-full rounded-lg">{{ $day['label'] }}</div>
             @endforeach
-
+            </div>
             @foreach($scheduleData as $time => $days)
-                <div class="text-center font-bold p-2 bg-gray-200">
-                    {{ $time }}
-                </div>
+                <div class="flex gap-1">
+                    <div class="w-full text-center font-bold py-2 bg-gray-200 rounded-lg flex items-center justify-center">
+                        {{ $time }}
+                    </div>
 
-                @foreach(range(0,count($days)-1) as $day)
-                    @include('livewire.schedule.partials.day-cell', [
-                        'day' => $day,
-                        'time' => $time,
-                        'classes' => $days[$day] ?? null,
-                        'scheduleId' => $schedule?->id ?? -1
-                    ])
-                @endforeach
+                    @foreach(range(0,count($days)-1) as $day)
+                            @include('livewire.schedule.partials.day-cell', [
+                                'day' => $day,
+                                'time' => $time,
+                                'classes' => $days[$day] ?? null,
+                                'scheduleId' => $schedule?->id ?? -1
+                            ])
+                    @endforeach
+                </div>
             @endforeach
         </div>
 

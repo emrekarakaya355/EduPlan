@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gray-100 dark:bg-gray-900" x-data="{ sidebarOpen: true }" @sidebar-toggle.window="sidebarOpen = $event.detail">
+<div class=" bg-gray-100 dark:bg-gray-900" x-data="{ sidebarOpen: true }" @sidebar-toggle.window="sidebarOpen = $event.detail">
 
     <header class="flex items-center h-20 md:h-auto" x-data="{ open: false }">
         <nav class="relative flex items-center w-full px-4">
@@ -17,31 +17,36 @@
         </nav>
     </header>
 
-    <main class="pt-16  min-h-screen w-full" :class="{ 'pl-64': sidebarOpen, 'pl-0': !sidebarOpen }">
+    <main class="pt-16 min-h-screen w-full"  :class="{ 'pl-64': sidebarOpen, 'pl-0': !sidebarOpen }">
         <div class="p-6 flex gap-4 min-h-[calc(100vh-4rem)]" style="flex-direction: column">
             <!-- Üst Kısım -->
             <div class="flex  space-x-8 flex-grow-0"  >
                 @if(isset($top))
-                    <div class="flex-1 bg-white rounded-lg shadow-sm overflow-hidden" >
+                    <div class="flex-1 bg-white rounded-lg shadow-sm overflow-hidden sticky top-10" >
                         {{ $top }}
                     </div>
                 @endif
-                @if(isset($detay))
-                    <div class="bg-white rounded-lg overflow-hidden" style="flex: 0 0 20%; height: 120px;">
-                        {{ $detay }}
-                    </div>
-                @endif
+
             </div>
             <div class="flex space-x-8">
                 <div class="bg-white rounded-lg shadow-sm flex-1 ">
                     {{ $slot }}
                 </div>
+                <div class="flex flex-col w-[20%] gap-2 ">
 
-                @if(isset($right))
-                    <div class="bg-white rounded-lg shadow-sm flex-shrink-0 w-[20%] max-h-[calc(100vh-200px)] overflow-y-auto " >
-                        {{ $right }}
-                    </div>
-                @endif
+                    @if(isset($right))
+
+                        <div class="bg-white rounded-lg shadow-sm min-h-[calc(100vh-5.5rem)] overflow-y-auto sticky top-20" >
+                            @if(isset($detay))
+                                <div class="min-h-32">
+                                    {{ $detay }}
+                                </div>
+                            @endif
+                            {{ $right }}
+                        </div>
+                    @endif
+                </div>
+
             </div>
 
             <!-- Alt Kısım -->

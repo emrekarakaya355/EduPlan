@@ -204,17 +204,16 @@ trait UsesScheduleDataFormatter
     public function getColorForClass($key)
     {
          $colors = [
-            '#F28E2B', // orange
+            '#d7d190', // orange
             '#76B7B2', // teal
             '#59A14F', // green
             '#EDC949', // gold
-            '#AF7AA1', // muted purple
+            '#D5B0AC', // muted purple
             '#FF9DA7', // pink
-            '#9C755F', // brownish
+            '#9CD08F', // brownish
             '#BAB0AC', // gray
             '#D37295', // rose
             '#FABFD2', // light pink
-            '#B07AA1', // dusty purple
             '#86BCB6', // desaturated teal
             '#F1CE63', // mustard
             '#8CD17D', // lime green

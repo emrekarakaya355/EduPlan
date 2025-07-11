@@ -88,10 +88,10 @@ class RoleModal extends Component
     public function assignRole()
     {
         $this->validate([
-            'selectedUserForModal' => 'required|exists:users,id',
+            'selectedUserForModal' => 'required|exists:kimlik,id',
             'selectedRoleForModal' => 'required|exists:roles,id',
-            'selectedEntityId' => 'required|integer', // This must be passed from parent
-            'selectedEntityType' => 'required|in:birim,bolum', // This must be passed from parent
+            'selectedEntityId' => 'required|integer',
+            'selectedEntityType' => 'required|in:birim,bolum',
         ], [
             'selectedUserForModal.required' => 'Lütfen bir kullanıcı seçin.',
             'selectedUserForModal.exists' => 'Seçilen kullanıcı geçersiz.',
@@ -102,12 +102,11 @@ class RoleModal extends Component
             'selectedEntityType.in' => 'Geçersiz kapsam türü.',
         ]);
 
+        dd($this->selectedRoleForModal);
         $user = User::find($this->selectedUserForModal);
         $role = Role::find($this->selectedRoleForModal);
-
+        dd($user);
         $scopeModelClass = $this->selectedEntityType === 'birim' ? Birim::class : Bolum::class;
-
-        // Check if the user already has a role for this specific scope
         $existingPivot = DB::table(config('permission.table_names.model_has_roles'))
             ->where('model_id', $user->id)
             ->where('model_type', User::class)
@@ -152,8 +151,6 @@ class RoleModal extends Component
 
     public function render()
     {
-
-
         $users = $this->showModal ? \Auth::user()->scopedInstructors() :collect();
 
         return view('livewire.settings.role-modal', [

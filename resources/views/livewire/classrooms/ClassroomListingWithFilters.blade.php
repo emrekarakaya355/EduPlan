@@ -1,4 +1,4 @@
-<div class="container space-x-4"  style="position: relative;">
+<div class="container space-x-4"  >
     <div class="filter-section">
         <div>
             <div class="campus-box">
